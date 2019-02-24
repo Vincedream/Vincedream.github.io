@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="React学习记录—浅析状态管理工具Redux与React-Redux">
+
+
+
+
+  <meta name="keywords" content="Vince, Vince's Blog,前端,Node,React">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Vince's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.2">
+
+
+
+<link rel="canonical" href="https://vince.xin/2017/11/26/React学习记录—浅析状态管理工具Redux与React-Redux/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.2">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> React学习记录—浅析状态管理工具Redux与React-Redux - Vince's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Vince's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Vince's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          React学习记录—浅析状态管理工具Redux与React-Redux
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-11-26
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/React/">React</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么要用到状态管理工具？"><span class="toc-text">为什么要用到状态管理工具？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Redux的三大原则"><span class="toc-text">Redux的三大原则</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#单一数据流"><span class="toc-text">单一数据流</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#State只能读取"><span class="toc-text">State只能读取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用纯函数来修改state"><span class="toc-text">使用纯函数来修改state</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#简单demo"><span class="toc-text">简单demo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一个简单的React与Redux计数器demo"><span class="toc-text">一个简单的React与Redux计数器demo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#异步Redux的使用方式"><span class="toc-text">异步Redux的使用方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为React量身定制-的React-Redux"><span class="toc-text">为React量身定制 的React-Redux</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用装饰器优化React-Redux中的connect"><span class="toc-text">使用装饰器优化React-Redux中的connect</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>Redux该怎么在React中使用呢？<br><a id="more"></a></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>当业务逻辑越来越复杂的时候，你会发现使用React原生的state会是件很繁琐的事情，比如我的上一篇学习记录讲到的跨组件通信案例，管理各个组件的state就像蜘蛛丝一样牵连复杂，并且具有很高的风险，稍微不注意state就会发生预料不到的改变，这个时候我们可以用到强大且干净利落的状态管理工具Redux。</p>
+<h2 id="为什么要用到状态管理工具？"><a href="#为什么要用到状态管理工具？" class="headerlink" title="为什么要用到状态管理工具？"></a>为什么要用到状态管理工具？</h2><p>前端工程师在团队中肩负的任务越来越繁重，开发SPA单页面应用遇到错综复杂的需求也很常见，这时候就需要管理非常多的state，其中可能包括服务器的相应、缓存数据、本地生成尚未持久化到服务器的数据，UI的各种状态，当一个组件的state变化会影响到其他一个甚至多个组件state变化时，并且当多个路由下的组件需要相互通信时，这个时候仍然使用React自带的state来管理状态显然是一件头疼的事情，因此出现各种状态管理工具，Redux就是其中优秀工具之一。</p>
+<h2 id="Redux的三大原则"><a href="#Redux的三大原则" class="headerlink" title="Redux的三大原则"></a>Redux的三大原则</h2><h3 id="单一数据流"><a href="#单一数据流" class="headerlink" title="单一数据流"></a>单一数据流</h3><p>应用中的state都被存储在唯一的store中，所有数据一目了然，这给我们带来非常大的便利来调试应用，任何组件都可以访问到store的任何数据，这样我们就不需要操心各种跨组件通信，当产品经理改需求时，也不用让整个应用大动干戈，因为你只需要维护唯一的数据源store。</p>
+<h3 id="State只能读取"><a href="#State只能读取" class="headerlink" title="State只能读取"></a>State只能读取</h3><p>第一大原则中我们说到“任何组件都能访问到store的任何数据”，这是不是表示store就像全局变量一样危险？当然不是，因为store中的state是只读的，如果要修改state，都要严格按照Redux的API来执行，也就是action，action是一个用于描述事件将如何发生的对象，只有action才能改变store中的state，因此Redux让应用的状态改变变得“可预测”。</p>
+<h3 id="使用纯函数来修改state"><a href="#使用纯函数来修改state" class="headerlink" title="使用纯函数来修改state"></a>使用纯函数来修改state</h3><p>单有action是无法改变state的，这时我们需要配合Reducer纯函数，Reducer存在的意义就是接受action的指令改变state并且返回新的state，它是纯函数，不会对应用产生任何的副作用。</p>
+<h2 id="简单demo"><a href="#简单demo" class="headerlink" title="简单demo"></a>简单demo</h2><p>说了这么多，我们用code来举个例子🌰：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createStore &#125; <span class="keyword">from</span> <span class="string">'redux'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">counter是一个reducer函数，它的作用是传入store中state的旧值和描述事件发生的action对象</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">counter</span>(<span class="params">state = <span class="number">0</span>, action</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">switch</span> (action.type) &#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="string">'INCREMENT'</span>:</span><br><span class="line">    <span class="keyword">return</span> state + <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">case</span> <span class="string">'DECREMENT'</span>:</span><br><span class="line">    <span class="keyword">return</span> state - <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">default</span>:</span><br><span class="line">    <span class="keyword">return</span> state;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建 Redux store 来存放应用的状态。</span></span><br><span class="line"><span class="comment">// API 是 &#123; subscribe, dispatch, getState &#125;。</span></span><br><span class="line"><span class="keyword">let</span> store = createStore(counter);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 监听state变化，当有变化时，触发subscribe中的函数</span></span><br><span class="line">store.subscribe(<span class="function"><span class="params">()</span> =&gt;</span></span><br><span class="line">    <span class="comment">// 使用store.getState()获取最新的state</span></span><br><span class="line">  <span class="built_in">console</span>.log(store.getState())</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 改变内部 state 惟一方法是 dispatch 一个 action，将会触发subscribe中的函数</span></span><br><span class="line">store.dispatch(&#123; <span class="attr">type</span>: <span class="string">'INCREMENT'</span> &#125;);</span><br><span class="line"><span class="comment">// 1</span></span><br><span class="line">store.dispatch(&#123; <span class="attr">type</span>: <span class="string">'INCREMENT'</span> &#125;);</span><br><span class="line"><span class="comment">// 2</span></span><br><span class="line">store.dispatch(&#123; <span class="attr">type</span>: <span class="string">'DECREMENT'</span> &#125;);</span><br><span class="line"><span class="comment">// 1</span></span><br></pre></td></tr></table></figure>
+<p>这个例子涵盖了大部分Redux的API和使用方式，但是具体应用到React当中，我们还需进行一下步骤。</p>
+<h2 id="一个简单的React与Redux计数器demo"><a href="#一个简单的React与Redux计数器demo" class="headerlink" title="一个简单的React与Redux计数器demo"></a>一个简单的React与Redux计数器demo</h2><p>我们要了解一个事实，React与Redux到底是什么关系？其实这两者一点关系都没有，Redux是一个单独的状态管理工具，它不仅可以用在React中，还可以用到其他的前框架中，只不过因为React的“ state 函数的形式来描述界面”的特性，React与Redux成为一对较好的搭档。也就是为什么我们说Redux是React全家桶之一。</p>
+<p>1、<br>用create-react-app初始化一个react项目，<code>npm install redux --save</code>,下载redux包。</p>
+<p>2、创建<code>index.redux.js</code>文件，写入计数器需要的action对象、reducer函数，和action creator：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//  action对象，描述“触发动作”</span></span><br><span class="line"><span class="keyword">const</span> ADD_NUM = <span class="string">'add num'</span>;</span><br><span class="line"><span class="keyword">const</span> REDUCE_NUM =<span class="string">'reduce num'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//reducer，接受旧的state（第一次为初始化state）和action，返回新的state</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">counter</span>(<span class="params">state=<span class="number">0</span>,action</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">switch</span>(action.type)&#123;</span><br><span class="line">    <span class="keyword">case</span> ADD_NUM:</span><br><span class="line">      <span class="keyword">return</span> state+<span class="number">1</span></span><br><span class="line">    <span class="keyword">case</span> REDUCE_NUM:</span><br><span class="line">      <span class="keyword">return</span> state<span class="number">-1</span></span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">      <span class="keyword">return</span> <span class="number">10</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//action creator 生成 action 的方法。“action” 和 “action 创建函数” 这两个概念很容易混在一起，使用时最好注意区分</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">addNum</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123; <span class="attr">type</span>:ADD_NUM &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">reduceNum</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123; <span class="attr">type</span>: REDUCE_NUM &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>3、修改<code>index.js</code>为：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">"react"</span>;</span><br><span class="line"><span class="keyword">import</span> ReactDom <span class="keyword">from</span> <span class="string">"react-dom"</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; createStore &#125; <span class="keyword">from</span> <span class="string">'redux'</span>;</span><br><span class="line"><span class="keyword">import</span> App <span class="keyword">from</span> <span class="string">"./App"</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; counter, addNum, reduceNum &#125; <span class="keyword">from</span> <span class="string">'./index.redux'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//利用redux的createStore API创建store</span></span><br><span class="line"><span class="keyword">const</span> store = createStore(counter);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">render</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">//将redux组件传入App组件当中</span></span><br><span class="line">  ReactDom.render(<span class="xml"><span class="tag">&lt;<span class="name">App</span> <span class="attr">store</span>=<span class="string">&#123;store&#125;</span> <span class="attr">addNum</span>=<span class="string">&#123;addNum&#125;</span> <span class="attr">reduceNum</span>=<span class="string">&#123;reduceNum&#125;</span>  /&gt;</span>,document.getElementById('root'));</span></span><br><span class="line"><span class="xml">&#125;</span></span><br><span class="line"><span class="xml">//初次渲染</span></span><br><span class="line"><span class="xml">render();</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">//利用store API监测当store中的state变化的时候自动启动subscribe监听函数，再次渲染render</span></span><br><span class="line"><span class="xml">store.subscribe(render);</span></span><br></pre></td></tr></table></figure>
+<p>4、修改<code>App.js</code>为：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span></span>&#123;</span><br><span class="line">  render()&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//引入props下来的store和action</span></span><br><span class="line">    <span class="keyword">const</span> store = <span class="keyword">this</span>.props.store;</span><br><span class="line">    <span class="keyword">const</span> num = store.getState(); <span class="comment">//获取state值</span></span><br><span class="line">    <span class="keyword">const</span> addNum = <span class="keyword">this</span>.props.addNum;</span><br><span class="line">    <span class="keyword">const</span> reduceNum = <span class="keyword">this</span>.props.reduceNum;</span><br><span class="line">    <span class="keyword">return</span>(</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">      &lt;h1&gt;现在的数量为&#123;num&#125;&lt;<span class="regexp">/h1&gt;  </span></span><br><span class="line"><span class="regexp">        &lt;button onClick=&#123;() =&gt; store.dispatch(addNum())&#125; &gt;+&lt;/</span>button&gt;  </span><br><span class="line">        &lt;button onClick=&#123;() =&gt; store.dispatch(reduceNum())&#125; &gt;-<span class="xml"><span class="tag">&lt;/<span class="name">button</span>&gt;</span></span>  </span><br><span class="line">    &lt;<span class="regexp">/div&gt; </span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">export default App</span></span><br></pre></td></tr></table></figure>
+<p>这样我们就完成一个简单的React与Redux结合的计数器例子在线查看我的例子(需翻墙：<a href="https://codesandbox.io/s/vn2q19xjq3" target="_blank" rel="noopener">Codesandbox</a>,也许你会问这么简单的逻辑为何要用这么复杂的方式来实现，因为这只是简单介绍Redux的用法，当需求超级复杂的时候，使用Redux带来的便利谁用谁知道～</p>
+<h2 id="异步Redux的使用方式"><a href="#异步Redux的使用方式" class="headerlink" title="异步Redux的使用方式"></a>异步Redux的使用方式</h2><p>你会注意到上个例子中，如果要用异步函数，是否无从下手，这时候就需要用到redux-thunk这个插件来实现异步，同样我们以前一个计数器例子来实现。</p>
+<p>1、安装<code>npm install redux-thunk --save</code>插件</p>
+<p>2、修改<code>index.js</code>为：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">"react"</span>;</span><br><span class="line"><span class="keyword">import</span> ReactDom <span class="keyword">from</span> <span class="string">"react-dom"</span>;</span><br><span class="line"><span class="comment">//添加applyMiddleware，才能使用thunk这个中间件</span></span><br><span class="line"><span class="keyword">import</span> &#123; createStore,applyMiddleware &#125; <span class="keyword">from</span> <span class="string">'redux'</span>;</span><br><span class="line"><span class="keyword">import</span> thunk <span class="keyword">from</span> <span class="string">'redux-thunk'</span>;</span><br><span class="line"><span class="keyword">import</span> App <span class="keyword">from</span> <span class="string">"./App"</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; counter, addNum, reduceNum, addNumAsync &#125; <span class="keyword">from</span> <span class="string">'./index.redux'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//利用redux的createStore API创建store，并且使用thunk中间件</span></span><br><span class="line"><span class="keyword">const</span> store = createStore(counter, applyMiddleware(thunk)); </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">render</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">//将redux组件传入App组件当中</span></span><br><span class="line">  ReactDom.render(<span class="xml"><span class="tag">&lt;<span class="name">App</span> <span class="attr">store</span>=<span class="string">&#123;store&#125;</span> <span class="attr">addNum</span>=<span class="string">&#123;addNum&#125;</span> <span class="attr">reduceNum</span>=<span class="string">&#123;reduceNum&#125;</span> <span class="attr">addNumAsync</span>=<span class="string">&#123;addNumAsync&#125;</span> /&gt;</span>,document.getElementById('root'));</span></span><br><span class="line"><span class="xml">&#125;</span></span><br><span class="line"><span class="xml">//初次渲染</span></span><br><span class="line"><span class="xml">render();</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">//利用store API监测当store变化的时候自动启动subscribe监听函数</span></span><br><span class="line"><span class="xml">store.subscribe(render);</span></span><br></pre></td></tr></table></figure>
+<p>3、修改<code>index.redux.js</code>为：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> ADD_NUM = <span class="string">"add num"</span>;</span><br><span class="line"><span class="keyword">const</span> REDUCE_NUM = <span class="string">"reduce num"</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//reducer</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">counter</span>(<span class="params">state = <span class="number">0</span>, action</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">switch</span> (action.type) &#123;</span><br><span class="line">    <span class="keyword">case</span> ADD_NUM:</span><br><span class="line">      <span class="keyword">return</span> state + <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">case</span> REDUCE_NUM:</span><br><span class="line">      <span class="keyword">return</span> state - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">      <span class="keyword">return</span> <span class="number">10</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//action creator</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">addNum</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123; <span class="attr">type</span>: ADD_NUM &#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">reduceNum</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123; <span class="attr">type</span>: REDUCE_NUM &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//这里特别注意的是addNumAsync返回一个setTimeout回调函数，第一个dispatch为参数，模拟异步addNum</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">addNumAsync</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="params">dispatch</span> =&gt;</span> &#123;</span><br><span class="line">    setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      dispatch(addNum());</span><br><span class="line">    &#125;, <span class="number">2000</span>);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>修改<code>App.js</code>为：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span></span>&#123;</span><br><span class="line">  render()&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//引入redux状态库</span></span><br><span class="line">    <span class="keyword">const</span> store = <span class="keyword">this</span>.props.store;</span><br><span class="line">    <span class="keyword">const</span> num = store.getState();</span><br><span class="line">    <span class="keyword">const</span> addNum = <span class="keyword">this</span>.props.addNum;</span><br><span class="line">    <span class="keyword">const</span> reduceNum = <span class="keyword">this</span>.props.reduceNum;</span><br><span class="line">    <span class="comment">//异步函数与其他函数一样使用</span></span><br><span class="line">    <span class="keyword">const</span> addNumAsync = <span class="keyword">this</span>.props.addNumAsync;</span><br><span class="line">    <span class="keyword">return</span>(</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">      &lt;h1&gt;现在的数量为&#123;num&#125;&lt;<span class="regexp">/h1&gt;  </span></span><br><span class="line"><span class="regexp">        &lt;button onClick=&#123;() =&gt; store.dispatch(addNum())&#125; &gt;+&lt;/</span>button&gt;  </span><br><span class="line">        &lt;button onClick=&#123;() =&gt; store.dispatch(reduceNum())&#125; &gt;-<span class="xml"><span class="tag">&lt;/<span class="name">button</span>&gt;</span></span>  </span><br><span class="line">        &lt;button onClick=&#123;() =&gt; store.dispatch(addNumAsync())&#125; &gt;+ Async&lt;<span class="regexp">/button&gt;  </span></span><br><span class="line"><span class="regexp">    &lt;/</span>div&gt; </span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> App</span><br></pre></td></tr></table></figure>
+<p>使用异步时，我们只需要在applyMiddleware中加一个thunk即可实现，查看在线demo：<a href="https://codesandbox.io/s/ojwy7krpry" target="_blank" rel="noopener">Codesandbox</a></p>
+<h2 id="为React量身定制-的React-Redux"><a href="#为React量身定制-的React-Redux" class="headerlink" title="为React量身定制 的React-Redux"></a>为React量身定制 的React-Redux</h2><p>我们之前说过React与Redux并没有什么直接的关系，但是React-Redux就不一样了，React-Redux让React使用Redux变得更加简洁，可以理解为React-Redux是Redux专门为React定制的状态管理工具。</p>
+<p>1、安装react-redux,<code>npm install react-redux --save</code></p>
+<p>2、修改<code>index.js</code>为：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">"react"</span>;</span><br><span class="line"><span class="keyword">import</span> ReactDom <span class="keyword">from</span> <span class="string">"react-dom"</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; createStore,applyMiddleware &#125; <span class="keyword">from</span> <span class="string">'redux'</span>;</span><br><span class="line"><span class="keyword">import</span> thunk <span class="keyword">from</span> <span class="string">'redux-thunk'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; Provider &#125; <span class="keyword">from</span> <span class="string">'react-redux'</span>;</span><br><span class="line"><span class="keyword">import</span> App <span class="keyword">from</span> <span class="string">"./App"</span>; </span><br><span class="line"><span class="keyword">import</span> &#123; counter &#125; <span class="keyword">from</span> <span class="string">'./index.redux'</span>;</span><br><span class="line"><span class="comment">//import &#123; counter, addNum, reduceNum, addNumAsync &#125; from './index.redux';</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//利用redux的createStore API创建store</span></span><br><span class="line"><span class="keyword">const</span> store = createStore(counter, applyMiddleware(thunk));</span><br><span class="line"></span><br><span class="line"><span class="comment">//Provider包裹的组件能够使用store中的state和action，在Provider中我们只需要传入store，并且无需subscribe监听，因为react-redux都给我们做好了</span></span><br><span class="line">ReactDom.render(</span><br><span class="line">  (</span><br><span class="line">    &lt;Provider store=&#123;store&#125; &gt;</span><br><span class="line">        &lt;App /&gt;</span><br><span class="line">    &lt;<span class="regexp">/Provider&gt;</span></span><br><span class="line"><span class="regexp">  ),</span></span><br><span class="line"><span class="regexp">  document.getElementById('root')</span></span><br><span class="line"><span class="regexp">)</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/ 以下是未使用React-redux</span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/function render() &#123;</span></span><br><span class="line"><span class="regexp">  /</span><span class="regexp">/将redux组件传入App组件当中</span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/  ReactDom.render(&lt;App store=&#123;store&#125; addNum=&#123;addNum&#125; reduceNum=&#123;reduceNum&#125; addNumAsync=&#123;addNumAsync&#125; /</span>&gt;,<span class="built_in">document</span>.getElementById(<span class="string">'root'</span>));</span><br><span class="line"><span class="comment">//&#125;</span></span><br><span class="line"><span class="comment">//初次渲染</span></span><br><span class="line"><span class="comment">//render();</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//利用store API监测当store变化的时候自动启动subscribe监听函数</span></span><br><span class="line"><span class="comment">//store.subscribe(render);</span></span><br></pre></td></tr></table></figure>
+<p>3、修改<code>App.js</code>为：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; connect &#125; <span class="keyword">from</span> <span class="string">'react-redux'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; addNum, reduceNum, addNumAsync &#125; <span class="keyword">from</span> <span class="string">'./index.redux'</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span></span>&#123;</span><br><span class="line">  render()&#123;</span><br><span class="line">    <span class="keyword">return</span>(</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">      &lt;h1&gt;现在的数量为&#123;<span class="keyword">this</span>.props.num&#125;&lt;<span class="regexp">/h1&gt; </span></span><br><span class="line"><span class="regexp">      &lt;button onClick=&#123;this.props.addNum&#125; &gt;+&lt;/</span>button&gt;</span><br><span class="line">      &lt;button onClick=&#123;<span class="keyword">this</span>.props.reduceNum&#125; &gt;-<span class="xml"><span class="tag">&lt;/<span class="name">button</span>&gt;</span></span>   </span><br><span class="line">        &lt;button onClick=&#123;<span class="keyword">this</span>.props.addNumAsync &#125; &gt;+ Async&lt;<span class="regexp">/button&gt;  </span></span><br><span class="line"><span class="regexp">    &lt;/</span>div&gt; </span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//数据层</span></span><br><span class="line"><span class="keyword">const</span> mapStateProps = <span class="function">(<span class="params">state</span>)=&gt;</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;<span class="attr">num</span>:state&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//改变数据的action</span></span><br><span class="line"><span class="keyword">const</span> actionCreators = &#123; addNum, reduceNum, addNumAsync &#125;;</span><br><span class="line"><span class="comment">//将store和action注入到App组件</span></span><br><span class="line">App = connect(mapStateProps, actionCreators)(App);</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> App</span><br></pre></td></tr></table></figure>
+<p>react-redux极大的简化了我们使用redux的步骤，查看我的在线demo:<a href="https://codesandbox.io/s/l509l09j2l" target="_blank" rel="noopener">Codesandbox</a></p>
+<h2 id="使用装饰器优化React-Redux中的connect"><a href="#使用装饰器优化React-Redux中的connect" class="headerlink" title="使用装饰器优化React-Redux中的connect"></a>使用装饰器优化React-Redux中的connect</h2><p>在未使用ES7的装饰器新特性时，我们是这样使用connect的，看起来确实有些繁琐，改进方案也很简单。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//数据层</span></span><br><span class="line"><span class="keyword">const</span> mapStateProps = <span class="function">(<span class="params">state</span>)=&gt;</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;<span class="attr">num</span>:state&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//改变数据的action</span></span><br><span class="line"><span class="keyword">const</span> actionCreators = &#123; addNum, reduceNum, addNumAsync &#125;;</span><br><span class="line"><span class="comment">//将store和action注入到App组件</span></span><br><span class="line">App = connect(mapStateProps, actionCreators)(App);</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> App</span><br></pre></td></tr></table></figure>
+<p>1、我们的项目是用creact-react-app初始化的，使用装饰器是需要配置package.json中的plugins，于是我们<code>npm run eject</code>呼出个性化配置，然后安装<code>npm install babel-plugin-transform-decorators-lagacy</code>插件。<br>2、打开package.json，在“babel”中添加<code>&quot;plugins&quot;:[&quot;transform-decorators-legacy&quot;]</code> ：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"babel"</span>: &#123;</span><br><span class="line">    <span class="string">"presets"</span>: [</span><br><span class="line">      <span class="string">"react-app"</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="string">"plugins"</span>:[<span class="string">"transform-decorators-legacy"</span>]</span><br><span class="line">  &#125;,</span><br></pre></td></tr></table></figure>
+<p>3、修改<code>App.js</code> 为：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; connect &#125; <span class="keyword">from</span> <span class="string">'react-redux'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; addNum, reduceNum, addNumAsync &#125; <span class="keyword">from</span> <span class="string">'./index.redux'</span>;</span><br><span class="line"><span class="comment">//使用装饰器方式优化connect</span></span><br><span class="line">@connect(</span><br><span class="line">  state=&gt;(&#123;<span class="attr">num</span>:state&#125;),</span><br><span class="line">  &#123; addNum, reduceNum, addNumAsync &#125;</span><br><span class="line">)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span></span>&#123;</span><br><span class="line">  render()&#123;</span><br><span class="line">    <span class="keyword">return</span>(</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;h1&gt;现在的数量为&#123;<span class="keyword">this</span>.props.num&#125;&lt;<span class="regexp">/h1&gt;</span></span><br><span class="line"><span class="regexp">        &lt;button onClick=&#123;this.props.addNum&#125; &gt;+&lt;/</span>button&gt;  </span><br><span class="line">        &lt;button onClick=&#123;<span class="keyword">this</span>.props.reduceNum&#125; &gt;-<span class="xml"><span class="tag">&lt;/<span class="name">button</span>&gt;</span></span>  </span><br><span class="line">        &lt;button onClick=&#123;<span class="keyword">this</span>.props.addNumAsync&#125; &gt;+ Async&lt;<span class="regexp">/button&gt;  </span></span><br><span class="line"><span class="regexp">       </span></span><br><span class="line"><span class="regexp">    &lt;/</span>div&gt; </span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// //数据层</span></span><br><span class="line"><span class="comment">// const mapStateProps = (state)=&gt;&#123;</span></span><br><span class="line"><span class="comment">//   return &#123;num:state&#125;</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br><span class="line"><span class="comment">// //改变数据的函数层</span></span><br><span class="line"><span class="comment">// const actionCreators = &#123; addNum, reduceNum, addNumAsync &#125;</span></span><br><span class="line"><span class="comment">// App = connect(mapStateProps, actionCreators)(App);</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> App</span><br></pre></td></tr></table></figure>
+<p>为什么我们需要安装插件还需要配置babel才能使用装饰器呢，因为部分浏览器还未支持装饰器decorators用法。查看在线demo：<a href="https://codesandbox.io/s/vnp4z5qq3l" target="_blank" rel="noopener">Codesandbox</a></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这篇学习记录只是浅析了Redux的简单使用方式，并没有涉及到较为复杂的Redux用法，在项目开发中Redux的使用远不止这么简单，还需要进一步的摸索与实践，才能较好的掌握Redux这个强大的状态管理工具。</p>
+<p>nice to meet you :)</p>
+<p>参考资料：</p>
+<p><a href="http://www.redux.org.cn/" target="_blank" rel="noopener">Redux 中文文档</a></p>
+<p><a href="http://www.ruanyifeng.com/blog/2016/09/redux_tutorial_part_one_basic_usages.html" target="_blank" rel="noopener">阮一峰Redux 入门教程（一）：基本用法</a></p>
+<p><a href="http://www.ruanyifeng.com/blog/2016/09/redux_tutorial_part_two_async_operations.html" target="_blank" rel="noopener">阮一峰Redux 入门教程（二）：中间件与异步操作</a></p>
+<p><a href="http://www.ruanyifeng.com/blog/2016/09/redux_tutorial_part_three_react-redux.html" target="_blank" rel="noopener">阮一峰Redux 入门教程（三）：React-Redux 的用法</a></p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://vince.xin">Vince</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://vince.xin/2017/11/26/React学习记录—浅析状态管理工具Redux与React-Redux/">https://vince.xin/2017/11/26/React学习记录—浅析状态管理工具Redux与React-Redux/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/Redux/">Redux</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/11/30/一道题引出的函数闭包与事件委托与事件绑定/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">一道题引出的函数闭包与事件委托与事件绑定</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/11/19/一道题引出来的JavaScript形参“值传递”与“引用传递”/">
+        <span class="next-text nav-default">一道题引出来的JavaScript形参“值传递”与“引用传递”</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:artistcoder@163.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/Vincedrean" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2017 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Vince</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://vince.xin/2017/11/26/React学习记录—浅析状态管理工具Redux与React-Redux/';
+        this.page.identifier = '2017/11/26/React学习记录—浅析状态管理工具Redux与React-Redux/';
+        this.page.title = 'React学习记录—浅析状态管理工具Redux与React-Redux';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//vincehua.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.2"></script>
+
+  </body>
+</html>

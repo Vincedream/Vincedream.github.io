@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="正则表达学习笔记以及常用的正则验证">
+
+
+
+
+  <meta name="keywords" content="Vince, Vince's Blog,前端,Node,React">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Vince's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.2">
+
+
+
+<link rel="canonical" href="https://vince.xin/2018/03/15/正则表达学习笔记以及常用的正则验证/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.2">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 正则表达学习笔记以及常用的正则验证 - Vince's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Vince's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Vince's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          正则表达学习笔记以及常用的正则验证
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-03-15
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/正则/">正则</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#正则到底匹配了什么"><span class="toc-text">正则到底匹配了什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#字符匹配"><span class="toc-text">字符匹配</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#两种维度的匹配"><span class="toc-text">两种维度的匹配</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#横向匹配"><span class="toc-text">横向匹配</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#纵向匹配"><span class="toc-text">纵向匹配</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符组"><span class="toc-text">字符组</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#范围表示法"><span class="toc-text">范围表示法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#排除字符串"><span class="toc-text">排除字符串</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#简写形式"><span class="toc-text">简写形式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#量词"><span class="toc-text">量词</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#简写形式-1"><span class="toc-text">简写形式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#贪婪匹配与惰性匹配"><span class="toc-text">贪婪匹配与惰性匹配</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多选分支"><span class="toc-text">多选分支</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#案例分析"><span class="toc-text">案例分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#位置匹配"><span class="toc-text">位置匹配</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#如何匹配位置"><span class="toc-text">如何匹配位置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#"><span class="toc-text">^</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-1"><span class="toc-text">$</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#b"><span class="toc-text">\b</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#B"><span class="toc-text">\B</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#p"><span class="toc-text">(?=p)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#p-1"><span class="toc-text">(?!p)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#案例分析-1"><span class="toc-text">案例分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常用正则"><span class="toc-text">常用正则</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>正则表达式真的要常用啊，要不然一下子就忘记了<br><a id="more"></a></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>正则表达式是可以让我们处理字符串变得更加灵活简便，并且功能非常强大，因此在哪个编程语言中都有正则表达式的规则，极大的提高了程序员的工作效率，在此记录自己的学习过程，因为正则是我认为最容易忘记的匹配概念，巩固一遍也方便自己之后在此温习。</p>
+<h2 id="正则到底匹配了什么"><a href="#正则到底匹配了什么" class="headerlink" title="正则到底匹配了什么"></a>正则到底匹配了什么</h2><p>永远记住：正则要么匹配<strong>字符</strong>，要么匹配<strong>位置</strong>，匹配字符能够让我们直接获取到需要的字符，匹配位置能够让我们清楚目标字符串的位置，再经过一系列的截取、替换或者插入，得到目标字符串。</p>
+<h2 id="字符匹配"><a href="#字符匹配" class="headerlink" title="字符匹配"></a>字符匹配</h2><h3 id="两种维度的匹配"><a href="#两种维度的匹配" class="headerlink" title="两种维度的匹配"></a>两种维度的匹配</h3><h4 id="横向匹配"><a href="#横向匹配" class="headerlink" title="横向匹配"></a>横向匹配</h4><p>指一个正则可匹配的字符串的长度不是固定的，可以是多种情况，实现的方式是使用<strong>量词</strong>，譬如{m,n}，表示出现最少m次，最多n次，如下例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regex = <span class="regexp">/ab&#123;2,5&#125;c/g</span>;</span><br><span class="line"><span class="keyword">var</span> string = <span class="string">"abc abbc abbbc abbbbc abbbbbc abbbbbbc"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(string.match(regex))  <span class="comment">// [ 'abbc', 'abbbc', 'abbbbc', 'abbbbbc' ]</span></span><br></pre></td></tr></table></figure>
+<p>规则图例： </p>
+<p><img src="http:static1.vince.xin/815276BD-9B00-4E79-AC47-E98EAFD7FF92.png" alt="image"></p>
+<p>很容易理解，也就是m to n times，出现2到5次，这就是简单的横向匹配模式。</p>
+<h4 id="纵向匹配"><a href="#纵向匹配" class="headerlink" title="纵向匹配"></a>纵向匹配</h4><p>纵向匹配是指，一个正则匹配的字符串，具体到某一位字符时，它可以是多种可能的值，在此指明，它是具体匹配<strong>某一位字符串</strong>，我们来看个简单例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regex = <span class="regexp">/a[xyz]c/g</span>;</span><br><span class="line"><span class="keyword">var</span> string = <span class="string">"aac abc axc ayz acc acccccz"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(string.match(regex))   <span class="comment">// [ 'axc' ]</span></span><br></pre></td></tr></table></figure>
+<p>这就是简单的纵向匹配，[xyz]指的是当匹配到第二位的时候，只能是x、y、z才能正确被匹配。</p>
+<p>规则图例：</p>
+<p><img src="http:static1.vince.xin/02C4C8DE-124C-4328-ACFA-5B8B86225FBC.png" alt="image"></p>
+<h3 id="字符组"><a href="#字符组" class="headerlink" title="字符组"></a>字符组</h3><p>它指用一系列的规则来匹配特定某一位的字符，记住，一定是匹配某一位，比如这个字符要符合1到6的数字或者a到f，按照平常我们可以这样写[123456abcdef]，固然可以，如果说条件太多了呢？比如说是所有非数字，非字母，这就比较难一一列出了。自然地，正则早就为我们提供了很多简写</p>
+<h4 id="范围表示法"><a href="#范围表示法" class="headerlink" title="范围表示法"></a>范围表示法</h4><p>这种表示法适用于比较有规律的规则，如下三种</p>
+<ol>
+<li>[1-8]表示1到8的某个数字</li>
+<li>[a-l]表示从a开始拼，到l的某个字母</li>
+<li>[A-K]与上面一点相同呢</li>
+</ol>
+<p>例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regex = <span class="regexp">/a[a-f1-7]c/g</span>;</span><br><span class="line"><span class="keyword">var</span> string = <span class="string">"a3c alc a4c a0c akc"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(string.match(regex))   <span class="comment">// [ 'a3c', 'a4c' ]</span></span><br></pre></td></tr></table></figure>
+<p>这种是包含[]中的字符，如果说要排除这些在外呢？</p>
+<h4 id="排除字符串"><a href="#排除字符串" class="headerlink" title="排除字符串"></a>排除字符串</h4><p>纵向匹配时，到匹配某一位置，可以是任何东西，但是就不能为”1”,”g”,”x”，这时候就要用排除字符组，如下例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regex = <span class="regexp">/a[^1gx]c/g</span>;</span><br><span class="line"><span class="keyword">var</span> string = <span class="string">"a1c alc a4c a0c axc"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(string.match(regex))   <span class="comment">// [ 'alc', 'a4c', 'a0c' ]</span></span><br></pre></td></tr></table></figure>
+<h4 id="简写形式"><a href="#简写形式" class="headerlink" title="简写形式"></a>简写形式</h4><p>我们可以用[0-9]来表示来表示所有的数字，但是如果匹配规则太多，就容易混淆，所以正则为我们提供了很多的简写：</p>
+<table>
+<thead>
+<tr>
+<th>字符组</th>
+<th>具体含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>\d</td>
+<td>表示[0-9]，数字</td>
+</tr>
+<tr>
+<td>\D</td>
+<td>表示[^0-9]，大写就表示“非”，即非数字</td>
+</tr>
+<tr>
+<td>\w</td>
+<td>表示[0-9a-zA-Z_]，表示数字大小写字母和下划线</td>
+</tr>
+<tr>
+<td>\W</td>
+<td>表示[^0-9a-zA-Z_]，除数字大小写字母和下划线的所有字符</td>
+</tr>
+<tr>
+<td>\s</td>
+<td>表示[ \t\v\n\r\f], 空白符号</td>
+</tr>
+<tr>
+<td>\S</td>
+<td>表示非空白符</td>
+</tr>
+<tr>
+<td> .</td>
+<td>表示几乎所有字符，这个几乎并不是指所有</td>
+</tr>
+</tbody>
+</table>
+<p>以上是常用的几种简写方式，如果说我们要匹配任意字符呢？可以用[\d\D]、[\w\W]、[\s\S]和[^]任意一种。</p>
+<h3 id="量词"><a href="#量词" class="headerlink" title="量词"></a>量词</h3><h4 id="简写形式-1"><a href="#简写形式-1" class="headerlink" title="简写形式"></a>简写形式</h4><p>我们在之前的横向匹配就接触到了量词，它就像这样{m,n}匹配个数，但是如果说要匹配无限个、最少一个的话，用{m,n}来写就不是很美观，所以正则同样给量词提供了简写：</p>
+<table>
+<thead>
+<tr>
+<th>量词</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>{m,}</td>
+<td>表示至少出现m次</td>
+</tr>
+<tr>
+<td>{m}</td>
+<td>表示出现m次</td>
+</tr>
+<tr>
+<td>?</td>
+<td>表示出现或者不出现，可有可无的意思</td>
+</tr>
+<tr>
+<td>+</td>
+<td>表示至少出现一次</td>
+</tr>
+<tr>
+<td>*</td>
+<td>表示出现任意次，也有可能不出现</td>
+</tr>
+</tbody>
+</table>
+<p>举个例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regex = <span class="regexp">/a&#123;1,2&#125;b&#123;3,&#125;d?e+f*/g</span>;</span><br></pre></td></tr></table></figure>
+<p>规则图例：</p>
+<p><img src="http:static1.vince.xin/397C79D8-8D65-4B3F-B606-BE18CC0929BF.png" alt="image"></p>
+<h4 id="贪婪匹配与惰性匹配"><a href="#贪婪匹配与惰性匹配" class="headerlink" title="贪婪匹配与惰性匹配"></a>贪婪匹配与惰性匹配</h4><p>我们用一个简单的例子来对比两者的不同：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 贪婪匹配</span></span><br><span class="line"><span class="keyword">var</span> regex = <span class="regexp">/\d&#123;2,5&#125;/g</span>;</span><br><span class="line"><span class="keyword">var</span> string = <span class="string">"12312 1 23 3224 23123 124"</span></span><br><span class="line"><span class="built_in">console</span>.log(string.match(regex)) <span class="comment">//[ '12312', '23', '3224', '23123', '124' ]</span></span><br></pre></td></tr></table></figure>
+<p><strong>贪婪匹配：</strong>什么叫贪婪，就是匹配到了最低标准条件(两个数字)还不满足，还要尽量多的去匹配直到最大饱和(6个数字)才停止匹配。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 惰性匹配</span></span><br><span class="line"><span class="keyword">var</span> regex = <span class="regexp">/\d&#123;2,5&#125;?/g</span>;</span><br><span class="line"><span class="keyword">var</span> string = <span class="string">"12312 1 23 3224 23123 124"</span></span><br><span class="line"><span class="built_in">console</span>.log(string.match(regex)) <span class="comment">//[ '12', '31', '23', '32', '24', '23', '12', '12' ]</span></span><br></pre></td></tr></table></figure>
+<p><strong>惰性匹配：</strong>惰性就是只要满足最低要求，就停下这轮匹配开始下一轮，这个例子最低要求是2个数字，因此匹配到的都是两位数，注意它和贪婪匹配唯一的区别就是在量词后面加了”?”。</p>
+<p>我们来对比他们的规则图例：</p>
+<ul>
+<li>惰性匹配：</li>
+</ul>
+<p><img src="http:static1.vince.xin/D6794375-AC7F-41B6-B312-1A0A78DD7E95.png" alt="image"></p>
+<ul>
+<li>贪婪匹配：</li>
+</ul>
+<p><img src="http:static1.vince.xin/BF27266E-9E12-4C5B-A4AC-840894904213.png" alt="image"></p>
+<p>他们俩的区别就是那根表示量词的线，惰性匹配是虚线，表示只要达到区间最低标准即可，而贪婪匹配则是实线，表示在区间内尽量多的匹配。</p>
+<h3 id="多选分支"><a href="#多选分支" class="headerlink" title="多选分支"></a>多选分支</h3><p>上面所讲的横纵向匹配一般用来匹配一些有规律的字符，假如我们有这么一个要求，要匹配字符串中的某几个单次，比如boy或girl，这时候我们就可以用多选分支来匹配啦：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regex = <span class="regexp">/boy|girl/g</span>;</span><br><span class="line"><span class="keyword">var</span> string = <span class="string">"the girl say you are a good boy"</span></span><br><span class="line"><span class="built_in">console</span>.log(string.match(regex)) <span class="comment">//[ 'girl', 'boy' ]</span></span><br></pre></td></tr></table></figure>
+<p>规则图例：</p>
+<p><img src="http:static1.vince.xin/5A57433F-F3F8-4EE5-B7C7-8BB41D4761A7.png" alt="image"></p>
+<p>分析：我们可以看到，图例上的分支说明这两条路都可以走，这么说，上下两条路都是平等的吗？不一定，我们用个更有说服力的例子来解释。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regex = <span class="regexp">/boy|boyfriend/g</span>;</span><br><span class="line"><span class="keyword">var</span> string = <span class="string">"boyfriend"</span></span><br><span class="line"><span class="built_in">console</span>.log(string.match(regex)) <span class="comment">// [ 'boy' ]</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regex = <span class="regexp">/boyfriend|boy/g</span>;</span><br><span class="line"><span class="keyword">var</span> string = <span class="string">"boyfriend"</span></span><br><span class="line"><span class="built_in">console</span>.log(string.match(regex)) <span class="comment">// [ 'boyfriend' ]</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regex = <span class="regexp">/boyfriend|boy/g</span>;</span><br><span class="line"><span class="keyword">var</span> string = <span class="string">"boy"</span></span><br><span class="line"><span class="built_in">console</span>.log(string.match(regex)) <span class="comment">// [ 'boy' ]</span></span><br></pre></td></tr></table></figure>
+<p>分析：例一例二为什么换了个位置，匹配出来的结果就是不一样的呢？</p>
+<p>我们可以这么理解，分支匹配是种“优先惰性”匹配，优先是值优先考虑分支中最靠前的规则，惰性是指如果最前的规则一旦匹配上，就不会在继续。这样上面结果不同就很好解释了，第一个例子优先匹配第一个规则“boy”,并且是惰性匹配，匹配到boy就结束了。第二三个例子优先匹配boybriend如果有，则匹配boybriend(例二)，如果没有就boy(例三)。</p>
+<h3 id="案例分析"><a href="#案例分析" class="headerlink" title="案例分析"></a>案例分析</h3><blockquote>
+<p>匹配如 #FFBBAB #FEE</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regex = <span class="regexp">/#([0-9a-fA-F]&#123;6&#125;|[0-9a-fA-F]&#123;3&#125;)/g</span>;</span><br><span class="line"><span class="keyword">var</span> string = <span class="string">"#ffbbad #FEB #fef #FDED3W"</span></span><br><span class="line"><span class="built_in">console</span>.log(string.match(regex)) <span class="comment">// [ '#ffbbad', '#FEB', '#fef', '#FDE' ]</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>匹配url参数</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regex = <span class="regexp">/([^?&amp;=]+)=([^?&amp;=]*)/g</span>;</span><br><span class="line"><span class="keyword">var</span> string = <span class="string">"https://juejin.im/post?name=huajinbo&amp;age=12"</span></span><br><span class="line"><span class="built_in">console</span>.log(string.match(regex)) <span class="comment">// [ 'name=huajinbo', 'age=12' ]</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>匹配日期 XXXX-XX-XX</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regex = <span class="regexp">/(\d&#123;4&#125;)-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[0-1])/g</span>;</span><br><span class="line"><span class="keyword">var</span> string = <span class="string">"2017-11-11"</span></span><br><span class="line"><span class="built_in">console</span>.log(regex.test(string)) <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>匹配HTML中的id属性</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regex = <span class="regexp">/id=".*?"/g</span>;</span><br><span class="line"><span class="keyword">var</span> string = <span class="string">'&lt;div id="main" class="top" &gt;&lt;/div&gt;'</span></span><br><span class="line"><span class="built_in">console</span>.log(string.match(regex)) <span class="comment">//[ 'id="main"' ]</span></span><br></pre></td></tr></table></figure>
+<h2 id="位置匹配"><a href="#位置匹配" class="headerlink" title="位置匹配"></a>位置匹配</h2><p>之前我们说过，正则表达式除了匹配字符还能匹配位置，怎么理解这个位置呢，就是两个字符之间符合正则规则的锚点，即如下图：</p>
+<h3 id="如何匹配位置"><a href="#如何匹配位置" class="headerlink" title="如何匹配位置"></a>如何匹配位置</h3><p>在ES5中有如下几个规则锚点：</p>
+<table>
+<thead>
+<tr>
+<th>规则</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>^</td>
+<td>单行字符串起点处</td>
+</tr>
+<tr>
+<td>$</td>
+<td>单行字符串末尾处</td>
+</tr>
+<tr>
+<td>\b</td>
+<td>单词[0-9a-zA-Z_]和非[0-9a-zA-Z_]的边界，即\w与\W的边界</td>
+</tr>
+<tr>
+<td>\B</td>
+<td>非(单词[0-9a-zA-Z_]和非[0-9a-zA-Z_])的边界</td>
+</tr>
+<tr>
+<td>(?=p)</td>
+<td>字符’p’前面的位置</td>
+</tr>
+<tr>
+<td>(?!p)</td>
+<td>非字符’p’前的位置</td>
+</tr>
+</tbody>
+</table>
+<p>刚刚开始看这几个规则时，真是一脸懵逼，这和之前的\d \D \w \W到底是啥关系，其实并没有什么关系，我们要接受这么一个全新的概念，<strong>寻找字符串位置</strong>，也就是说以上六个规则就是为了寻找符合规则锚点的，话多不如来串代码：</p>
+<h4 id><a href="#" class="headerlink" title="^"></a>^</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regex = <span class="regexp">/^/g</span>;</span><br><span class="line"><span class="keyword">var</span> string = <span class="string">"hello"</span></span><br><span class="line"><span class="built_in">console</span>.log(string.replace(regex,<span class="string">'#'</span>))  <span class="comment">// #hello#</span></span><br></pre></td></tr></table></figure>
+<p>对于一个字符串起点位置进行匹配，那么为什么要强调是单行呢？因为如果不是你特别指明多行匹配，正则就默认只匹配第一行的，如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regex = <span class="regexp">/^/g</span>;</span><br><span class="line"><span class="keyword">var</span> string = <span class="string">"hello\nhello"</span></span><br><span class="line"><span class="built_in">console</span>.log(string.replace(regex,<span class="string">'#'</span>))</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">#hello</span></span><br><span class="line"><span class="comment">hello</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+<p>这个时候就需要加上多行匹配规则，在/最后加上m(Multiline：多行)，如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regex = <span class="regexp">/^/gm</span>;</span><br><span class="line"><span class="keyword">var</span> string = <span class="string">"hello\nhello"</span></span><br><span class="line"><span class="built_in">console</span>.log(string.replace(regex,<span class="string">'#'</span>))</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">#hello</span></span><br><span class="line"><span class="comment">#hello</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+<h4 id="-1"><a href="#-1" class="headerlink" title="$"></a>$</h4><p>表示匹配单行字符串末尾位置，原理和^差不多，代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regex = <span class="regexp">/$/gm</span>;</span><br><span class="line"><span class="keyword">var</span> string = <span class="string">"hello"</span></span><br><span class="line"><span class="built_in">console</span>.log(string.replace(regex,<span class="string">'#'</span>)) <span class="comment">// hello#</span></span><br></pre></td></tr></table></figure>
+<h4 id="b"><a href="#b" class="headerlink" title="\b"></a>\b</h4><p>单词[0-9a-zA-Z_]和非[0-9a-zA-Z_]的边界，即\w与\W的边界，这个就有点晦涩难懂，比如[空字符;’’];和32ADcx之间的位置，例子如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regex = <span class="regexp">/\b/g</span>;</span><br><span class="line"><span class="keyword">var</span> string = <span class="string">"[h'ello"</span></span><br><span class="line"><span class="built_in">console</span>.log(string.replace(regex,<span class="string">'#'</span>)) <span class="comment">// [#h#'#ello#</span></span><br></pre></td></tr></table></figure>
+<p>这里我们注意<strong>空字符串也是非[0-9a-zA-Z_]</strong>，这就是为什么我们在最后o后面还有一个#。</p>
+<h4 id="B"><a href="#B" class="headerlink" title="\B"></a>\B</h4><p>这是我理解很久一个规则，怎么理解<strong>非(单词[0-9a-zA-Z_]和非[0-9a-zA-Z_])的边界</strong>，我们简单粗暴理解为：只要不是像[空字;’’];和32ADcx这样的区间，就是\B匹配的区间，比如db或[空字符，来一段代码表示：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regex = <span class="regexp">/\B/g</span>;</span><br><span class="line"><span class="keyword">var</span> string = <span class="string">"[h'ello"</span></span><br><span class="line"><span class="built_in">console</span>.log(string.replace(regex,<span class="string">'#'</span>)) <span class="comment">// #[h'e#l#l#o</span></span><br></pre></td></tr></table></figure>
+<h4 id="p"><a href="#p" class="headerlink" title="(?=p)"></a>(?=p)</h4><p>表示特点字符串前面的位置，这个很容易理解，代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regex = <span class="regexp">/(?=o)/g</span>;</span><br><span class="line"><span class="keyword">var</span> string = <span class="string">"boy"</span></span><br><span class="line"><span class="built_in">console</span>.log(string.replace(regex,<span class="string">'#'</span>)) <span class="comment">// b#oy</span></span><br></pre></td></tr></table></figure>
+<h4 id="p-1"><a href="#p-1" class="headerlink" title="(?!p)"></a>(?!p)</h4><p>表示非特点字符串前面的位置</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regex = <span class="regexp">/(?!o)/g</span>;</span><br><span class="line"><span class="keyword">var</span> string = <span class="string">"boy"</span></span><br><span class="line"><span class="built_in">console</span>.log(string.replace(regex,<span class="string">'#'</span>)) <span class="comment">// #bo#y#</span></span><br></pre></td></tr></table></figure>
+<h3 id="案例分析-1"><a href="#案例分析-1" class="headerlink" title="案例分析"></a>案例分析</h3><blockquote>
+<p>将12734893转换为12,734,893</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regex = <span class="regexp">/(?!^)(?=(\d&#123;3&#125;)+$)/g</span>;</span><br><span class="line"><span class="keyword">var</span> string = <span class="string">"12734893"</span></span><br><span class="line"><span class="built_in">console</span>.log(string.replace(regex,<span class="string">','</span>)) <span class="comment">// 12,734,893</span></span><br></pre></td></tr></table></figure>
+<h2 id="常用正则"><a href="#常用正则" class="headerlink" title="常用正则"></a>常用正则</h2><blockquote>
+<p>判断电话号码</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regx = <span class="regexp">/^1[34578]\d&#123;9&#125;$/</span>;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>验证邮箱</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regx = <span class="regexp">/^([a-zA-Z0-9_\-])+@([a-zA-Z0-9_\-])+(\.[a-zA-Z0-9_\-])+$/</span>;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>验证身份证号码</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regx = <span class="regexp">/(^\d&#123;15&#125;$)|(^\d&#123;18&#125;$)|(^\d&#123;17&#125;(\d|X|x)$)/</span>;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>匹配汉字</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regx = <span class="regexp">/^[\u4e00-\u9fa5]&#123;0,&#125;$/</span>;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>去除首尾的’/‘</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">'/asdf//'</span>;</span><br><span class="line">str = str.replace(<span class="regexp">/^\/*|\/*$/g</span>, <span class="string">''</span>);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>判断日期格式是否符合 ‘2017-05-11’的形式，简单判断，只判断格式</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regx = <span class="regexp">/^\d&#123;4&#125;\-\d&#123;1,2&#125;\-\d&#123;1,2&#125;$/</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>判断日期格式是否符合 ‘2017-05-11’的形式，严格判断（比较复杂）</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regx = <span class="regexp">/^(?:(?!0000)[0-9]&#123;4&#125;-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]&#123;2&#125;(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)$/</span>;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>IPv4地址正则</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regx = <span class="regexp">/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.)&#123;3&#125;(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/</span>;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>十六进制颜色正则</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regx = <span class="regexp">/^#?([a-fA-F0-9]&#123;6&#125;|[a-fA-F0-9]&#123;3&#125;)$/</span>;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>车牌号正则</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regx = <span class="regexp">/^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]&#123;1&#125;[A-Z]&#123;1&#125;[A-Z0-9]&#123;4&#125;[A-Z0-9挂学警港澳]&#123;1&#125;$/</span>;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>过滤HTML标签</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str=<span class="string">"&lt;p&gt;dasdsa&lt;/p&gt;nice &lt;br&gt; test&lt;/br&gt;"</span></span><br><span class="line"><span class="keyword">var</span> regx = <span class="regexp">/&lt;[^&lt;&gt;]+&gt;/g</span>;</span><br><span class="line">str = str.replace(regx, <span class="string">''</span>);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>密码强度正则，最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regx = <span class="regexp">/^.*(?=.&#123;6,&#125;)(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&amp;*? ]).*$/</span>;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>URL正则</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regx = <span class="regexp">/^((https?|ftp|file):\/\/)?([\da-z\.-]+)\.([a-z\.]&#123;2,6&#125;)([\/\w \.-]*)*\/?$/</span>;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>匹配浮点数</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regx = <span class="regexp">/^-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)$/</span>;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://vince.xin">Vince</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://vince.xin/2018/03/15/正则表达学习笔记以及常用的正则验证/">https://vince.xin/2018/03/15/正则表达学习笔记以及常用的正则验证/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2018/03/16/深入apply与call——借用原生方法以及参数传入差异的原因/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">深入apply与call——借用原生方法以及参数传入差异的原因</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2018/03/03/状态码304与200：HTTP缓存/">
+        <span class="next-text nav-default">状态码304与200：HTTP缓存</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:artistcoder@163.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/Vincedrean" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2017 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Vince</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://vince.xin/2018/03/15/正则表达学习笔记以及常用的正则验证/';
+        this.page.identifier = '2018/03/15/正则表达学习笔记以及常用的正则验证/';
+        this.page.title = '正则表达学习笔记以及常用的正则验证';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//vincehua.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.2"></script>
+
+  </body>
+</html>

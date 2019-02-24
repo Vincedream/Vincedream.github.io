@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="回到最初的起点--原生Ajax原理浅析">
+
+
+
+
+  <meta name="keywords" content="Vince, Vince's Blog,前端,Node,React">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Vince's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.2">
+
+
+
+<link rel="canonical" href="https://vince.xin/2018/01/22/回到最初的起点--原生Ajax原理浅析/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.2">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 回到最初的起点--原生Ajax原理浅析 - Vince's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Vince's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Vince's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          回到最初的起点--原生Ajax原理浅析
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-01-22
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/Javascript/">Javascript</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#概述"><span class="toc-text">概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#步骤一：创建XHR对象"><span class="toc-text">步骤一：创建XHR对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#步骤二：发送请求"><span class="toc-text">步骤二：发送请求</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#open"><span class="toc-text">open()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#send"><span class="toc-text">send()</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#步骤三：接收响应："><span class="toc-text">步骤三：接收响应：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#同步请求"><span class="toc-text">同步请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#异步请求"><span class="toc-text">异步请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#超时"><span class="toc-text">超时</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>技术虽然很老，但是我们也要知道他是怎么一回事<br><a id="more"></a></p>
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>看到这篇文章时，你或许在项目中将axios用的如虎添翼，体验到了axios大法好，确实不能否认用axios能够大幅度提高了项目开发效率，无论是方便的Promise还是拦截器先进理念，它都理所当然地成为项目开发的首选，但是这一切的起点，都是基于XHR对象，也就是我们平常说的ajax，本篇文章是我在使用axios几个月后再次回归本质，探索web请求的基石。</p>
+<h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>ajax是asynchronous javascript and  XML的简写，中文翻译是异步的javascript和XML，这一技术能够向服务器请求额外的数据而无须卸载页面，会带来更好的用户体验。虽然名字中包含XML，但ajax通信与数据格式无关，它可以请求任意格式的数据，比如常用的json，ajax包括以下几步骤：</p>
+<ol>
+<li>创建AJAX对象</li>
+<li>发出HTTP请求</li>
+<li>接收服务器传回的数据</li>
+<li>更新网页数据</li>
+</ol>
+<p>概括起来，就是一句话，ajax通过原生的XMLHttpRequest对象发出HTTP请求，得到服务器返回的数据后，再进行处理。</p>
+<h3 id="步骤一：创建XHR对象"><a href="#步骤一：创建XHR对象" class="headerlink" title="步骤一：创建XHR对象"></a>步骤一：创建XHR对象</h3><p>由于ajax的核心XMLHttpRequest对象(XHR)是微软首先引进的(IE5、IE6时期)，并且它用的是自己的MSXML库中的一个ActiveX对象实现的，而IE7+及其他标准浏览器都支持原生的XHR对象，所以这就造成了一个兼容性问题，虽然现在地球上也没几个人用IE5、6，但是作为规范就必须要写兼容性，要不然就会被认为不够严谨，anyway，就一行代码的事情嘛～</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> xhr;</span><br><span class="line"><span class="keyword">if</span> (<span class="built_in">window</span>.XMLHttpRequest) &#123;</span><br><span class="line">  xhr = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  xhr = <span class="keyword">new</span> ActiveXObject(<span class="string">'Microsoft.XMLHTTP'</span>); <span class="comment">//兼容IE5、6</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>创建一个XHR对象，也叫实例化一个XHR对象，因为XMLHTTPRequest()是一个构造函数，用new将它实例化。</p>
+<h3 id="步骤二：发送请求"><a href="#步骤二：发送请求" class="headerlink" title="步骤二：发送请求"></a>步骤二：发送请求</h3><h4 id="open"><a href="#open" class="headerlink" title="open()"></a>open()</h4><p>在使用XHR对象发送请求时，要调用的第一个方法是open()，如下所示，该方法接受3个参数：</p>
+<blockquote>
+<p>xhr.open(“get”,”url”, false);</p>
+</blockquote>
+<p>我们分别详细讲解这三个参数的具体含义：</p>
+<ol>
+<li>第一个参数用于指定发送请求的方式（method），这个字符串，不区分大小写，但通常使用大写字母。通常是”GET”和”POST”就够满足基本要求，但是你也可以写PUT、PATCH、DELETE都是没问题的，这里又引出一道很基础的概念：</li>
+</ol>
+<blockquote>
+<p>　　“GET”用于常规请求，它适用于当URL完全指定请求资源，当请求对服务器没有任何副作用以及当服务器的响应是可缓存的情况下使用。</p>
+<p>　　“POST”方法常用于HTML表单。它在请求主体中包含额外数据且这些数据常存储到服务器上的数据库中。相同URL的重复POST请求从服务器得到的响应可能不同，同时不应该缓存使用这个方法的请求。</p>
+</blockquote>
+<ol start="2">
+<li><p>open()方法的第二个参数是URL，该URL相对于执行代码的当前页面，向同一个域中使用相同端口和协议的URL发送请求(同源策略)，当然也是能跨域的。</p>
+</li>
+<li><p>open()方法的第三个参数是表示是否异步发送请求的布尔值，如果不填写，默认为true，表示异步发送，如果是false，那就是万恶的同步请求，如果没有极其特殊的要求，还是默认为异步。</p>
+</li>
+<li>如果请求一个受密码保护的URL，把用于认证的用户名和密码作为第4和第5个参数传递给open()方法，虽然不常用，但是写出来让大家了解一下。</li>
+</ol>
+<h4 id="send"><a href="#send" class="headerlink" title="send()"></a>send()</h4><p>上面一步我们已经创建了一个请求，单单创建是不够的，这时候我们还发出去，也就是send()，这是个非常容易遗漏的(特别是写get请求)，如果是get方法，参数可以写null或者直接省略，如果是post等方法，参数就是要发送出去的数据。</p>
+<ul>
+<li><p>GET:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">xhr.open(<span class="string">"get"</span>,<span class="string">"/test"</span>,<span class="literal">false</span>)</span><br><span class="line">xhr.send()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>POST:</p>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">xhr.open(<span class="string">"post"</span>,<span class="string">"/posttest"</span>,<span class="literal">false</span>)</span><br><span class="line">xhr.setRequestHeader(<span class="string">"content-type"</span>,<span class="string">"application/x-www-form-urlencoded"</span>);</span><br><span class="line">xhr.send(<span class="string">"name=huajinbo&amp;age=12"</span>)</span><br></pre></td></tr></table></figure>
+<p>这样数据就发送出去，那么我们怎么才能获得返回的数据呢？接着往下看：</p>
+<h3 id="步骤三：接收响应："><a href="#步骤三：接收响应：" class="headerlink" title="步骤三：接收响应："></a>步骤三：接收响应：</h3><p>一个完整的HTTP响应由状态码、响应头集合和响应主体组成。在收到响应后，这些都可以通过XHR对象的属性和方法使用，主要有以下4个属性:</p>
+<ul>
+<li>responseText: 作为响应主体被返回的文本(文本形式)</li>
+<li>responseXML: 如果响应的内容类型是’text/xml’或’application/xml’，这个属性中将保存着响应数据的XML - - DOM文档(document形式)</li>
+<li>status: HTTP状态码(数字形式)</li>
+<li>statusText: HTTP状态说明(文本形式)</li>
+</ul>
+<p><strong>注意：</strong> 有点需要说明白，我们上面的例子都是使用ajax的同步方式，后面会具体介绍。</p>
+<p>在接收到响应后，第一步是检查status属性，以确定响应已经成功返回。一般来说，可以将HTTP状态码为2XX作为成功的标志。此时，responseText属性的内容已经就绪，而且在内容类型正确的情况下，responseXML也可以访问了。此外，状态码为304表示请求的资源并没有被修改，可以直接使用浏览器中缓存的版本；当然，也意味着响应是有效的。</p>
+<p>我们通过以下代码来获取到返回的数据：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>((xhr.status &gt;=<span class="number">200</span> &amp;&amp; xhr.status &lt; <span class="number">300</span>) || xhr.status == <span class="number">304</span>)&#123;</span><br><span class="line">    alert(xhr.responseText);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    alert(<span class="string">'request was unsuccessful:'</span> + xhr.status);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>到这里，我们整个ajax就发送完成并且收到响应数据，为了具体阐述出整个ajax请求，因此以上例子都是基于ajax同步请求，但是在实际开发中，大部分是用异步ajax来请求的，下面我将会说明这两种的区别：</p>
+<h3 id="同步请求"><a href="#同步请求" class="headerlink" title="同步请求"></a>同步请求</h3><p>新人往往喜欢一切按照步骤来，所以由衷地喜欢同步，如果接受的是同步响应，则需要将open()方法的第三个参数设置为false，那么send()方法将阻塞直到请求完成。一旦send()返回，仅需要检查XHR对象的status和responseText属性即可，代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;button id=<span class="string">"btn"</span>&gt;获取信息&lt;<span class="regexp">/button&gt;</span></span><br><span class="line"><span class="regexp">&lt;div id="result"&gt;&lt;/</span>div&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">btn.onclick = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="comment">//创建xhr对象</span></span><br><span class="line">    <span class="keyword">var</span> xhr;</span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">window</span>.XMLHttpRequest)&#123;</span><br><span class="line">        xhr = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        xhr = <span class="keyword">new</span> ActiveXObject(<span class="string">'Microsoft.XMLHTTP'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//发送请求</span></span><br><span class="line">    xhr.open(<span class="string">'get'</span>,<span class="string">'/test'</span>,<span class="literal">false</span>);</span><br><span class="line">    xhr.send();</span><br><span class="line">    <span class="comment">//同步接受响应</span></span><br><span class="line">    <span class="keyword">if</span>((xhr.status &gt;=<span class="number">200</span> &amp;&amp; xhr.status &lt; <span class="number">300</span>) || xhr.status == <span class="number">304</span>)&#123;</span><br><span class="line">        <span class="comment">//实际操作</span></span><br><span class="line">        result.innerHTML += xhr.responseText;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这是一种头绪清晰的请求过程，但是客户端javascript是单线程的，当send()方法阻塞时，也就是说请求未返回的这段时间，它通常会导致整个浏览器冻结，无法执行其他任务，如果连接的服务器响应慢，那么用户的浏览器将冻结，因此，这里极度不推荐这么做，因为我们有更佳的事件方案。</p>
+<h3 id="异步请求"><a href="#异步请求" class="headerlink" title="异步请求"></a>异步请求</h3><p>假如你有一些ajax基础，你或许会疑问问什么一直没有提出readyState，这就是我们讲解异步请求的基础，readyState表示请求/响应过程的当前活动阶段，它是时刻监控请求的xhr变量，当请求的状态发生变化，readyState也会自动变化，这个时候我们就可以监听readyState的阶段码来实现异步请求，readyState的具体值如下：</p>
+<ul>
+<li>0(UNSENT):未初始化。尚未调用open()方法</li>
+<li>1(OPENED):启动。已经调用open()方法，但尚未调用send()方法</li>
+<li>2(HEADERS_RECEIVED):发送。己经调用send()方法，且接收到头信息</li>
+<li>3(LOADING):接收。已经接收到部分响应主体信息</li>
+<li>4(DONE):完成。已经接收到全部响应数据，而且已经可以在客户端使用了</li>
+</ul>
+<p>通过以下监听函数来执行不同阶段的任务：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">xhr.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(xhr.readyState === XXX)&#123;</span><br><span class="line">        <span class="comment">// something</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但是我们一般只关系readyState值为4的阶段，因为这个时候数据请求已经成功就绪状态：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">xhr.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(xhr.readyState === <span class="number">4</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span>(xhr.status == <span class="number">200</span>)&#123;</span><br><span class="line">            alert(xhr.responseText);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>注意：</strong> 必须在调用open()之前指定onreadystatechange 事件处理程序才能确保跨浏览器兼容性，否则将无法接收readyState属性为0和1的情况</p>
+<p>完整例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">btn.onclick = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="comment">//创建xhr对象</span></span><br><span class="line">    <span class="keyword">var</span> xhr;</span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">window</span>.XMLHttpRequest)&#123;</span><br><span class="line">        xhr = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        xhr = <span class="keyword">new</span> ActiveXObject(<span class="string">'Microsoft.XMLHTTP'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//异步接受响应</span></span><br><span class="line">    xhr.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(xhr.readyState == <span class="number">4</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(xhr.status == <span class="number">200</span>)&#123;</span><br><span class="line">                <span class="comment">//实际操作</span></span><br><span class="line">                result.innerHTML += xhr.responseText;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//发送请求</span></span><br><span class="line">    xhr.open(<span class="string">'get'</span>,<span class="string">'/test'</span>,<span class="literal">true</span>);</span><br><span class="line">    xhr.send();</span><br><span class="line">&#125;</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="超时"><a href="#超时" class="headerlink" title="超时"></a>超时</h3><p>我们在使用axios的时候，初始化前一般都会设置超时参数，以便我们弹出错误提醒和重新请求，其实也就是基于ajax的超时设置，如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">xhr.open(<span class="string">'post'</span>,<span class="string">'/test'</span>,<span class="literal">true</span>);</span><br><span class="line">xhr.ontimeout = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="comment">// 超时提醒或者再次请求</span></span><br><span class="line">&#125;</span><br><span class="line">xhr.timeout = <span class="number">1000</span>;</span><br><span class="line">xhr.send();</span><br></pre></td></tr></table></figure>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>通过以上分析，ajax并不复杂，无非是三个步骤四个状态，使用起来也是很人性化的，但是，由于ajax涉及到一些后端及网络的知识，比如各种请求方式、头部信息，使得初学者学起来不是很容易。因此axios将它的步骤和状态封装成语法糖，使用起来更简单，也减少了代码量。</p>
+<p>本篇文章通过回归ajax本质，有利于我们更清楚的理解浏览器请求过程以及原理，因为只是浅析，具体其他更深层次的知识，我将会在合适的时间，做一次全面总结。</p>
+<p>Experience is the father of wisdom and memory the mother ：）</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://vince.xin">Vince</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://vince.xin/2018/01/22/回到最初的起点--原生Ajax原理浅析/">https://vince.xin/2018/01/22/回到最初的起点--原生Ajax原理浅析/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/AJAX/">AJAX</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2018/02/03/总结项目开发中的一些http性能优化/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">总结项目开发中的一些http性能优化</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2018/01/08/styled-components—论React如何优雅地写CSS/">
+        <span class="next-text nav-default">styled-components—论React如何优雅地写CSS</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:artistcoder@163.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/Vincedrean" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2017 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Vince</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://vince.xin/2018/01/22/回到最初的起点--原生Ajax原理浅析/';
+        this.page.identifier = '2018/01/22/回到最初的起点--原生Ajax原理浅析/';
+        this.page.title = '回到最初的起点--原生Ajax原理浅析';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//vincehua.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.2"></script>
+
+  </body>
+</html>

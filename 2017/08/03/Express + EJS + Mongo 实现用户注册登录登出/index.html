@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="Express + EJS + Mongo 实现用户注册登录登出">
+
+
+
+
+  <meta name="keywords" content="Vince, Vince's Blog,前端,Node,React">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Vince's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.2">
+
+
+
+<link rel="canonical" href="https://vince.xin/2017/08/03/Express + EJS + Mongo 实现用户注册登录登出/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.2">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> Express + EJS + Mongo 实现用户注册登录登出 - Vince's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Vince's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Vince's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Express + EJS + Mongo 实现用户注册登录登出
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-08-03
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/Node-js/">Node.js</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#一、准备工作"><span class="toc-text">一、准备工作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#具体步骤："><span class="toc-text">具体步骤：</span></a></li></ol></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#二、路由和视图布局"><span class="toc-text">二、路由和视图布局</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#视图"><span class="toc-text">视图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#路由"><span class="toc-text">路由</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三、实现登录与注册"><span class="toc-text">三、实现登录与注册</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1、session会话与cookie"><span class="toc-text">1、session会话与cookie</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2、主页设置"><span class="toc-text">2、主页设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3、实现登录"><span class="toc-text">3、实现登录</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#将routes中的login-js改为："><span class="toc-text">将routes中的login.js改为：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#代码解读："><span class="toc-text">代码解读：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#修改views中的login-ejs为："><span class="toc-text">修改views中的login.ejs为：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4、实现注册"><span class="toc-text">4、实现注册</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5、实现登出"><span class="toc-text">5、实现登出</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>一个基础的登录注册Node.js应用，要不要来看看？<br><a id="more"></a></p>
+<p>今天我们来尝试一个对新手来说比较有挑战的demo，实现一个用户注册登录登出的项目，来吧～</p>
+<h2 id="一、准备工作"><a href="#一、准备工作" class="headerlink" title="一、准备工作"></a>一、准备工作</h2><ul>
+<li>必要条件：已经安装好了node环境和Mongo数据库，并且启动Mongo数据库</li>
+</ul>
+<h4 id="具体步骤："><a href="#具体步骤：" class="headerlink" title="具体步骤："></a>具体步骤：</h4><p>1、在全局安装express构造器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install express -g</span><br></pre></td></tr></table></figure>
+<p>2、新建文件夹，cd到该文件夹，用express的构造器快速搭建一个express骨架，取名为project</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">express project -e</span><br></pre></td></tr></table></figure>
+<p>3、cd到project项目目录，安装依赖包</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> project</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
+<p>4、因为expree构造器搭建的express初始项目都是为3000端口，而在实际项目开发的时候，3000端口往往被你不小心占用了，并且忘记关闭端口，所以我们修改初始项目中的默认端口，编译器打开project项目，找到bin目录下的<a href="http://www.js文件，将&quot;var" target="_blank" rel="noopener">www.js文件，将&quot;var</a> port = normalizePort(process.env.PORT || ‘3000’);”中的3000，换成3008～</p>
+<p><img src="http://static4.vince.xin/F10E1638-C81B-4FAA-990C-884F8B27DFB6.png" alt="image"></p>
+<p>5、安装我们下面要用到的两个插件express-session和mongoose</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i express-session mongoose -s</span><br></pre></td></tr></table></figure>
+<p>6、在project根目录下，命令行输入npm start启动express项目</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm start</span><br></pre></td></tr></table></figure>
+<p>7、浏览器输入 <a href="http://localhost:3008/" target="_blank" rel="noopener">http://localhost:3008/</a> ，如果出现这个，那么恭喜你第一步准备工作已经完成</p>
+<p><img src="http://static4.vince.xin/F7A6125A-5DAE-4063-904E-0CE8935EFCBB.png" alt="image"></p>
+<ul>
+<li>准备工作完成，进入下一步～</li>
+</ul>
+<h2 id="二、路由和视图布局"><a href="#二、路由和视图布局" class="headerlink" title="二、路由和视图布局"></a>二、路由和视图布局</h2><ul>
+<li>这里我先简单地将整个项目的视图和路由大概地搭建起来，循序渐进嘛，满满来～</li>
+</ul>
+<h3 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h3><p>1、在views中修改index.ejs为：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">  &lt;head&gt;</span><br><span class="line">    &lt;title&gt;index&lt;<span class="regexp">/title&gt;</span></span><br><span class="line"><span class="regexp">    &lt;link rel='stylesheet' href='/</span>stylesheets/style.css<span class="string">' /&gt;</span></span><br><span class="line"><span class="string">  &lt;/head&gt;</span></span><br><span class="line"><span class="string">  &lt;body&gt;</span></span><br><span class="line"><span class="string">    &lt;h1&gt;This is Index Page&lt;/h1&gt;</span></span><br><span class="line"><span class="string">    &lt;a href="/login"&gt;Login Page&lt;/a&gt;</span></span><br><span class="line"><span class="string">    &lt;a href="/register"&gt;Register Page&lt;/a&gt;</span></span><br><span class="line"><span class="string">  &lt;/body&gt;</span></span><br><span class="line"><span class="string">&lt;/html&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>为啥我们这里会有两个href超链接呢，因为方便多个页面跳转</li>
+</ul>
+<p>2、在views中新建登录页面 login.ejs，代码为：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>index<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">'stylesheet'</span> <span class="attr">href</span>=<span class="string">'/stylesheets/style.css'</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">h1</span>&gt;</span>This is Login Page<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"/"</span>&gt;</span>Index Page<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"/register"</span>&gt;</span>Register Page<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>3、在views中新建注册页面 register.ejs，代码为：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>index<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">'stylesheet'</span> <span class="attr">href</span>=<span class="string">'/stylesheets/style.css'</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">h1</span>&gt;</span>This is Register Page<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"/"</span>&gt;</span>Index Page<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"/login"</span>&gt;</span>Login Page<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>ok，视图编写好啦，接下来我们来编写路由～</li>
+</ul>
+<h3 id="路由"><a href="#路由" class="headerlink" title="路由"></a>路由</h3><p>1、修改routes文件夹中的index.js为：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</span><br><span class="line"><span class="keyword">var</span> router = express.Router();</span><br><span class="line"></span><br><span class="line"><span class="comment">/* GET home page. */</span></span><br><span class="line">router.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">  res.render(<span class="string">'index'</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = router;</span><br></pre></td></tr></table></figure>
+<p>2、在routes文件夹中新建login.js，输入代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by vince on 2017/7/11.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</span><br><span class="line"><span class="keyword">var</span> router = express.Router();</span><br><span class="line"></span><br><span class="line"><span class="comment">/* GET login page. */</span></span><br><span class="line">router.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">    res.render(<span class="string">'login'</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = router;</span><br></pre></td></tr></table></figure>
+<p>3、在routes文件夹中新建register.js，输入代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by vince on 2017/7/11.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</span><br><span class="line"><span class="keyword">var</span> router = express.Router();</span><br><span class="line"></span><br><span class="line"><span class="comment">/* GET register page. */</span></span><br><span class="line">router.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">    res.render(<span class="string">'register'</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = router;</span><br></pre></td></tr></table></figure>
+<p>4、在app.js中引入路由：</p>
+<ul>
+<li><p>将以下代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> index = <span class="built_in">require</span>(<span class="string">'./routes/index'</span>);</span><br><span class="line"><span class="keyword">var</span> users = <span class="built_in">require</span>(<span class="string">'./routes/users'</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改为：</p>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> index = <span class="built_in">require</span>(<span class="string">'./routes/index'</span>);</span><br><span class="line"><span class="keyword">var</span> users = <span class="built_in">require</span>(<span class="string">'./routes/users'</span>);</span><br><span class="line"><span class="keyword">var</span> login = <span class="built_in">require</span>(<span class="string">'./routes/login'</span>);</span><br><span class="line"><span class="keyword">var</span> register = <span class="built_in">require</span>(<span class="string">'./routes/register'</span>);</span><br></pre></td></tr></table></figure>
+<p>5、在app.js中设置路由：</p>
+<ul>
+<li>将以下代码：</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">app.use(<span class="string">'/'</span>, index);</span><br><span class="line">app.use(<span class="string">'/users'</span>, users);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>修改为：</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">app.use(<span class="string">'/'</span>, index);</span><br><span class="line">app.use(<span class="string">'/users'</span>, users);</span><br><span class="line">app.use(<span class="string">'/login'</span>,login);</span><br><span class="line">app.use(<span class="string">'/register'</span>,register);</span><br></pre></td></tr></table></figure>
+<p>6、路由配置完成，其实在4和5步中我们添加的代码如下所示：</p>
+<p><img src="http://static4.vince.xin/FA162CC1-9425-417B-A0EF-F6243E983075.png" alt="image"></p>
+<p>7、npm start运行项目：</p>
+<p><img src="http://static4.vince.xin/12831961-A947-4805-90E1-0EBC6CAC3619.png" alt="image"></p>
+<ul>
+<li>框架已经搭建好啦，我们开始书写逻辑代码～</li>
+</ul>
+<h2 id="三、实现登录与注册"><a href="#三、实现登录与注册" class="headerlink" title="三、实现登录与注册"></a>三、实现登录与注册</h2><h3 id="1、session会话与cookie"><a href="#1、session会话与cookie" class="headerlink" title="1、session会话与cookie"></a>1、session会话与cookie</h3><p>我们要实现登录登出，session和cookie是少不了的，它在这个项目中的用处就是当用户已经登录后，在一定时间范围里不必再次输入账号密码，关于session和cookie详细知识，小伙伴们可以查看这篇文章：<a href="http://www.cnblogs.com/shiyangxt/articles/1305506.html" target="_blank" rel="noopener">cookie 和session 的区别详解</a></p>
+<ul>
+<li>在express中使用session，我们一般用express-session这个中间件</li>
+</ul>
+<p>1、在app.js中引入中间件</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> session = <span class="built_in">require</span>(<span class="string">'express-session'</span>);</span><br></pre></td></tr></table></figure>
+<p>2、在app.js中设置session与cookie</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">app.use(session(&#123;</span><br><span class="line">    secret: <span class="string">'nice_to_meet_you'</span>,</span><br><span class="line">    cookie: &#123;</span><br><span class="line">        maxAge: <span class="number">15</span>*<span class="number">60</span>*<span class="number">1000</span>,</span><br><span class="line">        secure: <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;));</span><br></pre></td></tr></table></figure>
+<ul>
+<li>{secret : …}用于签名 session id，为啥要做个签名？因为要防止存在客户端浏览器cookie 下的 session id 被恶意篡改。</li>
+<li>{cookie:{maxAge:…, secure : false}}用来配置存入 cookie 中的 session id。maxAge表示有效期多久单位为 ms，以及允许http请求条件下也写入 cookie，若 secure 为 true，则用 http访问页面，session id 将不被写入 cookie，https反之。<br>4、设置完session和cookie，我们现在app.js中代码如下：</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</span><br><span class="line"><span class="keyword">var</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"><span class="keyword">var</span> favicon = <span class="built_in">require</span>(<span class="string">'serve-favicon'</span>);</span><br><span class="line"><span class="keyword">var</span> logger = <span class="built_in">require</span>(<span class="string">'morgan'</span>);</span><br><span class="line"><span class="keyword">var</span> cookieParser = <span class="built_in">require</span>(<span class="string">'cookie-parser'</span>);</span><br><span class="line"><span class="keyword">var</span> bodyParser = <span class="built_in">require</span>(<span class="string">'body-parser'</span>);</span><br><span class="line"><span class="keyword">var</span> session = <span class="built_in">require</span>(<span class="string">'express-session'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> index = <span class="built_in">require</span>(<span class="string">'./routes/index'</span>);</span><br><span class="line"><span class="keyword">var</span> users = <span class="built_in">require</span>(<span class="string">'./routes/users'</span>);</span><br><span class="line"><span class="keyword">var</span> login = <span class="built_in">require</span>(<span class="string">'./routes/login'</span>);</span><br><span class="line"><span class="keyword">var</span> register = <span class="built_in">require</span>(<span class="string">'./routes/register'</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> app = express();</span><br><span class="line"></span><br><span class="line"><span class="comment">// view engine setup</span></span><br><span class="line">app.set(<span class="string">'views'</span>, path.join(__dirname, <span class="string">'views'</span>));</span><br><span class="line">app.set(<span class="string">'view engine'</span>, <span class="string">'ejs'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// uncomment after placing your favicon in /public</span></span><br><span class="line"><span class="comment">//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));</span></span><br><span class="line">app.use(logger(<span class="string">'dev'</span>));</span><br><span class="line">app.use(bodyParser.json());</span><br><span class="line">app.use(bodyParser.urlencoded(&#123; <span class="attr">extended</span>: <span class="literal">false</span> &#125;));</span><br><span class="line">app.use(cookieParser());</span><br><span class="line">app.use(express.static(path.join(__dirname, <span class="string">'public'</span>)));</span><br><span class="line"></span><br><span class="line">app.use(session(&#123;</span><br><span class="line">    secret: <span class="string">'nice_to_meet_you'</span>,</span><br><span class="line">    cookie: &#123;</span><br><span class="line">        maxAge: <span class="number">15</span>*<span class="number">60</span>*<span class="number">1000</span>,</span><br><span class="line">        secure: <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">app.use(<span class="string">'/'</span>, index);</span><br><span class="line">app.use(<span class="string">'/users'</span>, users);</span><br><span class="line">app.use(<span class="string">'/login'</span>,login);</span><br><span class="line">app.use(<span class="string">'/register'</span>,register);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// catch 404 and forward to error handler</span></span><br><span class="line">app.use(<span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> err = <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'Not Found'</span>);</span><br><span class="line">  err.status = <span class="number">404</span>;</span><br><span class="line">  next(err);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// error handler</span></span><br><span class="line">app.use(<span class="function"><span class="keyword">function</span>(<span class="params">err, req, res, next</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// set locals, only providing error in development</span></span><br><span class="line">  res.locals.message = err.message;</span><br><span class="line">  res.locals.error = req.app.get(<span class="string">'env'</span>) === <span class="string">'development'</span> ? err : &#123;&#125;;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// render the error page</span></span><br><span class="line">  res.status(err.status || <span class="number">500</span>);</span><br><span class="line">  res.render(<span class="string">'error'</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = app;</span><br></pre></td></tr></table></figure>
+<h3 id="2、主页设置"><a href="#2、主页设置" class="headerlink" title="2、主页设置"></a>2、主页设置</h3><p>上一步我们设置好了session和cookie，那我们在主页怎么体现用户是登录状态还是未登录状态呢？</p>
+<ul>
+<li>完善index主页</li>
+</ul>
+<p>1、修改routes中的index.js为：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</span><br><span class="line"><span class="keyword">var</span> router = express.Router();</span><br><span class="line"></span><br><span class="line"><span class="comment">/* GET home page. */</span></span><br><span class="line">router.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">  <span class="comment">//设置user，若还没有session，则user为空</span></span><br><span class="line">  <span class="keyword">var</span> user = req.session.user;</span><br><span class="line">  res.render(<span class="string">'index'</span>,&#123;<span class="attr">user</span>:user&#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = router;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>当访问<a href="http://localhost:3008/时，如果已经登录，则会将session传入到user变量当中，如果没登录，那么user就为空" target="_blank" rel="noopener">http://localhost:3008/时，如果已经登录，则会将session传入到user变量当中，如果没登录，那么user就为空</a></li>
+</ul>
+<p>2、修改views中index.ejs为：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">  &lt;head&gt;</span><br><span class="line">    &lt;title&gt;index&lt;<span class="regexp">/title&gt;</span></span><br><span class="line"><span class="regexp">    &lt;link rel='stylesheet' href='/</span>stylesheets/style.css<span class="string">' /&gt;</span></span><br><span class="line"><span class="string">  &lt;/head&gt;</span></span><br><span class="line"><span class="string">  &lt;body&gt;</span></span><br><span class="line"><span class="string">    &lt;h1&gt;This is Index Page&lt;/h1&gt;</span></span><br><span class="line"><span class="string">    &lt;% if(user &amp;&amp; user.username) &#123; %&gt;</span></span><br><span class="line"><span class="string">    &lt;p&gt;&lt;%= user.username %&gt;你好，欢迎来到Index&lt;/p&gt;</span></span><br><span class="line"><span class="string">    &lt;a href="/logout"&gt;退出&lt;/a&gt;</span></span><br><span class="line"><span class="string">    &lt;% &#125;else&#123; %&gt;</span></span><br><span class="line"><span class="string">    &lt;p&gt;您还没有登陆，请登陆之后再操作&lt;/p&gt;</span></span><br><span class="line"><span class="string">    &lt;a href="/login"&gt;登陆&lt;/a&gt;</span></span><br><span class="line"><span class="string">    &lt;a href="/register"&gt;注册&lt;/a&gt;</span></span><br><span class="line"><span class="string">    &lt;% &#125; %&gt;</span></span><br><span class="line"><span class="string">  &lt;/body&gt;</span></span><br><span class="line"><span class="string">&lt;/html&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>index.ejs分析从index.js传过来的user，若有user则显示用户已经登录，若user为空，显示未登陆</li>
+</ul>
+<p>3、重新启动npm start，查看index页面</p>
+<p><img src="http://static4.vince.xin/C13E49BD-1053-46A3-8D9F-8DA262AFBA3D.png" alt="image"></p>
+<h3 id="3、实现登录"><a href="#3、实现登录" class="headerlink" title="3、实现登录"></a>3、实现登录</h3><ul>
+<li><h4 id="将routes中的login-js改为："><a href="#将routes中的login-js改为：" class="headerlink" title="将routes中的login.js改为："></a>将routes中的login.js改为：</h4></li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by vince on 2017/7/11.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</span><br><span class="line"><span class="keyword">var</span> router = express.Router();</span><br><span class="line"><span class="keyword">var</span> mongoose = <span class="built_in">require</span>(<span class="string">'mongoose'</span>);</span><br><span class="line"></span><br><span class="line">router.route(<span class="string">'/'</span>)</span><br><span class="line">    .get(<span class="function"><span class="keyword">function</span> (<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">        res.render(<span class="string">'login'</span>);</span><br><span class="line">    &#125;)</span><br><span class="line">    .post(<span class="function"><span class="keyword">function</span> (<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> username = req.body.username;</span><br><span class="line">        <span class="keyword">var</span> password = req.body.password;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(!username || !password)&#123;</span><br><span class="line">            res.send(<span class="string">'&lt;p&gt;用户名或者密码不能为空&lt;/p&gt;'</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> db = mongoose.createConnection(<span class="string">'mongodb://localhost:27017/mydb'</span>);</span><br><span class="line">        <span class="keyword">var</span> User = db.model(<span class="string">'user'</span>, <span class="keyword">new</span> mongoose.Schema(&#123;</span><br><span class="line">            username: <span class="built_in">String</span>,</span><br><span class="line">            password: <span class="built_in">String</span></span><br><span class="line">        &#125;));</span><br><span class="line">        User.findOne(&#123;<span class="attr">username</span>: username&#125;, <span class="string">'password'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, data, affectNums</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(!data)&#123;</span><br><span class="line">                res.send(<span class="string">'&lt;p&gt;用户不存在&lt;/p&gt;'</span>)</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(data.password === password)&#123;</span><br><span class="line">                req.session.user = &#123;<span class="attr">username</span>: username&#125;;</span><br><span class="line">                res.redirect(<span class="string">'/'</span>);</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            res.send(<span class="string">'&lt;p&gt;用户名或者密码不正确&lt;/p&gt;'</span>)</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;);</span><br><span class="line"><span class="built_in">module</span>.exports = router;</span><br></pre></td></tr></table></figure>
+<h4 id="代码解读："><a href="#代码解读：" class="headerlink" title="代码解读："></a>代码解读：</h4><ul>
+<li>因为要用到数据库，我们引入mongoose,如果对mongoose不太熟悉的小伙伴可以看下我的另外一篇文章，传送门： <a href="http://www.vinceo.cn/2017/07/10/%E3%80%8C%E5%85%A8%E6%A0%88%E5%88%9D%E6%8E%A2%E3%80%8D-Mongoose%E7%9A%84%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/" target="_blank" rel="noopener">「全栈初探」- Mongoose的简单使用</a></li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> mongoose = <span class="built_in">require</span>(<span class="string">'mongoose'</span>);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>当GET请求时，直接渲染login主页</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.get(<span class="function"><span class="keyword">function</span> (<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">        res.render(<span class="string">'login'</span>);</span><br><span class="line">    &#125;)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>用户填写表单，提交POST的form表单数据，获取username和password数据</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">.post(<span class="function"><span class="keyword">function</span> (<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> username = req.body.username;</span><br><span class="line">        <span class="keyword">var</span> password = req.body.password;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(!username || !password)&#123;</span><br><span class="line">            res.send(<span class="string">'&lt;p&gt;用户名或者密码不能为空&lt;/p&gt;'</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>连接数据库，将表单中的username和数据库中的username匹配，并且验证password是否一致</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//连接数据库，验证用户信息</span></span><br><span class="line"><span class="keyword">var</span> db = mongoose.createConnection(<span class="string">'mongodb://localhost:27017/mydb'</span>);</span><br><span class="line"><span class="keyword">var</span> User = db.model(<span class="string">'user'</span>, <span class="keyword">new</span> mongoose.Schema(&#123;</span><br><span class="line">    username: <span class="built_in">String</span>,</span><br><span class="line">    password: <span class="built_in">String</span></span><br><span class="line">&#125;));</span><br><span class="line">User.findOne(&#123;<span class="attr">username</span>: username&#125;, <span class="string">'password'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, data, affectNums</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!data)&#123;</span><br><span class="line">        res.send(<span class="string">'&lt;p&gt;用户不存在&lt;/p&gt;'</span>)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(data.password === password)&#123;</span><br><span class="line">        req.session.user = &#123;<span class="attr">username</span>: username&#125;;</span><br><span class="line">        res.redirect(<span class="string">'/'</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    res.send(<span class="string">'&lt;p&gt;用户名或者密码不正确&lt;/p&gt;'</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><h4 id="修改views中的login-ejs为："><a href="#修改views中的login-ejs为：" class="headerlink" title="修改views中的login.ejs为："></a>修改views中的login.ejs为：</h4></li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;index&lt;<span class="regexp">/title&gt;</span></span><br><span class="line"><span class="regexp">    &lt;link rel='stylesheet' href='/</span>stylesheets/style.css<span class="string">' /&gt;</span></span><br><span class="line"><span class="string">&lt;/head&gt;</span></span><br><span class="line"><span class="string">    &lt;body&gt;</span></span><br><span class="line"><span class="string">         &lt;h1&gt;This is Login Page&lt;/h1&gt;</span></span><br><span class="line"><span class="string">         &lt;form action="/login" method="post"&gt;</span></span><br><span class="line"><span class="string">             &lt;label&gt;&lt;span&gt;Account:&lt;/span&gt;&lt;input type="text" name="username"&gt;&lt;/label&gt;</span></span><br><span class="line"><span class="string">             &lt;label&gt;&lt;span&gt;Password:&lt;/span&gt;&lt;input type="password" name="password"&gt;&lt;/label&gt;</span></span><br><span class="line"><span class="string">             &lt;input type="submit" value="Login" &gt;</span></span><br><span class="line"><span class="string">         &lt;/form&gt;</span></span><br><span class="line"><span class="string">         &lt;a href="/register"&gt;还没账号 ?&lt;/a&gt;</span></span><br><span class="line"><span class="string">    &lt;/body&gt;</span></span><br><span class="line"><span class="string">&lt;/html&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>登录的逻辑代码完成啦，现在重新启动项目，查看login页面：</li>
+</ul>
+<p><img src="http://static4.vince.xin/4F8A398E-D4CB-4F6D-A26B-49FB71D4840E.png" alt="image"></p>
+<h3 id="4、实现注册"><a href="#4、实现注册" class="headerlink" title="4、实现注册"></a>4、实现注册</h3><ul>
+<li>同样修改routes中的register.js为：</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by vince on 2017/7/11.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</span><br><span class="line"><span class="keyword">var</span> router = express.Router();</span><br><span class="line"><span class="keyword">var</span> mongoose = <span class="built_in">require</span>(<span class="string">'mongoose'</span>);</span><br><span class="line"></span><br><span class="line">router.route(<span class="string">'/'</span>)</span><br><span class="line">    .get(<span class="function"><span class="keyword">function</span> (<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">        res.render(<span class="string">'register'</span>);</span><br><span class="line">    &#125;)</span><br><span class="line">    .post(<span class="function"><span class="keyword">function</span> (<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">        <span class="comment">//获取post的表单数据</span></span><br><span class="line">        <span class="keyword">var</span> username = req.body.username,</span><br><span class="line">            password = req.body.password,</span><br><span class="line">            passwordComfirm = req.body[<span class="string">'password-confirm'</span>],</span><br><span class="line">            userData = &#123;<span class="attr">username</span>: username, <span class="attr">password</span>: password&#125;; <span class="comment">//这才是我们最终需要的数据</span></span><br><span class="line">        <span class="comment">//验证账号密码是否为空</span></span><br><span class="line">        <span class="keyword">if</span>(username == <span class="string">''</span> || password == <span class="string">''</span>)&#123;</span><br><span class="line">            res.json(&#123;</span><br><span class="line">                <span class="string">'message'</span>:<span class="string">'Password or Account can not be null'</span></span><br><span class="line">            &#125;);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//验证两次密码是否一致</span></span><br><span class="line">        <span class="keyword">if</span>(password !== passwordComfirm)&#123;</span><br><span class="line">            res.json(&#123;</span><br><span class="line">                <span class="string">'message'</span>:<span class="string">'Password and confirm password do not match'</span></span><br><span class="line">            &#125;);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//连接数据库</span></span><br><span class="line">        <span class="keyword">var</span> db = mongoose.createConnection(<span class="string">'mongodb://localhost:27017/mydb'</span>);</span><br><span class="line">        <span class="keyword">var</span> Schema = <span class="keyword">new</span> mongoose.Schema(&#123;</span><br><span class="line">            username: <span class="built_in">String</span>,</span><br><span class="line">            password: <span class="built_in">String</span></span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">var</span> User = db.model(<span class="string">'user'</span>,Schema);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//数据库查重，如果已经存在账号，那么注册失败</span></span><br><span class="line">        User.findOne(&#123;<span class="attr">username</span>: username&#125;,<span class="function"><span class="keyword">function</span> (<span class="params">err, data</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(err)&#123;</span><br><span class="line">                res.send(err);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(data)&#123;</span><br><span class="line">                res.send(<span class="string">'&lt;p&gt;Account already exists&lt;/p&gt;'</span>);  <span class="comment">//账号重复，注册失败</span></span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//如果没有错误，将新的账号密码存储在数据库中</span></span><br><span class="line">            User.create(userData,<span class="function"><span class="keyword">function</span> (<span class="params">err, data, affectNums</span>) </span>&#123;</span><br><span class="line">                <span class="keyword">if</span>(err)&#123;</span><br><span class="line">                    res.json(&#123;</span><br><span class="line">                        message: err</span><br><span class="line">                    &#125;);</span><br><span class="line">                    <span class="keyword">return</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span>(affectNums == <span class="number">0</span>)&#123;</span><br><span class="line">                    res.send(<span class="string">'&lt;p&gt; Register Error &lt;/p&gt;'</span>);</span><br><span class="line">                    <span class="keyword">return</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                req.session.user = &#123;<span class="attr">username</span>: username&#125;; <span class="comment">//注册完成后，自动设置session，表示用户已经登录</span></span><br><span class="line">                res.redirect(<span class="string">'/'</span>); <span class="comment">//返回index页面</span></span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;);</span><br><span class="line"><span class="built_in">module</span>.exports = router;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>修改views中register的代码为：</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>index<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">'stylesheet'</span> <span class="attr">href</span>=<span class="string">'/stylesheets/style.css'</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>This is Login Page<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">"/register"</span> <span class="attr">method</span>=<span class="string">"post"</span> <span class="attr">id</span>=<span class="string">"reg-form"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">label</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>用户名:<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"username"</span>&gt;</span><span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">label</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>密码:<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"password"</span> <span class="attr">name</span>=<span class="string">"password"</span>&gt;</span><span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">label</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>确认密码:<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"password"</span> <span class="attr">name</span>=<span class="string">"password-confirm"</span>&gt;</span><span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">value</span>=<span class="string">"注册"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"/login"</span>&gt;</span>已有账号？<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">    <span class="comment">//验证表单</span></span></span><br><span class="line"><span class="javascript">        (<span class="function"><span class="keyword">function</span>(<span class="params">g, undefined</span>)</span>&#123;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> form = <span class="built_in">document</span>.querySelector(<span class="string">'#reg-form'</span>),</span></span><br><span class="line"><span class="javascript">                username = <span class="built_in">document</span>.querySelector(<span class="string">'input[name=username]'</span>),</span></span><br><span class="line"><span class="javascript">                password = <span class="built_in">document</span>.querySelector(<span class="string">'input[name=password]'</span>),</span></span><br><span class="line"><span class="javascript">                rePassword = <span class="built_in">document</span>.querySelector(<span class="string">'input[name=password-confirm]'</span>);</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="javascript">            form.addEventListener(<span class="string">'submit'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span></span><br><span class="line"><span class="undefined">                e = e || event;</span></span><br><span class="line"><span class="undefined">                e.preventDefault();</span></span><br><span class="line"><span class="javascript">                <span class="keyword">if</span>(username.value == <span class="string">""</span> || password.value == <span class="string">""</span> )&#123;</span></span><br><span class="line"><span class="javascript">                    alert(<span class="string">'用户名或者密码不能为空'</span>);</span></span><br><span class="line"><span class="javascript">                    <span class="keyword">return</span> <span class="literal">false</span>;</span></span><br><span class="line"><span class="undefined">                &#125;</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="javascript">                <span class="keyword">if</span>(password.value == <span class="string">''</span>)&#123;</span></span><br><span class="line"><span class="javascript">                    alert(<span class="string">'确认密码不能为空'</span>);</span></span><br><span class="line"><span class="javascript">                    <span class="keyword">return</span> <span class="literal">false</span>;</span></span><br><span class="line"><span class="undefined">                &#125;</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="javascript">                <span class="keyword">if</span>(password.value !== rePassword.value )&#123;</span></span><br><span class="line"><span class="javascript">                    alert(<span class="string">'两次密码输入不一致'</span>);</span></span><br><span class="line"><span class="javascript">                    <span class="keyword">return</span> <span class="literal">false</span>;</span></span><br><span class="line"><span class="undefined">                &#125;</span></span><br><span class="line"><span class="javascript">                <span class="keyword">this</span>.submit();</span></span><br><span class="line"><span class="javascript">            &#125;, <span class="literal">false</span>)</span></span><br><span class="line"><span class="javascript">        &#125;)(<span class="keyword">this</span>);</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>虽然我们在register中已经验证过表单，但是这里给大家参考一下啦～</p>
+</li>
+<li><p>到这里我们已经完成了注册，重启项目，访问register，注册试一试：</p>
+</li>
+</ul>
+<p><img src="http://static4.vince.xin/B9A6CA30-1021-4966-8711-27E8A62CB2BE.png" alt="image"></p>
+<ul>
+<li>注册成功后，跳转到index主页：</li>
+</ul>
+<p><img src="http://static4.vince.xin/35C08130-8B5E-4916-9EA0-D5A848203AAF.png" alt="image"></p>
+<ul>
+<li>查看数据库中数据：</li>
+</ul>
+<p><img src="http://static4.vince.xin/D533FED1-00F7-4082-A3C7-54DE29F0E0BE.png" alt="image"></p>
+<p>到这里我们已经完成了注册和登录，兴奋吧～，别忘了我们还有登出功能没实现哦</p>
+<h3 id="5、实现登出"><a href="#5、实现登出" class="headerlink" title="5、实现登出"></a>5、实现登出</h3><p>1、我们在routes中新建logout.js。输入代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by vince on 2017/7/11.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</span><br><span class="line"><span class="keyword">var</span> router = express.Router();</span><br><span class="line"></span><br><span class="line">router.get(<span class="string">'/'</span>,<span class="function"><span class="keyword">function</span> (<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(req.session.user)&#123;</span><br><span class="line">        <span class="keyword">delete</span> req.session.user;  <span class="comment">//删除session，退为未登录状态</span></span><br><span class="line">    &#125;</span><br><span class="line">    res.redirect(<span class="string">'/'</span>);  <span class="comment">//重定向到主页</span></span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = router;</span><br></pre></td></tr></table></figure>
+<p>2、回到app.js中向上面那样设置路由<br>添加代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> logout = <span class="built_in">require</span>(<span class="string">'./routes/logout'</span>);</span><br><span class="line">app.use(<span class="string">'/logout'</span>,logout);</span><br></pre></td></tr></table></figure>
+<p>如图：</p>
+<p><img src="http://static4.vince.xin/01E52F89-8405-48F4-A593-688CB82C81C9.png" alt="image"></p>
+<ul>
+<li>到现在为止，所有代码已经完成啦，重启项目试试吧～</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>这个小demo中我们学会了如何设置路由、session与cookie的使用、mongo数据库读写、ejs的基本使用，收获还是不错的～</li>
+<li>作为新手入门，代码写到到这里差不多了。当然在实际业务中，登录注册远比现在复杂，验证码也是必须的，折旧等着小伙伴们自己去探索吧～</li>
+<li>代码已经放入GitHub中，传送门: <a href="https://github.com/Vincedream/Express_Login_Regist" target="_blank" rel="noopener">Express + EJS + Mongo 实现一个用户注册登录登出</a></li>
+<li>如果你觉得对你有帮助，给个star鼓励啦～</li>
+<li>nice to meet you～</li>
+</ul>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://vince.xin">Vince</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://vince.xin/2017/08/03/Express + EJS + Mongo 实现用户注册登录登出/">https://vince.xin/2017/08/03/Express + EJS + Mongo 实现用户注册登录登出/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/Express/">Express</a>
+            
+              <a href="/tags/Mongo/">Mongo</a>
+            
+              <a href="/tags/EJS/">EJS</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/08/23/Mongoose的简单使用/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Mongoose的简单使用</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/07/27/20行代码实现Express提交表单数据插入Mongo数据库/">
+        <span class="next-text nav-default">20行代码实现Express提交表单数据插入Mongo数据库</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:artistcoder@163.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/Vincedrean" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2017 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Vince</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://vince.xin/2017/08/03/Express + EJS + Mongo 实现用户注册登录登出/';
+        this.page.identifier = '2017/08/03/Express + EJS + Mongo 实现用户注册登录登出/';
+        this.page.title = 'Express + EJS + Mongo 实现用户注册登录登出';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//vincehua.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.2"></script>
+
+  </body>
+</html>

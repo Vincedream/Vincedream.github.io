@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="用CSS让你的文字有文艺范">
+
+
+
+
+  <meta name="keywords" content="Vince, Vince's Blog,前端,Node,React">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Vince's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.2">
+
+
+
+<link rel="canonical" href="https://vince.xin/2017/09/13/用CSS让你的文字有文艺范/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.2">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 用CSS让你的文字有文艺范 - Vince's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Vince's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Vince's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          用CSS让你的文字有文艺范
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-09-13
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/CSS/">CSS</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#透明文字"><span class="toc-text">透明文字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#模糊文字"><span class="toc-text">模糊文字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#镂空文字"><span class="toc-text">镂空文字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#渐变文字"><span class="toc-text">渐变文字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#图片背景文字："><span class="toc-text">图片背景文字：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>如何写文字样式更文艺？<br><a id="more"></a></p>
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>我们做页面涉及字体的时候，最多就是换个color换个font-family，总是觉得没体现出你内心的文艺范，这时是不是抱怨CSS并没有给文字设置什么样式，抱怨是没用哒，我们自己动手，看看能不能“创造”出一些CSS字体样式呢～</p>
+<h3 id="透明文字"><a href="#透明文字" class="headerlink" title="透明文字"></a>透明文字</h3><ol>
+<li>用rgba调整透明度<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">div</span>&#123;</span><br><span class="line">    <span class="attribute">background-color</span>: pink;</span><br><span class="line">    <span class="attribute">color</span>: <span class="built_in">rgba</span>(0, 0, 0, 0.1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><img src="http://vinceimage.oss-cn-beijing.aliyuncs.com/blog/06B76BD6-3B89-4D38-8FB9-D8C10EA2D031.png" alt="image"></p>
+<ol start="2">
+<li>用opacity调整遮罩<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">div</span>&#123;</span><br><span class="line">    <span class="attribute">background-color</span>: pink;</span><br><span class="line">    <span class="attribute">opacity</span>: <span class="number">0.4</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><img src="http://vinceimage.oss-cn-beijing.aliyuncs.com/blog/4ADBA9CC-0D62-4DD7-8B18-6C6DAF5C7708.png" alt="image"><br>两种区别是用rgba只是对文字有透明度，而opacity对整个div都有遮罩影响，对比其两个div的背景颜色即可发现区别。</p>
+<h3 id="模糊文字"><a href="#模糊文字" class="headerlink" title="模糊文字"></a>模糊文字</h3><p>在css中并没有指定文字模糊的样式，但是可以用text-shadow喝-webkit-text-fill-color组合，得出模糊文字，即用text-shadow制造底层模糊文字，用-webkit-text-fill-color填充颜色为透明，例如：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">div</span>&#123;</span><br><span class="line">    <span class="attribute">text-shadow</span>: <span class="number">0</span> <span class="number">0</span> <span class="number">5px</span> red;</span><br><span class="line">    <span class="attribute">-webkit-text-fill-color</span>: transparent;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里的text-shadow将x，y偏移量设置为0，也就是不偏移，设置味5px的模糊程度，重点是下面的fill-color设置为transparent透明，这样就把底层的模糊字体体现出来，效果如下：<br><img src="http://vinceimage.oss-cn-beijing.aliyuncs.com/B6BC0F0C-C50B-4EA1-B462-F634F6391365.png" alt="image"></p>
+<h3 id="镂空文字"><a href="#镂空文字" class="headerlink" title="镂空文字"></a>镂空文字</h3><p>这里我们用到-webkit-text-stroke来给文字外围描边，然后在把文字的填充颜色设置为透明，这样就能只显示出文字的外围的描边，也就是我们所说的镂空文字。<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">div</span>&#123;</span><br><span class="line">    <span class="attribute">font-size</span>: <span class="number">40px</span>;</span><br><span class="line">    <span class="attribute">-webkit-text-stroke</span>: <span class="number">1px</span> red;</span><br><span class="line">    <span class="attribute">-webkit-text-fill-color</span>: transparent;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>效果：</p>
+<p><img src="http://vinceimage.oss-cn-beijing.aliyuncs.com/blog/0764C528-A3A2-4025-999C-3A2F8C2E91E6.png" alt="image"></p>
+<h3 id="渐变文字"><a href="#渐变文字" class="headerlink" title="渐变文字"></a>渐变文字</h3><p>这是个比较有趣的组合方式，CSS中并没有给我们提供文字的渐变，但是我们的background可以做到渐变颜色，那怎么让文字渐变呢，我们上面的一个属性是让文字透明，这样文字下面的东西我们就可以看的到，那我们试想，如果让文字下面的渐变背景颜色显示出来，这样的不就是相当于文字有了背景颜色嘛，我们先试试：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">div</span>&#123;</span><br><span class="line">    <span class="attribute">font-size</span>: <span class="number">40px</span>;</span><br><span class="line">    <span class="attribute">background</span>: <span class="built_in">linear-gradient</span>(to bottom,white,black);</span><br><span class="line">    <span class="attribute">-webkit-text-fill-color</span>: transparent;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然而效果却是：</p>
+<p><img src="http://vinceimage.oss-cn-beijing.aliyuncs.com/blog/0A5C29AF-C9BA-4826-8084-3B98AFBF78BA.png" alt="image"></p>
+<p>这里虽然背景有了渐变，但文字直接成了透明，那么我们怎么做到文字外围的背景去除，文字中的背景显示出来，我们知道background-clip是用来设置背景图片在那个区域显示，如果它能让文字中的背景显示，那我们岂不是就能做到我们希望的效果～，没错-webkit-background-clip:text的效果就是制定背景只在文字中显示，我们再试试：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">div</span>&#123;</span><br><span class="line">    <span class="attribute">font-size</span>: <span class="number">40px</span>;</span><br><span class="line">    <span class="attribute">background</span>: <span class="built_in">linear-gradient</span>(to bottom,white,black);</span><br><span class="line">    <span class="attribute">-webkit-text-fill-color</span>: transparent;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>文字渐变效果：</p>
+<p><img src="http://vinceimage.oss-cn-beijing.aliyuncs.com/blog/B5FE66FB-CF92-49EF-8ACD-B194E667D790.png" alt="image"></p>
+<h3 id="图片背景文字："><a href="#图片背景文字：" class="headerlink" title="图片背景文字："></a>图片背景文字：</h3><p>我们经常在网上看到类似于这样酷炫的图片：<br><img src="http://vinceimage.oss-cn-beijing.aliyuncs.com/blog/2430F35B-80B8-4A42-AEDF-D554399E7AD7.png" alt="image"></p>
+<p>作为一个爱折腾的前端狗，做页面的时候能用CSS达到的效果绝对不求美工给我们高清大图贴页面，自己动手～</p>
+<p>我们都知道background-clip是用来设置背景图片的显示位置，如果要用到只在图片上显示背景位置，我们在这里用到了一个全新的CSS熟悉-webkit-background-clip: text,这个属性能让背景只在文字底下显示，如果文字设置为透明的，那我们就能透过文字，看到一个背景图片文字，这是一个能媲美PS效果的利器属性，代码：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">div</span>&#123;</span><br><span class="line">      <span class="comment">/*背景样式*/</span></span><br><span class="line">      <span class="attribute">height</span>: <span class="number">300px</span>;</span><br><span class="line">      <span class="attribute">width</span>: <span class="number">500px</span>;</span><br><span class="line">      <span class="attribute">background-size</span>: contain;</span><br><span class="line">      <span class="attribute">background-repeat</span>: no-repeat;</span><br><span class="line">      <span class="attribute">background-image</span>: <span class="built_in">url</span>(bg.jpg);</span><br><span class="line">      <span class="comment">/*文字样式*/</span></span><br><span class="line">      <span class="attribute">font-size</span>: <span class="number">70px</span>;</span><br><span class="line">      <span class="attribute">font-weight</span>: bold;</span><br><span class="line">      <span class="attribute">text-align</span>: center;</span><br><span class="line">      <span class="attribute">line-height</span>: <span class="number">300px</span>;</span><br><span class="line">      <span class="comment">/*图片文字样式*/</span></span><br><span class="line">      <span class="attribute">-webkit-text-fill-color</span>: transparent;</span><br><span class="line">      <span class="attribute">-webkit-background-clip</span>: text;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>效果图：</p>
+<p><img src="http://vinceimage.oss-cn-beijing.aliyuncs.com/blog/62713D66-A2D6-4E52-BF6C-A61C8936CFD8.png" alt="image"></p>
+<p>以后小伙伴找你帮忙做这种图片，就再也不需要用PS做啦，CSS几行子代码搞定！</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>单个CSS看起来似乎只是个简单的样式功能，但是用多个CSS样式组合，能给我们一些惊喜的效果，这篇短文只是简单的列出几个效果，还有更多酷炫的效果等着小伙伴们去挖掘～</p>
+<p>have a nice day :) </p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://vince.xin">Vince</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://vince.xin/2017/09/13/用CSS让你的文字有文艺范/">https://vince.xin/2017/09/13/用CSS让你的文字有文艺范/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/10/04/CSS动画：animation、transition、transform、translate傻傻分不清/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">CSS动画：animation、transition、transform、translate傻傻分不清</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/09/08/写CSS第一步：CSS Reset与Normalize/">
+        <span class="next-text nav-default">写CSS第一步：CSS Reset与Normalize</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:artistcoder@163.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/Vincedrean" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2017 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Vince</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://vince.xin/2017/09/13/用CSS让你的文字有文艺范/';
+        this.page.identifier = '2017/09/13/用CSS让你的文字有文艺范/';
+        this.page.title = '用CSS让你的文字有文艺范';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//vincehua.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.2"></script>
+
+  </body>
+</html>

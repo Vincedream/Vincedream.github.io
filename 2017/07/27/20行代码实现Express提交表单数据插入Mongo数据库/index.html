@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="20行代码实现Express提交表单数据插入Mongo数据库">
+
+
+
+
+  <meta name="keywords" content="Vince, Vince's Blog,前端,Node,React">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Vince's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.2">
+
+
+
+<link rel="canonical" href="https://vince.xin/2017/07/27/20行代码实现Express提交表单数据插入Mongo数据库/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.2">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 20行代码实现Express提交表单数据插入Mongo数据库 - Vince's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Vince's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Vince's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          20行代码实现Express提交表单数据插入Mongo数据库
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-07-27
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/Node-js/">Node.js</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#一、准备工作"><span class="toc-text">一、准备工作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二、代码实现"><span class="toc-text">二、代码实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#后端代码"><span class="toc-text">后端代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#前端代码"><span class="toc-text">前端代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Demo目录总览"><span class="toc-text">Demo目录总览</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三、运行代码查看结果"><span class="toc-text">三、运行代码查看结果</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>简单一个Mongo数据库代码demo<br><a id="more"></a></p>
+<h2 id="一、准备工作"><a href="#一、准备工作" class="headerlink" title="一、准备工作"></a>一、准备工作</h2><ol>
+<li>新建文件夹express_form</li>
+<li>打开命令行工具cd到当前文件夹输入</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm init</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>一路enter初始化一个项目</li>
+</ol>
+<p><img src="http://static4.vince.xin/6744C70D-82C3-4019-A4FC-58A9346A376D.png" alt="image"></p>
+<ol start="4">
+<li>安装我们需要的依赖包</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i express mongoose -s</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>初始化项目成功~</li>
+</ol>
+<h2 id="二、代码实现"><a href="#二、代码实现" class="headerlink" title="二、代码实现"></a>二、代码实现</h2><h3 id="后端代码"><a href="#后端代码" class="headerlink" title="后端代码"></a>后端代码</h3><ul>
+<li>根目录中创建app.js，按照步骤输入以下代码</li>
+</ul>
+<p>1.引入express，并且创建一个实例：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>); <span class="comment">//引入express</span></span><br><span class="line"><span class="keyword">var</span> app = express();  <span class="comment">//创建一个express实例</span></span><br></pre></td></tr></table></figure>
+<p>2.设置静态文件目录，以便我们读取html文件</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">app.use(express.static(__dirname + <span class="string">'/public'</span>)); <span class="comment">//使用 express.static 中间件来设置静态文件路径，方便读取index.html主页</span></span><br></pre></td></tr></table></figure>
+<p>3.引入mongoose，连接数据库（前提是已经启动好了Mongo数据库）</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> mongoose = <span class="built_in">require</span>(<span class="string">'mongoose'</span>); <span class="comment">//引入mongoose</span></span><br><span class="line">mongoose.connect(<span class="string">'mongodb://localhost:27017/usertest'</span>); <span class="comment">//mongoose连接数据库（前提是已经启动Mongo）</span></span><br></pre></td></tr></table></figure>
+<p>4.创建一个Schema骨架模型，并且设计好user模板</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Schema = mongoose.Schema;  <span class="comment">//创建一个Schema模型骨架，并且设置好user模版</span></span><br><span class="line"><span class="keyword">var</span> UserSchema = <span class="keyword">new</span> Schema(&#123;</span><br><span class="line">   first_name: &#123;<span class="attr">type</span>: <span class="built_in">String</span>&#125;,</span><br><span class="line">   last_name: &#123;<span class="attr">type</span>: <span class="built_in">String</span>&#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>5.发布模型</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> User = mongoose.model(<span class="string">"User"</span>,UserSchema); <span class="comment">//Schema发布一个User的Model</span></span><br></pre></td></tr></table></figure>
+<p>6.处理请求函数</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">app.get(<span class="string">'/process_get'</span>,<span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;  <span class="comment">//处理process的get请求</span></span><br><span class="line">    <span class="keyword">var</span> user_1 = <span class="keyword">new</span> User(&#123;</span><br><span class="line">        first_name: req.query.first_name,</span><br><span class="line">        last_name: req.query.last_name</span><br><span class="line">    &#125;);</span><br><span class="line">    user_1.save(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;res.send(<span class="string">'数据插入成功'</span>);&#125;);  <span class="comment">//插入数据并且提示数据库插入成功</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>7.监听3002端口</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">app.listen(<span class="number">3002</span>,<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="built_in">console</span>.log(<span class="string">'servering'</span>); &#125;);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>app.js所有代码总览，真的只有20行😺</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>); </span><br><span class="line"><span class="keyword">var</span> app = express();  </span><br><span class="line">app.use(express.static(__dirname + <span class="string">'/public'</span>));</span><br><span class="line"><span class="keyword">var</span> mongoose = <span class="built_in">require</span>(<span class="string">'mongoose'</span>); </span><br><span class="line">mongoose.connect(<span class="string">'mongodb://localhost:27017/usertest'</span>); </span><br><span class="line"><span class="keyword">var</span> Schema = mongoose.Schema;  </span><br><span class="line"><span class="keyword">var</span> UserSchema = <span class="keyword">new</span> Schema(&#123;</span><br><span class="line">   first_name: &#123;<span class="attr">type</span>: <span class="built_in">String</span>&#125;,</span><br><span class="line">   last_name: &#123;<span class="attr">type</span>: <span class="built_in">String</span>&#125;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">var</span> User = mongoose.model(<span class="string">"User"</span>,UserSchema); </span><br><span class="line">app.get(<span class="string">'/process_get'</span>,<span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;  </span><br><span class="line">    <span class="keyword">var</span> user_1 = <span class="keyword">new</span> User(&#123;</span><br><span class="line">        first_name: req.query.first_name,</span><br><span class="line">        last_name: req.query.last_name</span><br><span class="line">    &#125;);</span><br><span class="line">    user_1.save(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;res.send(<span class="string">'数据插入成功'</span>);&#125;);  </span><br><span class="line">&#125;);</span><br><span class="line">app.listen(<span class="number">3002</span>,<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="built_in">console</span>.log(<span class="string">'servering'</span>); &#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="前端代码"><a href="#前端代码" class="headerlink" title="前端代码"></a>前端代码</h3><ol>
+<li><p>我们在根目录上创建一个public的文件夹(因为我们上面把静态文件设置在了’/public’下)</p>
+</li>
+<li><p>新建index.html</p>
+</li>
+<li><p>输入以下代码</p>
+</li>
+</ol>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Title<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">href</span>=<span class="string">"https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"</span> <span class="attr">integrity</span>=<span class="string">"sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"</span> <span class="attr">crossorigin</span>=<span class="string">"anonymous"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">"width: 400px; margin: 0 auto; margin-top: 30px;"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">"http://localhost:3002/process_get"</span> <span class="attr">model</span>=<span class="string">"get"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">label</span>&gt;</span>FirstName:<span class="tag">&lt;/<span class="name">label</span>&gt;</span><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">class</span>=<span class="string">"form-control"</span> <span class="attr">name</span>=<span class="string">"first_name"</span>&gt;</span> <span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">label</span>&gt;</span>LastName:<span class="tag">&lt;/<span class="name">label</span>&gt;</span> <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">class</span>=<span class="string">"form-control"</span> <span class="attr">name</span>=<span class="string">"last_name"</span>&gt;</span> <span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">class</span>=<span class="string">"btn btn-default"</span> <span class="attr">id</span>=<span class="string">"submit"</span> <span class="attr">value</span>=<span class="string">"Submit"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>我们注意到这次我们提交表单是用GET的方式提交，action路径是”<a href="http://localhost:3002/process_get&quot;，与我们app.js中的app.get(&#39;/process_get&#39;)一致。" target="_blank" rel="noopener">http://localhost:3002/process_get&quot;，与我们app.js中的app.get(&#39;/process_get&#39;)一致。</a><h3 id="Demo目录总览"><a href="#Demo目录总览" class="headerlink" title="Demo目录总览"></a>Demo目录总览</h3></li>
+</ul>
+<p><img src="http://static4.vince.xin/6775EB72-2249-4302-8173-5C47E2609AA7.png" alt="image"></p>
+<h2 id="三、运行代码查看结果"><a href="#三、运行代码查看结果" class="headerlink" title="三、运行代码查看结果"></a>三、运行代码查看结果</h2><ol>
+<li>在根目录中运行app.js：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node app.js</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>浏览器打开 <a href="http://localhost:3002/index.html" target="_blank" rel="noopener">http://localhost:3002/index.html</a></li>
+</ol>
+<p><img src="http://static4.vince.xin/25FBB767-774B-48AB-B9E0-73F7DBCC4F3F.png" alt="image"></p>
+<ol start="3">
+<li>输入表单信息</li>
+</ol>
+<p><img src="http://static4.vince.xin/F8757766-59FE-4E16-955F-8C9885C3092D.png" alt="image"></p>
+<ol start="4">
+<li>插入数据成功</li>
+</ol>
+<p><img src="http://static4.vince.xin/D13B5F43-49F7-4848-9D7D-5FBB070A76D9.png" alt="image"></p>
+<ol start="5">
+<li>查看数据库中是否已经插入数据</li>
+</ol>
+<p><img src="http://static4.vince.xin/3D4C5A49-1D68-4AA6-8B6A-CE838B524A09.png" alt="image"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这个小Demo只是简单粗暴地操作表单提交和数据库插入，目的在于给刚刚入门的小伙伴一个信心，其实前端输入表单数据和后端数据库操作真的不难，在真正的项目中，这20行代码肯定是不够完善的啦，还有更多的知识等着我们去学习～</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://vince.xin">Vince</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://vince.xin/2017/07/27/20行代码实现Express提交表单数据插入Mongo数据库/">https://vince.xin/2017/07/27/20行代码实现Express提交表单数据插入Mongo数据库/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/Express/">Express</a>
+            
+              <a href="/tags/Mongo/">Mongo</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/08/03/Express + EJS + Mongo 实现用户注册登录登出/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Express + EJS + Mongo 实现用户注册登录登出</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/07/06/详解Express的上传文件中间件Multer/">
+        <span class="next-text nav-default">详解Express的上传文件中间件Multer</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:artistcoder@163.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/Vincedrean" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2017 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Vince</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://vince.xin/2017/07/27/20行代码实现Express提交表单数据插入Mongo数据库/';
+        this.page.identifier = '2017/07/27/20行代码实现Express提交表单数据插入Mongo数据库/';
+        this.page.title = '20行代码实现Express提交表单数据插入Mongo数据库';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//vincehua.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.2"></script>
+
+  </body>
+</html>

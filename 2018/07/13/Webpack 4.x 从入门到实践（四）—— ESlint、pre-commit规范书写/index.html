@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="Webpack 4.x 从入门到实践（四）—— ESlint、pre-commit规范书写">
+
+
+
+
+  <meta name="keywords" content="Vince, Vince's Blog,前端,Node,React">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Vince's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.2">
+
+
+
+<link rel="canonical" href="https://vince.xin/2018/07/13/Webpack 4.x 从入门到实践（四）—— ESlint、pre-commit规范书写/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.2">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> Webpack 4.x 从入门到实践（四）—— ESlint、pre-commit规范书写 - Vince's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Vince's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Vince's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Webpack 4.x 从入门到实践（四）—— ESlint、pre-commit规范书写
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-07-13
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/Webpack/">Webpack</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#start"><span class="toc-text">start</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#step"><span class="toc-text">step</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#全局安装eslint"><span class="toc-text">全局安装eslint</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#init-ESlint规则"><span class="toc-text">init ESlint规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分析代码"><span class="toc-text">分析代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#整合到git"><span class="toc-text">整合到git</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VSCode插件智能提示"><span class="toc-text">VSCode插件智能提示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#自定义规则"><span class="toc-text">自定义规则</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#last"><span class="toc-text">last</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>代码不规范，同事两行泪<br><a id="more"></a></p>
+<h2 id="start"><a href="#start" class="headerlink" title="start"></a>start</h2><p>eslint是规范团队书写一致风格代码的利器，有了它你也很难写出乱七八糟的代码(至少在风格上)，因此，许多团队会将eslint至于git commit 之前，先检测一遍是否符合规范再commit，这里我们就开始接着我们chapter-02的代码来配置一个简单的ESlint的规范。</p>
+<h2 id="step"><a href="#step" class="headerlink" title="step"></a>step</h2><h3 id="全局安装eslint"><a href="#全局安装eslint" class="headerlink" title="全局安装eslint"></a>全局安装eslint</h3><p><code>npm i eslint -g</code></p>
+<h3 id="init-ESlint规则"><a href="#init-ESlint规则" class="headerlink" title="init ESlint规则"></a>init ESlint规则</h3><p>我们使用全局安装的ESlint来“傻瓜式”地设置我们的ESlint规则，我们只要在命令行中输入:<code>eslint --init</code>，选择自己喜欢的配置，并且自动下载一些需要的依赖:</p>
+<p><img src="http://static4.vince.xin/afdgsdfgdfhs.gif" alt="image"></p>
+<p>这个时候，eslint会自动在当前文件夹中添加一个<code>.eslintrc.js</code>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    <span class="string">"extends"</span>: <span class="string">"airbnb"</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这是eslint自动为我们设置的eslint规则，extends表示规则继承standard，也就是使用standard这一套规则，那么他有哪些规则呢，我们可以到这里查看其详细的配置<a href="https://github.com/airbnb/javascript" target="_blank" rel="noopener">airbnb</a>，或者说我们直接找到nodemodules中的eslint-config-airbnb查看其规则，当然这里我们可以到当然这不是固定的，我们能够进行一些自定义修改。</p>
+<h3 id="分析代码"><a href="#分析代码" class="headerlink" title="分析代码"></a>分析代码</h3><p>简单配置完成后，我们可以使用npm script的方式来查看我们代码中有哪些不规范之处，这时，我们需要在package.json中的script加上：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"scripts"</span>: &#123;</span><br><span class="line">    <span class="string">"lint"</span>: <span class="string">"eslint src/*.js"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>当我们运行 npm run lint 后，会打印出我们代码中不规范之处。</p>
+<p><img src="http://static4.vince.xin/1AA89A1F-024E-4EF0-9117-E85236DC0BE1.png" alt="image"></p>
+<p>我们可以选择手动修改，但是eslint能够自动修改这些不规范的代码，只需要在scripts上加上 –fix：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"scripts"</span>: &#123;</span><br><span class="line">    <span class="string">"lint"</span>: <span class="string">"eslint --fix src/*.js"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样无论再不规范的饿代码，lint之后也能有模有样。</p>
+<h3 id="整合到git"><a href="#整合到git" class="headerlink" title="整合到git"></a>整合到git</h3><p>当团队合作时，我们可能会忘记lint之后再commit，这个时候可能就会影响到小伙伴们阅读代码，这个时候我们就能一个工具来杜绝这种现象：<a href="https://github.com/observing/pre-commit" target="_blank" rel="noopener">pre-commit</a>，他会在git commit之前先跑某个脚本，如果没过的话就不允许commit，所以很适合跟lint做搭配。</p>
+<ul>
+<li>下载<code>pre-commit</code>: <code>npm i pre-commit -D</code></li>
+<li>配置<code>package.json</code>:</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"scripts"</span>: &#123; </span><br><span class="line">    <span class="string">"lint"</span>: <span class="string">"eslint --fix src/*.js"</span> </span><br><span class="line">&#125;, </span><br><span class="line"><span class="string">"pre-commit"</span>: [<span class="string">"lint"</span>],</span><br></pre></td></tr></table></figure>
+<p>我们做一个测试，在index.js中写入以下不规范代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">require</span>(<span class="string">'./index.css'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'122214444111111xi333323xix444222i'</span>);</span><br><span class="line">        <span class="keyword">let</span> a = <span class="number">999</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"222"</span>);</span><br><span class="line"><span class="keyword">if</span> (<span class="built_in">module</span>.hot) &#123;</span><br><span class="line">  <span class="comment">// 实现热更新</span></span><br><span class="line">  <span class="built_in">module</span>.hot.accept();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个时候我们尝试去提交代码，则会出现以下提示：</p>
+<p><img src="http://static4.vince.xin/BAC79FE1-C560-4AF6-8C95-577DA9E887A8.png" alt="image"></p>
+<p>我们返回到<code>index.js</code>中，发现一些缩近的单双引符号已经被lint了，但是像console和定义变量，这个是不会被lint的，所以只能我们手动将其删除或者注释。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 被lint后的代码</span></span><br><span class="line"><span class="built_in">require</span>(<span class="string">'./index.css'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'122214444111111xi333323xix444222i'</span>);</span><br><span class="line"><span class="keyword">const</span> a = <span class="number">999</span>;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'222'</span>);</span><br><span class="line"><span class="keyword">if</span> (<span class="built_in">module</span>.hot) &#123;</span><br><span class="line">  <span class="comment">// 实现热更新</span></span><br><span class="line">  <span class="built_in">module</span>.hot.accept();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们手动注释掉eslint无法处理的问题:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 被lint后的代码</span></span><br><span class="line"><span class="built_in">require</span>(<span class="string">'./index.css'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//console.log('122214444111111xi333323xix444222i');</span></span><br><span class="line"><span class="comment">//const a = 999;</span></span><br><span class="line"><span class="comment">//console.log('222');</span></span><br><span class="line"><span class="keyword">if</span> (<span class="built_in">module</span>.hot) &#123;</span><br><span class="line">  <span class="comment">// 实现热更新</span></span><br><span class="line">  <span class="built_in">module</span>.hot.accept();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这个时候，我们便可以提交啦～</p>
+<h3 id="VSCode插件智能提示"><a href="#VSCode插件智能提示" class="headerlink" title="VSCode插件智能提示"></a>VSCode插件智能提示</h3><p>vscode能够在我们build之前就能根据你设置的eslintrc中的规则来给你实时提醒，我们只需要在vscode中下载插件:<code>ESlint</code>，重启编辑器就能看到vscode的提示:</p>
+<p><img src="http://static4.vince.xin/D3EF3E83-EAB1-4417-ADDD-DDB9C0F1F162.png" alt="image"></p>
+<p>不仅如此，当你保存文件的时候，还能帮助你自动更正不符合规范的格式。</p>
+<h3 id="自定义规则"><a href="#自定义规则" class="headerlink" title="自定义规则"></a>自定义规则</h3><p>写死的规范固然不好，我们团队中肯定有些自定义的规范，比如需要写分号，或者允许出现console语句，这时，我们就需要配置.eslint文件:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    <span class="string">"extends"</span>: <span class="string">"airbnb"</span>,</span><br><span class="line">    <span class="string">"rules"</span>: &#123; </span><br><span class="line">        <span class="string">"quotes"</span>: [<span class="string">"error"</span>, <span class="string">"single"</span>], </span><br><span class="line">        <span class="string">"semi"</span>: [<span class="string">"error"</span>, <span class="string">"never"</span>],</span><br><span class="line">        <span class="string">"no-console"</span>: [<span class="string">"off"</span>]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这里我们添加了一个rules字段，表示一些我们自定义配置，quotes表示我们使用<code>&#39;&#39;</code>还是<code>&quot;&quot;</code>去括住字符，这里的single表示单引号，而前面的error表示如果不用单引号则直接报错，我们也可以将error改为warning，表示不报错只警告，下面的smi表示是否在语句末加上;，no-console表示是否可以出现console语句，这里我们选择了off，即表示关闭no-console这个规则。更详细的配置可以查阅官方文档：<a href="http://eslint.cn/" target="_blank" rel="noopener">eslint中文</a></p>
+<h2 id="last"><a href="#last" class="headerlink" title="last"></a>last</h2><p>这个章节我们使用了eslint和pre-commit来规范了我们的代码风格，能够很大程度上的提高编码规范，我们总结以下eslint的作用：<br><strong>1. 帮你找出语法错误</strong></p>
+<p>没定义变量就拿来用、少了括号等等常见的语法错误</p>
+<ol start="2">
+<li>确保你遵循最佳实践</li>
+</ol>
+<p>不使用全局变量、建议使用=== 而非 ==</p>
+<ol start="3">
+<li>提醒你删掉多余的程式码</li>
+</ol>
+<p>有些变量定义了却没有使用、import了没有使用的模块、空的class constructor …</p>
+<ol start="4">
+<li>统一基本的coding style</li>
+</ol>
+<p>要不要加分号、使用单引号或双引号、缩排使用space 或tab 等等</p>
+<p>本章节的代码已经上传到Github，传送门<a href="https://github.com/Vincedream/webpack-study" target="_blank" rel="noopener">webpack-study</a>,请自行切换到chapter-03分支。</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://vince.xin">Vince</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://vince.xin/2018/07/13/Webpack 4.x 从入门到实践（四）—— ESlint、pre-commit规范书写/">https://vince.xin/2018/07/13/Webpack 4.x 从入门到实践（四）—— ESlint、pre-commit规范书写/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2018/07/27/Webpack 4.x 从入门到实践（五）—— Babel的配置/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Webpack 4.x 从入门到实践（五）—— Babel的配置</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2018/07/03/Webpack 4.x 从入门到实践（三）——dev-server与HMR/">
+        <span class="next-text nav-default">Webpack 4.x 从入门到实践（三）——dev-server与HMR</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:artistcoder@163.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/Vincedrean" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2017 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Vince</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://vince.xin/2018/07/13/Webpack 4.x 从入门到实践（四）—— ESlint、pre-commit规范书写/';
+        this.page.identifier = '2018/07/13/Webpack 4.x 从入门到实践（四）—— ESlint、pre-commit规范书写/';
+        this.page.title = 'Webpack 4.x 从入门到实践（四）—— ESlint、pre-commit规范书写';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//vincehua.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.2"></script>
+
+  </body>
+</html>

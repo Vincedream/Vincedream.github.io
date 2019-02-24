@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="详解Express的上传文件中间件Multer">
+
+
+
+
+  <meta name="keywords" content="Vince, Vince's Blog,前端,Node,React">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Vince's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.2">
+
+
+
+<link rel="canonical" href="https://vince.xin/2017/07/06/详解Express的上传文件中间件Multer/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.2">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 详解Express的上传文件中间件Multer - Vince's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Vince's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Vince's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          详解Express的上传文件中间件Multer
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-07-06
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/Node-js/">Node.js</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#准备工作"><span class="toc-text">准备工作</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Multer的使用"><span class="toc-text">Multer的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1、single-fieldname-单个文件上传"><span class="toc-text">1、single(fieldname) - 单个文件上传</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2、-array-fieldname-maxCount-多文件上传"><span class="toc-text">2、.array(fieldname,maxCount)-多文件上传</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3、fields-fields-多个文件上传-多域上传"><span class="toc-text">3、fields(fields) - 多个文件上传(多域上传)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4、-any-接收所有文件上传"><span class="toc-text">4、.any() - 接收所有文件上传</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Multer其他“骚”操作"><span class="toc-text">Multer其他“骚”操作</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1、文件对象"><span class="toc-text">1、文件对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2、选项参数"><span class="toc-text">2、选项参数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-storage-存储引擎"><span class="toc-text">1.storage - 存储引擎</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-limits-文件尺寸"><span class="toc-text">2.limits - 文件尺寸</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-fileFilter-文件筛选"><span class="toc-text">3.fileFilter - 文件筛选</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>Node.js上传文件中间件了解一下？<br><a id="more"></a></p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Express中有各种上传文件的中间件，其中Multer的高效性值得我们去使用，他是Express官方推出的只用于处理multipart/form-data请求数据的中间件，但是官方文档中的说明并不是很清楚，对新手来说并不是特别友好，以下是我学习Multer的学习笔记，希望能给大家带来一些价值～</p>
+<h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h1><p>1、创建一个文件夹multer_test，cd到该文件夹，输入以下命令新建工程，一路enter回车过去。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm init</span><br></pre></td></tr></table></figure>
+<p>2、下载需要的安装包</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install express multer -save</span><br></pre></td></tr></table></figure>
+<p>3、根目录下新建app.js，输入以下代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by vince on 2017/7/16.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</span><br><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</span><br><span class="line"><span class="keyword">var</span> multer  = <span class="built_in">require</span>(<span class="string">'multer'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> app = express();</span><br><span class="line">app.get(<span class="string">'/form'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>)</span>&#123;</span><br><span class="line">    <span class="comment">//读取根目录的html文件</span></span><br><span class="line">    <span class="keyword">var</span> form = fs.readFileSync(<span class="string">'./form.html'</span>, &#123;<span class="attr">encoding</span>: <span class="string">'utf8'</span>&#125;);</span><br><span class="line">    <span class="comment">//渲染html</span></span><br><span class="line">    res.send(form);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.listen(<span class="number">3009</span>,<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"server at 3008 port"</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>4、根目录下创建form.html文件，输入代码：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Multer<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>Multer Test<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>5、运行app.js，浏览器打开：<a href="http://localhost:3008/form" target="_blank" rel="noopener">http://localhost:3008/form</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node app.js</span><br></pre></td></tr></table></figure>
+<p>运行效果：</p>
+<p><img src="http://static4.vince.xin/6FF1EBA1-B39C-41A1-AFD0-4F732A5F15C1.png" alt="image"></p>
+<p>6、准备工作完成，开始coding吧～</p>
+<h1 id="Multer的使用"><a href="#Multer的使用" class="headerlink" title="Multer的使用"></a>Multer的使用</h1><h2 id="1、single-fieldname-单个文件上传"><a href="#1、single-fieldname-单个文件上传" class="headerlink" title="1、single(fieldname) - 单个文件上传"></a>1、single(fieldname) - 单个文件上传</h2><p>接收一个名为fieldname的上传文件，所上传的文件会被保存在req.file。</p>
+<ul>
+<li>在app.js文件中修改以下代码：</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by vince on 2017/7/16.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</span><br><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</span><br><span class="line"><span class="keyword">var</span> multer  = <span class="built_in">require</span>(<span class="string">'multer'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> app = express();</span><br><span class="line"></span><br><span class="line"><span class="comment">//配制multer参数，设置上传的文件存储路径为upload</span></span><br><span class="line"><span class="keyword">var</span> upload = multer(&#123; <span class="attr">dest</span>: <span class="string">'upload/'</span>&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">//.single(fieldname) - 单个文件上传</span></span><br><span class="line">app.post(<span class="string">'/upload-single'</span>,upload.single(<span class="string">'logo'</span>),<span class="function"><span class="keyword">function</span> (<span class="params">req,res,next</span>) </span>&#123;</span><br><span class="line">    res.send(<span class="string">'upload success!'</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">//处理form的get请求，渲染html页面</span></span><br><span class="line">app.get(<span class="string">'/form'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>)</span>&#123;</span><br><span class="line">    <span class="comment">//读取根目录的html文件</span></span><br><span class="line">    <span class="keyword">var</span> form = fs.readFileSync(<span class="string">'./form.html'</span>, &#123;<span class="attr">encoding</span>: <span class="string">'utf8'</span>&#125;);</span><br><span class="line">    <span class="comment">//渲染html</span></span><br><span class="line">    res.send(form);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.listen(<span class="number">3009</span>,<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"server at 3008 port"</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在form.html文件中修改以下代码：</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Multer<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>Multer Test<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">"/upload-single"</span> <span class="attr">method</span>=<span class="string">"post"</span> <span class="attr">enctype</span>=<span class="string">"multipart/form-data"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h3</span>&gt;</span>单文件上传<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">name</span>=<span class="string">"logo"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">value</span>=<span class="string">"提交"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>代码解读：</li>
+</ul>
+<ol>
+<li><p>upload.single(‘logo’)要和html中的input type=”file” name=”logo”要吻合，upload.single的功能是只上传单个文件，并且指定inpiut中的name。</p>
+</li>
+<li><p>在html中的form表单中enctype必须要为”multipart/form-data”，因为multer只处理multipart/form-data请求数据。</p>
+</li>
+</ol>
+<ul>
+<li>重启app.js，运行代码</li>
+</ul>
+<p><img src="http://static4.vince.xin/99946F0B-0587-438D-8819-E268F9638934.png" alt="image"></p>
+<p>试试上传一个文件，会发现在根目录中多出了一个文件夹upload，里面还有一个二进制格式的文件，这就是我们上传的文件啦，二进制文件在一些环境下是打不开的，那我们怎么转换为正常格式的文件呢，不急，我们看下一步。<br><img src="http://static4.vince.xin/74DDF515-64F2-4B77-B256-4713AD140CC3.png" alt="image"></p>
+<ul>
+<li>将二进制文件转换为普通文件：<br>打开app.js，修改post为：</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">app.post(<span class="string">'/upload-single'</span>,upload.single(<span class="string">'logo'</span>),<span class="function"><span class="keyword">function</span> (<span class="params">req,res,next</span>) </span>&#123;</span><br><span class="line">    / 图片会放在uploads目录没有后缀，需要自己转存，用到fs模块</span><br><span class="line">    <span class="comment">// 对文件转存，fs.rename(oldPath, newPath,callback);</span></span><br><span class="line">    fs.rename(req.file.path, <span class="string">"upload/"</span> + req.file.originalname, <span class="function"><span class="keyword">function</span>(<span class="params">err</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (err) &#123;</span><br><span class="line">            <span class="keyword">throw</span> err;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    res.send(<span class="string">'upload success!'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>重启app.js，再次上传文件，发现上传的文件已经带有后缀，转换成普通打得开的文件啦～</p>
+<p>如图：<br><img src="http://static4.vince.xin/BC914FCF-B188-429F-8E97-EBDA2D2D0AB9.png" alt="image"></p>
+<ul>
+<li>好啦，一个简单的multer上传文件例子完成啦，但是multer还有其他强大功能，我们接着往下看吧～</li>
+</ul>
+<h2 id="2、-array-fieldname-maxCount-多文件上传"><a href="#2、-array-fieldname-maxCount-多文件上传" class="headerlink" title="2、.array(fieldname,maxCount)-多文件上传"></a>2、.array(fieldname,maxCount)-多文件上传</h2><p>接收名为fieldname的，多个上传文件数组。可选参数maxCount表示可接受的文件数量，上传文件数超出该参数指定的数据后会抛出一个错误。文件数组会被保存在req.files数组中。</p>
+<ul>
+<li>在app.js中添加以下代码</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//.array(fieldname,maxCount)-多文件上传</span></span><br><span class="line">app.post(<span class="string">'/upload-array'</span>,upload.array(<span class="string">'logo'</span>,<span class="number">3</span>),<span class="function"><span class="keyword">function</span> (<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// req.files 是 `logo` 文件数组</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; req.files.length; i++) &#123;</span><br><span class="line">      fs.rename(req.files[i].path, <span class="string">"upload/"</span> + req.files[i].originalname, <span class="function"><span class="keyword">function</span>(<span class="params">err</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (err) &#123;</span><br><span class="line">                <span class="keyword">throw</span> err;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'文件'</span>+(i+<span class="number">1</span>)+<span class="string">'上传成功！'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    res.send(<span class="string">'upload success!'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在form.html中添加以下代码</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">"/upload-array"</span> <span class="attr">method</span>=<span class="string">"post"</span> <span class="attr">enctype</span>=<span class="string">"multipart/form-data"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h3</span>&gt;</span>2.array(fieldname,maxCount)-多文件上传<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    文件1：<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">name</span>=<span class="string">"logo"</span>&gt;</span> <span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    文件2：<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">name</span>=<span class="string">"logo"</span>&gt;</span> <span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    文件3：<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">name</span>=<span class="string">"logo"</span>&gt;</span> <span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">value</span>=<span class="string">"提交"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>代码解读</li>
+</ul>
+<ol>
+<li>多文件上传的req.files和单文件上传的req.file的区别是“s”，多文件就是files，单文件是file，千万不能弄混了。</li>
+<li>req.files是一个文件数组，所以要循环req.files[i];</li>
+</ol>
+<ul>
+<li>重启app.js，上传文件</li>
+</ul>
+<p>上传文件：</p>
+<p><img src="http://static4.vince.xin/0E2EAA9F-9601-4CF4-8C5B-BD424D45ED63.png" alt="image"></p>
+<p>上传结果：</p>
+<p><img src="http://static4.vince.xin/FB56D23A-3BEA-4778-A0B6-BEBCB6663E1B.png" alt="image"></p>
+<p>其实这个array文件上传是有限制性的，我们注意到，在html中的表单中form的name=”logo”必须一致，也就是说在一个form中要上传多个文件，name必须是一致的，这在我们实际开发中显然达不到要求，那么有没有办法解决呢，当然有，别忘了，multer是强大的，往下面接着看吧～</p>
+<h2 id="3、fields-fields-多个文件上传-多域上传"><a href="#3、fields-fields-多个文件上传-多域上传" class="headerlink" title="3、fields(fields) - 多个文件上传(多域上传)"></a>3、fields(fields) - 多个文件上传(多域上传)</h2><p>接收通过fields指定的多个上传文件。文件数组对象会被保存在req.files中。fields是一个包含对象的数组，对象中会包含name和maxCount两个属性：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">  &#123; <span class="attr">name</span>: <span class="string">'avatar'</span>, <span class="attr">maxCount</span>: <span class="number">1</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">name</span>: <span class="string">'gallery'</span>, <span class="attr">maxCount</span>: <span class="number">8</span> &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>从fields的英文字义来看是“田野”的意思，我们顾名思义，一块田野中可以种植各种蔬菜，并且可以规定每种蔬菜的数量，那么name就是input标签中的name=‘’，maxCount就是form表单中每种文件上传的个数。</p>
+<ul>
+<li>在app.js中添加以下代码：</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//.fields(fields) - 多个文件上传</span></span><br><span class="line">app.post(<span class="string">'/upload-fields'</span>,upload.fields([&#123;<span class="attr">name</span>:<span class="string">'logo'</span>,<span class="attr">maxCount</span>:<span class="number">2</span>&#125;,&#123;<span class="attr">name</span>:<span class="string">'logo2'</span>,<span class="attr">maxCount</span>:<span class="number">3</span>&#125;]),<span class="function"><span class="keyword">function</span> (<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">   <span class="comment">//转存name：'logo'的文件</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i &lt; req.files[<span class="string">'logo'</span>].length;i++)&#123;</span><br><span class="line">        fs.rename(req.files[<span class="string">'logo'</span>][i].path,<span class="string">'upload/'</span>+req.files[<span class="string">'logo'</span>][i].originalname,<span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(err)&#123;</span><br><span class="line">                <span class="keyword">throw</span> err;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'logo文件'</span>+(i+<span class="number">1</span>)+<span class="string">'上传成功！'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 转存name：'logo2'的文件</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i &lt; req.files[<span class="string">'logo2'</span>].length;i++)&#123;</span><br><span class="line">        fs.rename(req.files[<span class="string">'logo2'</span>][i].path,<span class="string">'upload/'</span>+req.files[<span class="string">'logo2'</span>][i].originalname,<span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(err)&#123;</span><br><span class="line">                <span class="keyword">throw</span> err;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'logo2文件'</span>+(i+<span class="number">1</span>)+<span class="string">'上传成功！'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    res.send(<span class="string">'upload success!'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在html中添加以下代码：</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">"/upload-fields"</span> <span class="attr">method</span>=<span class="string">"post"</span> <span class="attr">enctype</span>=<span class="string">"multipart/form-data"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h3</span>&gt;</span>fields(fields) - 多个文件上传<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">    1 <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">name</span>=<span class="string">"logo"</span>&gt;</span> <span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    2 <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">name</span>=<span class="string">"logo"</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    3 <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">name</span>=<span class="string">"logo2"</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    4 <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">name</span>=<span class="string">"logo2"</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">value</span>=<span class="string">"提交"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>代码解读</li>
+</ul>
+<p>1、fields(fields)中的参数与html中input标签中的name一一匹配<br>2、req.files[‘logo’]和req.files[‘logo2’]分别是连个文件数组，所以用两个for循环转存。</p>
+<ul>
+<li>重启app.js，上传文件</li>
+</ul>
+<p>如图：</p>
+<p><img src="http://static4.vince.xin/071DFD99-DFB6-4E72-AEED-43C02373C718.png" alt="image"></p>
+<p>上传结果如图：</p>
+<p><img src="http://static4.vince.xin/5CA98826-BEC5-4BA4-84E3-3A2DB33D6954.png" alt="image"></p>
+<p>小伙伴们是不是觉得这种上传方式有点繁琐，那么没关系，下面还有一种文件上传方式，非常简便哦，我们一起来看吧</p>
+<h2 id="4、-any-接收所有文件上传"><a href="#4、-any-接收所有文件上传" class="headerlink" title="4、.any() - 接收所有文件上传"></a>4、.any() - 接收所有文件上传</h2><p>接收请求中的所有文件。上传文件数组会被保存在req.files中，这种方式没有多余的限制，比较便捷。</p>
+<ul>
+<li>在app.js中添加以下代码：</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//.any() - 接收所有文件上传</span></span><br><span class="line">app.post(<span class="string">'/upload-any'</span>,upload.any(),<span class="function"><span class="keyword">function</span> (<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//处理方式与第二种上传文件方式一致</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; req.files.length; i++) &#123;</span><br><span class="line">        fs.rename(req.files[i].path, <span class="string">"upload/"</span> + req.files[i].originalname, <span class="function"><span class="keyword">function</span>(<span class="params">err</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (err) &#123;</span><br><span class="line">                <span class="keyword">throw</span> err;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'文件'</span>+(i+<span class="number">1</span>)+<span class="string">'上传成功！'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    res.send(<span class="string">'upload success!'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在html中添加以下代码：</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">"/upload-any"</span> <span class="attr">method</span>=<span class="string">"post"</span> <span class="attr">enctype</span>=<span class="string">"multipart/form-data"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h3</span>&gt;</span>4.any() - 接收所有文件上传<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">    文件1: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">name</span>=<span class="string">"logo"</span>&gt;</span> <span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    文件2: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">name</span>=<span class="string">"logo"</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    文件3: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">name</span>=<span class="string">"logo2"</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">value</span>=<span class="string">"提交"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>代码解读<br>1、文件数组保存在req.files中，与第二种上传方式一致<br>2、在html中input标签中不必要严格设置name的属性，比较便捷</li>
+<li>重启app.js，运行</li>
+</ul>
+<p>上传文件如图：</p>
+<p><img src="http://static4.vince.xin/806E1FBB-4541-4CF4-B41A-2794917BC72E.png" alt="image"></p>
+<p>查看结果如图：</p>
+<p><img src="http://static4.vince.xin/4F3E1F1F-9642-4EA2-ADF7-559E3F23506B.png" alt="image"></p>
+<p>以上是multer四种上传文件的方式，以上例子都是比较简单的例子，在实际开发当中我们还有其他的要求，multer也给我们提供了这些API，我们接着往下看吧～</p>
+<h1 id="Multer其他“骚”操作"><a href="#Multer其他“骚”操作" class="headerlink" title="Multer其他“骚”操作"></a>Multer其他“骚”操作</h1><ul>
+<li>准备工作</li>
+</ul>
+<p>为了和上面的app.js区分开，我们新建一个test.js，输入以下代码，并且将端口改为3010:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by vince on 2017/7/16.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</span><br><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</span><br><span class="line"><span class="keyword">var</span> multer  = <span class="built_in">require</span>(<span class="string">'multer'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> app = express();</span><br><span class="line"></span><br><span class="line"><span class="comment">//处理form的get请求，渲染html页面</span></span><br><span class="line">app.get(<span class="string">'/form2'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>)</span>&#123;</span><br><span class="line">    <span class="comment">//读取根目录的html文件</span></span><br><span class="line">    <span class="keyword">var</span> form = fs.readFileSync(<span class="string">'./form2.html'</span>, &#123;<span class="attr">encoding</span>: <span class="string">'utf8'</span>&#125;);</span><br><span class="line">    <span class="comment">//渲染html</span></span><br><span class="line">    res.send(form);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.listen(<span class="number">3010</span>,<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"server at 3010 port"</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>新建form2.html，输入以下代码：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Title<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>Multer Other Test<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">"/upload-single"</span> <span class="attr">method</span>=<span class="string">"post"</span> <span class="attr">enctype</span>=<span class="string">"multipart/form-data"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h3</span>&gt;</span>Multer其他功能<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">    文件1：<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">name</span>=<span class="string">"logo"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">value</span>=<span class="string">"提交"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>准备工作完成啦，我们来看看Multer还有其他哪些骚操作把～</p>
+<h2 id="1、文件对象"><a href="#1、文件对象" class="headerlink" title="1、文件对象"></a>1、文件对象</h2><p>multer解析完上传文件后，会被保存为一个包含以下字段的对象：</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fieldname</td>
+<td>表单提交的文件名(input控件的name属性)</td>
+</tr>
+<tr>
+<td>originalname</td>
+<td>文件在用户设备中的原始名称</td>
+</tr>
+<tr>
+<td>encoding</td>
+<td>文件的编码类型</td>
+</tr>
+<tr>
+<td>mimetype</td>
+<td>文件的Mime类型</td>
+</tr>
+<tr>
+<td>size</td>
+<td>文件的大小</td>
+</tr>
+<tr>
+<td>destination</td>
+<td>文件的保存目录(DiskStorage)</td>
+</tr>
+<tr>
+<td>filename</td>
+<td>文件在destination中的名称(DiskStorage)</td>
+</tr>
+<tr>
+<td>path</td>
+<td>上传文件的全路径(DiskStorage)</td>
+</tr>
+<tr>
+<td>buffer</td>
+<td>文件对象的Buffer(MemoryStorage)</td>
+</tr>
+</tbody>
+</table>
+<p>那么问题来了，我们需要这些有什么用呢？当我们上传文件到后台以后，我们想要获得文件的详细数据与属性，我们就能通过这个来获得啦～</p>
+<ul>
+<li>修改test.js中的代码，添加以下代码</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//配制multer参数，设置上传的文件存储路径为upload</span></span><br><span class="line"><span class="keyword">var</span> upload = multer(&#123; <span class="attr">dest</span>: <span class="string">'upload/'</span>&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">//.single(fieldname) - 单个文件上传</span></span><br><span class="line">app.post(<span class="string">'/upload-single'</span>,upload.single(<span class="string">'logo'</span>),<span class="function"><span class="keyword">function</span> (<span class="params">req,res,next</span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 图片会放在uploads目录没有后缀，需要自己转存，用到fs模块</span></span><br><span class="line">    <span class="comment">// 对文件转存，fs.rename(oldPath, newPath,callback);</span></span><br><span class="line">    fs.rename(req.file.path, <span class="string">"upload/"</span> + req.file.originalname, <span class="function"><span class="keyword">function</span>(<span class="params">err</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (err) &#123;</span><br><span class="line">            <span class="keyword">throw</span> err;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'fieldname - 表单提交的文件名(input控件的name属性)： '</span>+req.file.fieldname);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'originalname - 文件在用户设备中的原始名称： '</span>+req.file.originalname);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'encoding - 文件的编码类型： '</span>+req.file.encoding);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'mimetype - 文件的Mime类型： '</span>+req.file.mimetype);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'size - 文件的大小： '</span>+req.file.size);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'destination - 文件的保存目录(DiskStorage)： '</span>+req.file.destination);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'filename - 文件在destination中的名称(DiskStorage)： '</span>+req.file.filename);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'path - 上传文件的全路径(DiskStorage)： '</span>+req.file.path);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'buffer - 文件对象的Buffer(MemoryStorage)： '</span>+req.file.buffer);</span><br><span class="line">    res.send(<span class="string">'upload success!'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在form2.html中添加以下代码：</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>Multer Other Test<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">"/upload-single"</span> <span class="attr">method</span>=<span class="string">"post"</span> <span class="attr">enctype</span>=<span class="string">"multipart/form-data"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h3</span>&gt;</span>Multer其他功能<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">    文件1：<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">name</span>=<span class="string">"logo"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">value</span>=<span class="string">"提交"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>运行test.js</li>
+<li>访问 <a href="http://localhost:3010/form2" target="_blank" rel="noopener">http://localhost:3010/form2</a></li>
+<li>上传文件<br><img src="http://static4.vince.xin/5B281DCB-689C-401C-86F5-4D3E134D86B2.png" alt="image"></li>
+<li>查看控制台中输出信息：<br><img src="http://static4.vince.xin/E4FC9C78-D793-4C7D-B1E5-1F2783DB2416.png" alt="image"></li>
+</ul>
+<h2 id="2、选项参数"><a href="#2、选项参数" class="headerlink" title="2、选项参数"></a>2、选项参数</h2><p>Multer的选项对象中可以包含以下值：</p>
+<ul>
+<li>dest或storage - 文件存储位置</li>
+<li>fileFilter - 函数，控制可上传的文件类型</li>
+<li>limits - 上传数据限制(文件大小)</li>
+</ul>
+<h3 id="1-storage-存储引擎"><a href="#1-storage-存储引擎" class="headerlink" title="1.storage - 存储引擎"></a>1.storage - 存储引擎</h3><p>.diskStorage(obj)与硬盘存储,该选项有以下两个可选项：</p>
+<ul>
+<li>destination - 硬盘存储，用于设置文件的存储目录，可以是一个函数或字符串。若未提供该参数，将使用系统的临时目录。</li>
+<li>filename - 内存存储，用于设置文件名。若未提供该参数，将使用一个随机字符串，且文件名中不包含扩展名。</li>
+</ul>
+<p>示例：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> storage = multer.diskStorage(&#123;</span><br><span class="line">  destination: <span class="function"><span class="keyword">function</span> (<span class="params">req, file, cb</span>) </span>&#123;</span><br><span class="line">    cb(<span class="literal">null</span>, <span class="string">'/tmp/my-uploads'</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">  filename: <span class="function"><span class="keyword">function</span> (<span class="params">req, file, cb</span>) </span>&#123;</span><br><span class="line">    cb(<span class="literal">null</span>, file.fieldname + <span class="string">'-'</span> + <span class="built_in">Date</span>.now())</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> upload = multer(&#123; <span class="attr">storage</span>: storage &#125;)</span><br></pre></td></tr></table></figure>
+<p>我们可以使用这个来做什么呢？上面我解释四种文件上传方式的时候，每个post函数中都有一个用来转存文件的函数，显得非常臃肿，其实Multer早就为我们考虑到这一点了，我们开始codeing使用他吧～</p>
+<ul>
+<li><p>注释以下代码：<br><img src="http://static4.vince.xin/7599D146-177D-44A7-A23E-C3CAE24B2440.png" alt="image"></p>
+</li>
+<li><p>在app.js中添加以下代码：</p>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置storage存储参数</span></span><br><span class="line"><span class="keyword">var</span> storage = multer.diskStorage(&#123;</span><br><span class="line">    destination: <span class="function"><span class="keyword">function</span> (<span class="params">req, file, cb</span>) </span>&#123;</span><br><span class="line">        cb(<span class="literal">null</span>, <span class="string">'./upload'</span>)</span><br><span class="line">    &#125;,</span><br><span class="line">    filename: <span class="function"><span class="keyword">function</span> (<span class="params">req, file, cb</span>) </span>&#123;</span><br><span class="line">        cb(<span class="literal">null</span>, file.originalname)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">//配制multer参数</span></span><br><span class="line"><span class="keyword">var</span> upload = multer(&#123; <span class="attr">storage</span>: storage &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">//处理上传文件</span></span><br><span class="line">app.post(<span class="string">'/upload-single'</span>,upload.single(<span class="string">'logo'</span>),<span class="function"><span class="keyword">function</span> (<span class="params">req,res,next</span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">    res.send(<span class="string">'upload success!'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>重启test.js，上传文件，发现效果和fs处理效果是一致的。</li>
+</ul>
+<h3 id="2-limits-文件尺寸"><a href="#2-limits-文件尺寸" class="headerlink" title="2.limits - 文件尺寸"></a>2.limits - 文件尺寸</h3><p>该选项用于设置文件尺寸，Multer 会将这个对象传递至busboy中。limits对象中可以包含以下可选值：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fieldNameSize</td>
+<td>字段名最大尺寸。默认值：100 bytes</td>
+</tr>
+<tr>
+<td>fieldSize</td>
+<td>字段值最大尺寸。默认值：1MB</td>
+</tr>
+<tr>
+<td>fields</td>
+<td>非文件字段的最大数量。默认值：Infinity</td>
+</tr>
+<tr>
+<td>fileSize</td>
+<td>multipart 表单中，文件的最大尺寸。默认值：Infinity</td>
+</tr>
+<tr>
+<td>files</td>
+<td>multipart 表单中，文件最大数量。默认值：Infinity</td>
+</tr>
+<tr>
+<td>parts</td>
+<td>multipart 表单中，最大组件(fields+files)数量。默认值：Infinity</td>
+</tr>
+<tr>
+<td>headerPairs</td>
+<td>默认值：2000</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>那么这些又有什么用呢？假设我们不想浪费服务器的流量，只允许客户端上传小于10MB的文件，那么我们就可以利用这个功能啦～</p>
+<ul>
+<li>在app.js中修改以下代码：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//配制multer参数，设置上传的文件存储路径为upload,上传文件小于160kB，默认单位为B，所以160000B=160kB</span><br><span class="line">var upload = multer(&#123; storage: storage,limits:&#123;fileSize: 160000&#125;&#125;);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>重启test.js，上传文件，大于160kb的文件会显示上传失败</li>
+</ul>
+<h3 id="3-fileFilter-文件筛选"><a href="#3-fileFilter-文件筛选" class="headerlink" title="3.fileFilter - 文件筛选"></a>3.fileFilter - 文件筛选</h3><p>fileFilter用于控制要哪些文件是可接受的，哪些是要被拒绝的。使用形式如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fileFilter</span> (<span class="params">req, file, cb</span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 需要调用回调函数 `cb`，</span></span><br><span class="line">  <span class="comment">// 并在第二个参数中传入一个布尔值，用于指示文件是否可接受</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 如果要拒绝文件，上传则传入 `false`。如:</span></span><br><span class="line">  cb(<span class="literal">null</span>, <span class="literal">false</span>)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 如果接受上传文件，则传入 `true`。如:</span></span><br><span class="line">  cb(<span class="literal">null</span>, <span class="literal">true</span>)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 出错后，可以在第一个参数中传入一个错误：</span></span><br><span class="line">  cb(<span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'I don\'t have a clue!'</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么这个又有什么用呢，假设当上传的文件必须为统一格式，比如image的话，那我们就能用上这个功能啦～</p>
+<ul>
+<li>在test.js中的添加以下代码：</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置上传文件的Mime类型为video</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fileFilter</span>(<span class="params">req, file, cb</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">const</span> extension = file.mimetype.split(<span class="string">'/'</span>)[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">if</span>(extension !== <span class="string">'image'</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> cb(<span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'The file is not image type'</span>), <span class="literal">false</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    cb(<span class="literal">null</span>, <span class="literal">true</span>);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>并且修改multer参数</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//配制multer参数</span></span><br><span class="line"><span class="keyword">var</span> upload = multer(&#123; <span class="attr">storage</span>: storage,<span class="attr">limits</span>:&#123;<span class="attr">fileSize</span>: <span class="number">160000000</span>&#125;,<span class="attr">fileFilter</span>:fileFilter&#125;);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>重启test.js，当上传其他格式文件时，显示上传错误</li>
+</ul>
+<p>Multer中的几个“骚”操作我们差不多总结完啦，Multer是开发中非常常见的中间件，对于其掌握是非常必要的～</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
+<li>因为官方文档对于multer解释不太清楚，小白看了会懵逼，所以才有了这一篇博文，希望能够帮助到一些刚刚入门Express的小伙伴们，也是自己巩固知识的好机会。</li>
+<li>代码已经上传到<a href="https://github.com/Vincedream/multer_test" target="_blank" rel="noopener">GitHub</a>啦，运行之前别忘记npm install哦，如果对你有帮助，给个star鼓励下啦～</li>
+<li>Nice to meet you ～</li>
+</ul>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://vince.xin">Vince</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://vince.xin/2017/07/06/详解Express的上传文件中间件Multer/">https://vince.xin/2017/07/06/详解Express的上传文件中间件Multer/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/Express/">Express</a>
+            
+              <a href="/tags/Multer/">Multer</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/07/27/20行代码实现Express提交表单数据插入Mongo数据库/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">20行代码实现Express提交表单数据插入Mongo数据库</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/06/19/你可能不知道的 border-radius/">
+        <span class="next-text nav-default">你可能不知道的 border-radius</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:artistcoder@163.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/Vincedrean" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2017 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Vince</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://vince.xin/2017/07/06/详解Express的上传文件中间件Multer/';
+        this.page.identifier = '2017/07/06/详解Express的上传文件中间件Multer/';
+        this.page.title = '详解Express的上传文件中间件Multer';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//vincehua.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.2"></script>
+
+  </body>
+</html>

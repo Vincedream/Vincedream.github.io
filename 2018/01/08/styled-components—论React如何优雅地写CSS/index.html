@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="styled-components—论React如何优雅地写CSS">
+
+
+
+
+  <meta name="keywords" content="Vince, Vince's Blog,前端,Node,React">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Vince's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.2">
+
+
+
+<link rel="canonical" href="https://vince.xin/2018/01/08/styled-components—论React如何优雅地写CSS/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.2">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> styled-components—论React如何优雅地写CSS - Vince's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Vince's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Vince's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          styled-components—论React如何优雅地写CSS
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-01-08
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/React/">React</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么要CSS-in-JS"><span class="toc-text">为什么要CSS in JS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装"><span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#组件样式继承"><span class="toc-text">组件样式继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#随意更换标签"><span class="toc-text">随意更换标签</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#用props定制主题"><span class="toc-text">用props定制主题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#设置attrs函数"><span class="toc-text">设置attrs函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#嵌套和伪类"><span class="toc-text">嵌套和伪类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CSS-动画支持"><span class="toc-text">CSS 动画支持</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么不污染全局样式"><span class="toc-text">为什么不污染全局样式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>还能在JavaScript中写CSS？<br><a id="more"></a></p>
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>好好的HTML、JavaScript、CSS为什么要写在一起，分开来写不是更好吗，这样也避免一大串合在一起影响美观呀，但是自从学习了React框架后，发现HTML和JavaScript写在一起，但是CSS写在另外一个文件，刚刚接触React时才疏学浅，认为这应该是祖祖辈辈传下来的吧，但是经过一段时间，发现这并不好维护，每个js组件带一个CSS文件，不仅在HTML中要设置class属性，还必须要用在每个css样式里面带上组件的前缀生怕污染全局css，内心不爽却也无能为力。</p>
+<p>直到我遇见了，styled-components，仿佛像是沙漠旅行者遇见了绿洲～</p>
+<h3 id="为什么要CSS-in-JS"><a href="#为什么要CSS-in-JS" class="headerlink" title="为什么要CSS in JS"></a>为什么要CSS in JS</h3><p>这点就好比一个袋子标签写着‘钥匙’里面装了所有与钥匙相关的东西，而不是一个大袋子装钥匙，还附带一个小袋子装钥匙扣钥匙环。这样相比就很明白了，我们可以理解CSS为钥匙扣和钥匙环，在传统的样式脚本分离的写法中，需要手动将钥匙和钥匙环扣在一起才能使用。但是CSS in JS就好比将钥匙环已经绑定在钥匙上，拿起即用一样。</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install styled-components</span><br></pre></td></tr></table></figure>
+<p>styled-components只需要安装一次，便可以像一个组件一样在任何地方使用，并不需要配置webpack，这一点充分体现出开箱即用的优点，我们先从一个简单的demo来展示他最基础的用法。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">"react"</span>;</span><br><span class="line"><span class="keyword">import</span> styled <span class="keyword">from</span> <span class="string">"styled-components"</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">const</span> Wrapper = styled.div<span class="string">`</span></span><br><span class="line"><span class="string">      margin: 10px auto;</span></span><br><span class="line"><span class="string">      width: 300px;</span></span><br><span class="line"><span class="string">      height: 100px;</span></span><br><span class="line"><span class="string">      border: 1px solid pink;</span></span><br><span class="line"><span class="string">      text-align: center;</span></span><br><span class="line"><span class="string">    `</span>;</span><br><span class="line">    <span class="keyword">const</span> Button = styled.button<span class="string">`</span></span><br><span class="line"><span class="string">      width: 100px;</span></span><br><span class="line"><span class="string">      background: yellow;</span></span><br><span class="line"><span class="string">    `</span>;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;Wrapper&gt;</span><br><span class="line">        &lt;Button&gt;Hello World&lt;<span class="regexp">/Button&gt;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>Wrapper&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> App;</span><br></pre></td></tr></table></figure>
+<p>相信你看完这段代码后，会有种 真 · 组件式开发 的感觉，直接将css写在自己定义的一个组件中，在render里面直接调用，不必写一些className乱七八糟的属性。但是，这只是styled-components的最大的特点，关键是，写CSS最重要的还是完全复原设计图，styled-components得要又其他css类库一样简便的用法。</p>
+<h3 id="组件样式继承"><a href="#组件样式继承" class="headerlink" title="组件样式继承"></a>组件样式继承</h3><p>通常在原生css中一般会通过在class中传入多个name通过空格分隔来复用css样式，这样也起到了继承的作用，但是在styled-components中继承是一件非常优雅的事情，就像写class继承那么优雅：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">const</span> Button = styled.button<span class="string">`</span></span><br><span class="line"><span class="string">      font-size: 1em;</span></span><br><span class="line"><span class="string">      margin: 1em;</span></span><br><span class="line"><span class="string">      padding: 0.25em 1em;</span></span><br><span class="line"><span class="string">      border-radius: 3px;</span></span><br><span class="line"><span class="string">    `</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> TomatoButton = Button.extend<span class="string">`</span></span><br><span class="line"><span class="string">      color: tomato;</span></span><br><span class="line"><span class="string">      border-color: tomato;</span></span><br><span class="line"><span class="string">    `</span>;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;Button&gt;Button&lt;<span class="regexp">/Button&gt;</span></span><br><span class="line"><span class="regexp">        &lt;TomatoButton&gt;TomatoButton&lt;/</span>TomatoButton&gt;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>在这里，我们用到了类似于ES6中class的extend的语法，无论是在书写美观还是可读性，styled-components都略胜一筹，你的小伙伴也无需看到你class里面装满css的name而头皮发麻啦～</p>
+<h3 id="随意更换标签"><a href="#随意更换标签" class="headerlink" title="随意更换标签"></a>随意更换标签</h3><p>我们经常会遇到这样的情况，当我们写完一个button的样式后，在一些奇怪的场景下，我们必须要使用a标签来替换button标签，并且a标签和button所要求实现的样式是一样的，这个时候你可能会复制一份button的样式再加到这个a标签中，但是在styled-components中，你可以随意切换标签，代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">const</span> Button = styled.button<span class="string">`</span></span><br><span class="line"><span class="string">      display: inline-block;</span></span><br><span class="line"><span class="string">      font-size: 1em;</span></span><br><span class="line"><span class="string">      margin: 1em;</span></span><br><span class="line"><span class="string">      padding: 0.25em 1em;</span></span><br><span class="line"><span class="string">      border: 2px solid palevioletred;</span></span><br><span class="line"><span class="string">      border-radius: 3px;</span></span><br><span class="line"><span class="string">    `</span>;</span><br><span class="line">    <span class="keyword">const</span> Link = Button.withComponent(<span class="string">"a"</span>);</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;Button&gt;Normal Button&lt;<span class="regexp">/Button&gt;</span></span><br><span class="line"><span class="regexp">        &lt;Link&gt;Normal Link&lt;/</span>Link&gt;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>继承样式后，通过withComponent来切换标签，随意自如，是那么的优雅～</p>
+<h3 id="用props定制主题"><a href="#用props定制主题" class="headerlink" title="用props定制主题"></a>用props定制主题</h3><p>我们使用antd的时候，同一个Button通过设置<button primary>test</button>来使用各种样式的按钮，千万不要觉得这很难实现，因为在你自己项目中，自己也能够很方便地是用styled-components的props传参来定制，代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">const</span> Button = styled.button<span class="string">`</span></span><br><span class="line"><span class="string">      background: <span class="subst">$&#123;props =&gt; (props.primary ? <span class="string">"#188fff"</span> : <span class="string">"white"</span>)&#125;</span>;</span></span><br><span class="line"><span class="string">      color: <span class="subst">$&#123;props =&gt; (props.primary ? <span class="string">"white"</span> : <span class="string">"black"</span>)&#125;</span>;</span></span><br><span class="line"><span class="string">      font-size: 1em;</span></span><br><span class="line"><span class="string">      margin: 1em;</span></span><br><span class="line"><span class="string">      padding: 0.25em 1em;</span></span><br><span class="line"><span class="string">      border-radius: 3px;</span></span><br><span class="line"><span class="string">    `</span>;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;Button&gt;Normal&lt;<span class="regexp">/Button&gt;</span></span><br><span class="line"><span class="regexp">        &lt;Button primary&gt;Primary&lt;/</span>Button&gt;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<h3 id="设置attrs函数"><a href="#设置attrs函数" class="headerlink" title="设置attrs函数"></a>设置attrs函数</h3><p>只是优雅当然不够，还得有html和css的最原始的功能，比如说input里面设置type来定义不同类型的输入框，不知你是否忍受够了在input标签里面书写长长一大串属性(type value class)带来的密集感，要知道如果标签中写的属性过多，会极大地降低html结构的可读性，但是，有了styled-components，一切都可以变得那么优雅～</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">const</span> Input = styled.input.attrs(&#123;</span><br><span class="line">      type: <span class="string">"password"</span>,</span><br><span class="line">      placeholder: <span class="string">"A small text input"</span></span><br><span class="line">    &#125;)<span class="string">`</span></span><br><span class="line"><span class="string">      color: palevioletred;</span></span><br><span class="line"><span class="string">      border-radius: 3px;</span></span><br><span class="line"><span class="string">    `</span>;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;Input /&gt;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<h3 id="嵌套和伪类"><a href="#嵌套和伪类" class="headerlink" title="嵌套和伪类"></a>嵌套和伪类</h3><p>之所以对styled-components很亲切，是因为他的语法和less有很大的相似之处，并且在styled-components，我们依旧可以使用className来定义样式，如下代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">const</span> Wrapper = styled.div<span class="string">`</span></span><br><span class="line"><span class="string">      display: block;</span></span><br><span class="line"><span class="string">      h4 &#123;</span></span><br><span class="line"><span class="string">        font-size: 14px;</span></span><br><span class="line"><span class="string">        &amp;:hover &#123;</span></span><br><span class="line"><span class="string">          color: #fff;</span></span><br><span class="line"><span class="string">        &#125;</span></span><br><span class="line"><span class="string">      &#125;</span></span><br><span class="line"><span class="string">      .detail &#123;</span></span><br><span class="line"><span class="string">        color: #ccc;</span></span><br><span class="line"><span class="string">      &#125;</span></span><br><span class="line"><span class="string">    `</span>;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;Wrapper&gt;</span><br><span class="line">          &lt;h4&gt;This is H4&lt;<span class="regexp">/h4&gt;</span></span><br><span class="line"><span class="regexp">          &lt;p className="detail"&gt;this is p&lt;/</span>p&gt;</span><br><span class="line">        &lt;<span class="regexp">/Wrapper&gt;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>div&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="CSS-动画支持"><a href="#CSS-动画支持" class="headerlink" title="CSS 动画支持"></a>CSS 动画支持</h3><p>同样动画也是完美支持，和元素CSS写法并没有太大区别，注意要引入styled-components的特定keyframes，代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> styled, &#123; injectGlobal, keyframes &#125; <span class="keyword">from</span> <span class="string">"styled-components"</span>;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">const</span> fadeIn = keyframes<span class="string">`</span></span><br><span class="line"><span class="string">      0% &#123;</span></span><br><span class="line"><span class="string">        opacity: 0;</span></span><br><span class="line"><span class="string">      &#125;</span></span><br><span class="line"><span class="string">      100% &#123;</span></span><br><span class="line"><span class="string">        opacity: 1;</span></span><br><span class="line"><span class="string">      &#125;</span></span><br><span class="line"><span class="string">    `</span>;</span><br><span class="line">    <span class="keyword">const</span> FadeInButton = styled.button<span class="string">`</span></span><br><span class="line"><span class="string">      animation: 1s <span class="subst">$&#123;fadeIn&#125;</span> ease-out;</span></span><br><span class="line"><span class="string">    `</span>;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;FadeInButton&gt;button&lt;<span class="regexp">/FadeInButton&gt;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>div&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="为什么不污染全局样式"><a href="#为什么不污染全局样式" class="headerlink" title="为什么不污染全局样式"></a>为什么不污染全局样式</h3><p>最后我们留下一个问题，我们之前在使用css-modules中，之所以它不会污染全局css样式，是因为构建工具会将类名style.title编译成一个哈希字符串，保证每个class不重复，那么styled-components的原理是怎么样的呢？</p>
+<p>我们打开chrome调试工具可以发现：styled-components同样也为class生成了唯一的哈希，并且无需在webpack共建工具中配置任何项目，开箱即用～</p>
+<p><img src="http://static1.vince.xin/7EDCFA98-C134-4A26-BA04-10D5DE58BC2B.png" alt="image"></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>styled-components在实际开发过程中，我认为最主要还是优化了HTML结构的”美感”，使得代码可读性更好，也提升了组件可维护性和代码复用率，并且引进了很多先进的概念，使得写CSS能够像写JavaScript一样灵活，这对于我们用JavaScript写html的React脑残粉来说，是个“三国统一”的最终愿景，当然这只是styled-components的部分功能，还有更多的功能等待我们去发现，小生学疏才浅，只是抛砖引玉，顺便写一篇博文巩固自己对知识是掌握。</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://vince.xin">Vince</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://vince.xin/2018/01/08/styled-components—论React如何优雅地写CSS/">https://vince.xin/2018/01/08/styled-components—论React如何优雅地写CSS/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/styled-components/">styled-components</a>
+            
+              <a href="/tags/CSS-In-JS/">CSS In JS</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2018/01/22/回到最初的起点--原生Ajax原理浅析/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">回到最初的起点--原生Ajax原理浅析</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2018/01/07/2017年度总结——转变自己的关键点/">
+        <span class="next-text nav-default">2017年度总结——转变自己的关键点</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:artistcoder@163.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/Vincedrean" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2017 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Vince</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://vince.xin/2018/01/08/styled-components—论React如何优雅地写CSS/';
+        this.page.identifier = '2018/01/08/styled-components—论React如何优雅地写CSS/';
+        this.page.title = 'styled-components—论React如何优雅地写CSS';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//vincehua.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.2"></script>
+
+  </body>
+</html>

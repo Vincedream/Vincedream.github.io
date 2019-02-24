@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="用PM2一键部署你的Node项目">
+
+
+
+
+  <meta name="keywords" content="Vince, Vince's Blog,前端,Node,React">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Vince's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.2">
+
+
+
+<link rel="canonical" href="https://vince.xin/2017/12/11/用PM2一键部署你的Node项目/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.2">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 用PM2一键部署你的Node项目 - Vince's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Vince's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Vince's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          用PM2一键部署你的Node项目
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-12-11
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/Node-js/">Node.js</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#写在前面"><span class="toc-text">写在前面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是PM2？"><span class="toc-text">什么是PM2？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PM2部署前提条件"><span class="toc-text">PM2部署前提条件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PM2部署步骤"><span class="toc-text">PM2部署步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建项目"><span class="toc-text">创建项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#提交项目到仓库"><span class="toc-text">提交项目到仓库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#将项目拉取到服务器上"><span class="toc-text">将项目拉取到服务器上</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#将项目运行起来"><span class="toc-text">将项目运行起来</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#项目更新"><span class="toc-text">项目更新</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PM2帮我们做了哪些事情？"><span class="toc-text">PM2帮我们做了哪些事情？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#配置文件说起"><span class="toc-text">配置文件说起</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#分析以上代码："><span class="toc-text">分析以上代码：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>如何更快速便捷地部署你的应用？<br><a id="more"></a></p>
+<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>之前在部署项目的时候，先将项目push到私有仓库里，然后再在服务器下clone项目，然后再部署。开始的时候觉得也还行，后来随着项目更新速度有点快，于是部署的时候就各种窗口切换，各种指令啪啪啪的输入，可爱的室友便开始嫌我烦(我也嫌烦)，于是找到PM2这个神器。</p>
+<h2 id="什么是PM2？"><a href="#什么是PM2？" class="headerlink" title="什么是PM2？"></a>什么是PM2？</h2><p>当然不可以吃，但是能省出时间让你吃吃吃，也就是提升了我们的部署效率，我们用一张图来看看之前我是怎么部署迭代项目的：</p>
+<p><img src="http://blogpic.vince.xin/619ED344-8D7E-4F39-889A-F5D7938A891C.png" alt="image"></p>
+<p>当你有个很皮的项目需要不断迭代更新的时候，那么每次迭代都要经历这么一个过程，当然是不能忍的呀～，如果我们用PM2快速部署的话，那么将会是下面这个样子的:</p>
+<p><img src="http://blogpic.vince.xin/ED3FAA25-070A-4D96-9FA8-BAC3160B6E93.png" alt="image"></p>
+<p>惊不惊喜，意不意外，是不是很想学会怎么做到的，接着往下看吧～</p>
+<h2 id="PM2部署前提条件"><a href="#PM2部署前提条件" class="headerlink" title="PM2部署前提条件"></a>PM2部署前提条件</h2><ol>
+<li>首先你得有一个配置好了node基本环境服务器，并且你能通过ssh无钥登录你的服务器，如果还未满足此条件，可以看一下我的上一篇文章。</li>
+<li>你的服务器和你的电脑能通过ssh访问你的gitee或者github的仓库，如果的项目不想被公开，那么可以放在gitee的免费私有仓库上，当然也可以花钱在github上建私有仓库。</li>
+<li>在电脑和服务器下已全局安装PM2</li>
+<li>一颗能够通过Google解决以上三个问题的大脑</li>
+</ol>
+<h2 id="PM2部署步骤"><a href="#PM2部署步骤" class="headerlink" title="PM2部署步骤"></a>PM2部署步骤</h2><h3 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h3><ol>
+<li>为了更好的说明整个步骤，我们现在gitee上创建一个仓库叫<code>Pm2Test</code>，并且设为私有仓库，其实都可以的，只是正式上线的项目一般都是私有的，然后通过本地ssh无钥clone下来。</li>
+</ol>
+<p><img src="http://blogpic.vince.xin/2C828B08-0CBD-4CAC-841E-CD421B0F1C6D.png" alt="image"></p>
+<ol start="2">
+<li>创建<code>aap.js</code>，设置一个在3004端口下监听的demo:</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> homePage=<span class="string">`</span></span><br><span class="line"><span class="string">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="string">&lt;html lang="en"&gt;</span></span><br><span class="line"><span class="string">&lt;head&gt;</span></span><br><span class="line"><span class="string">    &lt;meta charset="UTF-8"&gt;</span></span><br><span class="line"><span class="string">    &lt;title&gt;Document&lt;/title&gt;</span></span><br><span class="line"><span class="string">&lt;/head&gt;</span></span><br><span class="line"><span class="string">&lt;body&gt;</span></span><br><span class="line"><span class="string">    &lt;h1&gt;Nice to meet you ~&lt;/h1&gt;</span></span><br><span class="line"><span class="string">&lt;/body&gt;</span></span><br><span class="line"><span class="string">&lt;/html&gt;</span></span><br><span class="line"><span class="string">`</span></span><br><span class="line"></span><br><span class="line">http.createServer(<span class="function">(<span class="params">req,res</span>) =&gt;</span> &#123;</span><br><span class="line">    res.statusCode = <span class="number">200</span>;</span><br><span class="line">    res.setHeader(<span class="string">'Content-Type'</span>,<span class="string">'text/html'</span>)</span><br><span class="line">    res.end(homePage)</span><br><span class="line">&#125;)</span><br><span class="line">.listen(<span class="number">3004</span>,()=&gt;&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'Server Runing At 3004'</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>重点是在根目录下创建PM2的配置文件<code>ecosystem.json</code>,我们在代码注释中解释每一个选项是啥意思和改怎么填写,注意在粘贴到项目中需要将注释都去掉，json是不解释注释的：<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"apps"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">"name"</span>:<span class="string">"Pm2Test"</span>,  <span class="comment">//项目名称</span></span><br><span class="line">            <span class="string">"script"</span>:<span class="string">"app.js"</span>,  <span class="comment">//项目入口文件</span></span><br><span class="line">            <span class="string">"env"</span>: &#123;</span><br><span class="line">                <span class="string">"COMMON_VARIABLE"</span>: <span class="string">"true"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="string">"env_production"</span>:&#123;</span><br><span class="line">                <span class="string">"NODE_ENV"</span>: <span class="string">"Pm2Test"</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    ],</span><br><span class="line">    <span class="string">"deploy"</span>: &#123;</span><br><span class="line">        <span class="string">"Pm2Test"</span>: &#123;</span><br><span class="line">            <span class="string">"user"</span>: <span class="string">"vince"</span>,  <span class="comment">//登录服务器的user账号</span></span><br><span class="line">            <span class="string">"host"</span>: [<span class="string">"59.110.159.146"</span>],  <span class="comment">//登录服务器的公网ip地址</span></span><br><span class="line">            <span class="string">"ref"</span>: <span class="string">"origin/master"</span>,  <span class="comment">//远端名称及分支名</span></span><br><span class="line">            <span class="string">"repo"</span>: <span class="string">"git@gitee.com:vinceHua/Pm2Test.git"</span>, <span class="comment">//git仓库地址也就是这个项目的仓库地址</span></span><br><span class="line">            <span class="string">"path"</span>: <span class="string">"/home/vince/www/production"</span>,  <span class="comment">//远程服务器部署目录，需要填写user具备写入权限的目录</span></span><br><span class="line">            <span class="string">"ssh_options"</span>: <span class="string">"StrictHostKeyChecking=no"</span>, <span class="comment">//ssh检查设置</span></span><br><span class="line">            <span class="comment">//部署后执行的命令</span></span><br><span class="line">            <span class="string">"post-deploy"</span>: <span class="string">"npm install &amp;&amp; pm2 startOrRestart ecosystem.json --env production"</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="提交项目到仓库"><a href="#提交项目到仓库" class="headerlink" title="提交项目到仓库"></a>提交项目到仓库</h3><p>项目文件和pm2配置文件完成后，我们需要将最新修改的这个项目push到gitee上</p>
+<h3 id="将项目拉取到服务器上"><a href="#将项目拉取到服务器上" class="headerlink" title="将项目拉取到服务器上"></a>将项目拉取到服务器上</h3><p>然后我们通过pm2操控服务器将gitee上的文件拉取到服务器上，键入<code>pm2 deploy ecosystem.json Pm2Test setup</code>，Pm2Test对应着配置文件中deploy下的项目，回车如图便是成功了：</p>
+<p><img src="http://blogpic.vince.xin/BE6DD6A2-F7C1-4809-83DE-C47F5FDD6E10.png" alt="image"></p>
+<h3 id="将项目运行起来"><a href="#将项目运行起来" class="headerlink" title="将项目运行起来"></a>将项目运行起来</h3><ol>
+<li>然后输入<code>pm2 deploy ecosystem.json Pm2Test</code>让项目运行起来，这个时候我们发现如图错误，原因是在服务器下的bash并不能通过远程执行pm2指令。</li>
+</ol>
+<p><img src="http://blogpic.vince.xin/B71C9737-DB22-479E-BF40-7467CDD7504D.png" alt="image"></p>
+<ol start="2">
+<li>解决办法是在服务器的账户目录下输入<code>vi .bashrc</code>将如下图的标注的注释掉(在前面加#),如图</li>
+</ol>
+<p><img src="http://blogpic.vince.xin/292987B4-52DB-4F50-8C5A-16A775596437.png" alt="image"></p>
+<ol start="3">
+<li>再次运行<code>pm2 deploy ecosystem.json Pm2Test</code>，如下图即表示成功了：</li>
+</ol>
+<p><img src="http://blogpic.vince.xin/F037D9FF-3902-4E2D-B022-A82DA705BF4D.png" alt="image"></p>
+<ol start="4">
+<li>浏览器下访问59.110.159.146:3004，便部署成功啦～</li>
+</ol>
+<p><img src="http://blogpic.vince.xin/C3298E86-8778-4319-8F7B-1A9372B36BAF.png" alt="image"></p>
+<h3 id="项目更新"><a href="#项目更新" class="headerlink" title="项目更新"></a>项目更新</h3><ol>
+<li>当项目有修改的时候，我们只需要执行一下命令将代码push到gitee中：</li>
+</ol>
+<ul>
+<li><code>git add .</code> </li>
+<li><code>it commit -m  &#39;test&#39;</code></li>
+<li><code>git push -u origin master</code></li>
+</ul>
+<ol start="2">
+<li>然后输入一下命令再次让项目运行起来</li>
+</ol>
+<ul>
+<li><code>pm2 deploy ecosystem.json Pm2Test</code></li>
+</ul>
+<ol start="3">
+<li>再次访问59.110.159.146:3004，发现项目已经更新了：</li>
+</ol>
+<p><img src="http://blogpic.vince.xin/071F4C46-60DE-427D-BEF1-41977DAEECE1.png" alt="image"></p>
+<h2 id="PM2帮我们做了哪些事情？"><a href="#PM2帮我们做了哪些事情？" class="headerlink" title="PM2帮我们做了哪些事情？"></a>PM2帮我们做了哪些事情？</h2><h3 id="配置文件说起"><a href="#配置文件说起" class="headerlink" title="配置文件说起"></a>配置文件说起</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"user"</span>: <span class="string">"vince"</span>,  <span class="comment">//登录服务器的user账号</span></span><br><span class="line"><span class="string">"host"</span>: [<span class="string">"59.110.159.146"</span>],  <span class="comment">//登录服务器的公网ip地址</span></span><br><span class="line"><span class="string">"ref"</span>: <span class="string">"origin/master"</span>,  <span class="comment">//远端名称及分支名</span></span><br><span class="line"><span class="string">"repo"</span>: <span class="string">"git@gitee.com:vinceHua/Pm2Test.git"</span>, <span class="comment">//git仓库地址也就是这个项目的仓库地址</span></span><br><span class="line"><span class="string">"path"</span>: <span class="string">"/home/vince/www/production"</span>,  <span class="comment">//远程服务器部署目录，需要填写user具备写入权限的目录</span></span><br><span class="line"><span class="comment">//部署后执行的命令</span></span><br><span class="line"><span class="string">"post-deploy"</span>: <span class="string">"npm install &amp;&amp; pm2 startOrRestart ecosystem.json --env production"</span></span><br></pre></td></tr></table></figure>
+<h4 id="分析以上代码："><a href="#分析以上代码：" class="headerlink" title="分析以上代码："></a>分析以上代码：</h4><ul>
+<li>我们设置了服务器的user和host，并且本地local能够用ssh无钥登录服务器，这样PM2也就能连接到我们服务器</li>
+<li>ref和repo设置了gitee下的仓库地址和分支，并且服务器server能够无钥拉取gitee私有仓库下的项目，这样PM2就在服务器下替我们拉取了gitee下的项目。</li>
+<li>设置path后，PM2将拉取的项目存到设置的path下</li>
+<li>post-deploy让PM2替我们执行哪些代码</li>
+</ul>
+<p>拉取项目时候键入<code>pm2 deploy ecosystem.json Pm2Test setup</code>时候，我们可以在log下看到拉取项目的整个流程</p>
+<p><img src="http://blogpic.vince.xin/BE6DD6A2-F7C1-4809-83DE-C47F5FDD6E10.png" alt="image"></p>
+<p>运行项目键入<code>pm2 deploy ecosystem.json Pm2Test</code>时候，我们观察下图便会发现整个运行post-deploy的过程</p>
+<p><img src="http://blogpic.vince.xin/BB0921C2-765C-4448-8A36-63E02B7B46CB.png" alt="image"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过一步步的实践，我们学习到PM2的部署过程和真个部署的原理。PM2的主要功能就是省去了我们登录服务器拉取部署这个繁杂的过程，所有的操作都能在本机电脑上进行。</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://vince.xin">Vince</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://vince.xin/2017/12/11/用PM2一键部署你的Node项目/">https://vince.xin/2017/12/11/用PM2一键部署你的Node项目/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/PM2/">PM2</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/12/26/React中绑定事件为什么要.bind(this)以及如何优雅bind/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">React中绑定事件为什么要.bind(this)以及如何优雅bind</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/12/09/用Node EJS写一个爬虫脚本每天定时给心爱的她发一封暖心邮件/">
+        <span class="next-text nav-default">用Node EJS写一个爬虫脚本每天定时给心爱的她发一封暖心邮件</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:artistcoder@163.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/Vincedrean" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2017 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Vince</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://vince.xin/2017/12/11/用PM2一键部署你的Node项目/';
+        this.page.identifier = '2017/12/11/用PM2一键部署你的Node项目/';
+        this.page.title = '用PM2一键部署你的Node项目';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//vincehua.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.2"></script>
+
+  </body>
+</html>

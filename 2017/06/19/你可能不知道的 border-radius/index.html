@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="你可能不知道的 border-radius">
+
+
+
+
+  <meta name="keywords" content="Vince, Vince's Blog,前端,Node,React">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Vince's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.2">
+
+
+
+<link rel="canonical" href="https://vince.xin/2017/06/19/你可能不知道的 border-radius/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.2">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 你可能不知道的 border-radius - Vince's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Vince's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Vince's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          你可能不知道的 border-radius
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-06-19
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/CSS/">CSS</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#普通的圆角"><span class="toc-text">普通的圆角</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#最常用的圆角样式"><span class="toc-text">最常用的圆角样式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#画一个标准的圆"><span class="toc-text">画一个标准的圆</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#不规则圆角"><span class="toc-text">不规则圆角</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#画一个半圆"><span class="toc-text">画一个半圆</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#画一个四分子圆"><span class="toc-text">画一个四分子圆</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#垂直水平半径不相等-椭圆-的圆角"><span class="toc-text">垂直水平半径不相等(椭圆)的圆角</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#水平半径与垂直半径"><span class="toc-text">水平半径与垂直半径</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#画一个椭圆"><span class="toc-text">画一个椭圆</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#画一个半椭圆"><span class="toc-text">画一个半椭圆</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#画一个四分之一椭圆"><span class="toc-text">画一个四分之一椭圆</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#奇形怪状的图"><span class="toc-text">奇形怪状的图</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#画一个鸡蛋"><span class="toc-text">画一个鸡蛋</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#画一片树叶"><span class="toc-text">画一片树叶</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#画一个爱心"><span class="toc-text">画一个爱心</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>来了解一下这些不为人知的border-radius属性<br><a id="more"></a></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>CSS中总有一些你不知道的样式使用方式，但是当遇到一些比较特殊的样式要绘制的时候，这些属性就能给你帮手很大的忙，比如border-radius，我们可以用它来画一个圆形、半圆，四分之一圆，椭圆，半椭圆，不规则圆…</p>
+<h2 id="普通的圆角"><a href="#普通的圆角" class="headerlink" title="普通的圆角"></a>普通的圆角</h2><h3 id="最常用的圆角样式"><a href="#最常用的圆角样式" class="headerlink" title="最常用的圆角样式"></a>最常用的圆角样式</h3><p>我们用的最多的就是在一个盒子画上圆角边框，原理就是在div盒子上削一个半径为20px的四之一圆：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.box1</span>&#123;</span><br><span class="line">      <span class="attribute">height</span>: <span class="number">200px</span>;</span><br><span class="line">      <span class="attribute">width</span>: <span class="number">200px</span>;</span><br><span class="line">      <span class="attribute">background-color</span>: pink;</span><br><span class="line">      <span class="attribute">border-radius</span>: <span class="number">50px</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>效果图：</p>
+<p><img src="http://vinceimage.oss-cn-beijing.aliyuncs.com/blog/1FB9B4B4-90A5-4D8C-9F5D-5673E56B53C1.jpeg" alt="image"></p>
+<h3 id="画一个标准的圆"><a href="#画一个标准的圆" class="headerlink" title="画一个标准的圆"></a>画一个标准的圆</h3><p>当我们把border-radius的值设置为一个正方形的二分之一边长时，就画了一个标准的圆形：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.box1</span>&#123;</span><br><span class="line">      <span class="attribute">height</span>: <span class="number">200px</span>;</span><br><span class="line">      <span class="attribute">width</span>: <span class="number">200px</span>;</span><br><span class="line">      <span class="attribute">background-color</span>: pink;</span><br><span class="line">      <span class="attribute">border-radius</span>: <span class="number">100px</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>效果图：</p>
+<p><img src="http://vinceimage.oss-cn-beijing.aliyuncs.com/blog/4B5F6F39-487B-4C70-8BB5-3A3B8889FA3A.jpeg" alt="image"></p>
+<p>问题：当我们把border-radius的值继续加大会出现什么效果呢？答案是没有效果，因为当border-radius的值为一个时，它的最大有效值为“盒子最短边的二分之一”，例如：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.box1</span>&#123;</span><br><span class="line">//注意这是一个矩形，他的“盒子最短边的二分之一”为50px;</span><br><span class="line">      <span class="selector-tag">height</span>: 100<span class="selector-tag">px</span>; </span><br><span class="line">      <span class="selector-tag">width</span>: 200<span class="selector-tag">px</span>;</span><br><span class="line">      <span class="selector-tag">background-color</span>: <span class="selector-tag">pink</span>;</span><br><span class="line">      <span class="selector-tag">border-radius</span>: 50<span class="selector-tag">px</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>效果图：</p>
+<p><img src="http://vinceimage.oss-cn-beijing.aliyuncs.com/blog/4FBDD922-F265-4F08-AC2A-61C6152FF1FD.jpeg" alt="image"></p>
+<p>当我们继续加大border-radius的值时，是没有任何效果的，这也是为什么我们无法用这种方法画出椭圆的原因。</p>
+<h3 id="不规则圆角"><a href="#不规则圆角" class="headerlink" title="不规则圆角"></a>不规则圆角</h3><p>如果UI设计师告诉你，这个盒子四个圆角是不一样的，有大有小，也就是说这四个圆角的半径是不相同的，这个时候就要用到border-radius的拓展属性：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.box1</span>&#123;</span><br><span class="line">      <span class="attribute">height</span>: <span class="number">200px</span>;</span><br><span class="line">      <span class="attribute">width</span>: <span class="number">200px</span>;</span><br><span class="line">      <span class="attribute">background-color</span>: pink;</span><br><span class="line">      <span class="attribute">border-top-left-radius</span>: <span class="number">100px</span>;</span><br><span class="line">      <span class="attribute">border-top-right-radius</span>: <span class="number">50px</span>;</span><br><span class="line">      <span class="attribute">border-bottom-right-radius</span>: <span class="number">10px</span>;</span><br><span class="line">      <span class="attribute">border-bottom-left-radius</span>: <span class="number">25px</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>效果图：</p>
+<p><img src="http://vinceimage.oss-cn-beijing.aliyuncs.com/blog/885EF5B8-757C-4E8D-8A47-0DDCD77F7AB3.jpeg" alt="image"></p>
+<p>我们也可以简写，从左上角顺时针开始：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.box1</span>&#123;</span><br><span class="line">      <span class="attribute">height</span>: <span class="number">200px</span>;</span><br><span class="line">      <span class="attribute">width</span>: <span class="number">200px</span>;</span><br><span class="line">      <span class="attribute">background-color</span>: pink;</span><br><span class="line">      <span class="attribute">border-radius</span>: <span class="number">100px</span> <span class="number">50px</span> <span class="number">10px</span> <span class="number">25px</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="画一个半圆"><a href="#画一个半圆" class="headerlink" title="画一个半圆"></a>画一个半圆</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.box1</span>&#123;</span><br><span class="line">      <span class="attribute">width</span>: <span class="number">200px</span>;</span><br><span class="line">      <span class="attribute">height</span>: <span class="number">100px</span>;</span><br><span class="line">      <span class="attribute">background-color</span>: pink;</span><br><span class="line">      <span class="attribute">border-radius</span>: <span class="number">200px</span> <span class="number">200px</span> <span class="number">0</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>效果图：</p>
+<p><img src="http://vinceimage.oss-cn-beijing.aliyuncs.com/blog/01CE393C-E2E8-4DAE-ADF3-96C3162104E2.png" alt="image"></p>
+<h3 id="画一个四分子圆"><a href="#画一个四分子圆" class="headerlink" title="画一个四分子圆"></a>画一个四分子圆</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.box1</span>&#123;</span><br><span class="line">      <span class="attribute">width</span>: <span class="number">200px</span>;</span><br><span class="line">      <span class="attribute">height</span>: <span class="number">200px</span>;</span><br><span class="line">      <span class="attribute">background-color</span>: pink;</span><br><span class="line">      <span class="attribute">border-radius</span>: <span class="number">200px</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>效果图：</p>
+<p><img src="http://vinceimage.oss-cn-beijing.aliyuncs.com/blog/27953E33-0102-467C-8C2D-43625EA0AB61.png" alt="image"></p>
+<h2 id="垂直水平半径不相等-椭圆-的圆角"><a href="#垂直水平半径不相等-椭圆-的圆角" class="headerlink" title="垂直水平半径不相等(椭圆)的圆角"></a>垂直水平半径不相等(椭圆)的圆角</h2><h3 id="水平半径与垂直半径"><a href="#水平半径与垂直半径" class="headerlink" title="水平半径与垂直半径"></a>水平半径与垂直半径</h3><p>以上我们都是基于标准圆来削去四个角，是无法得到一个椭圆形状的，为了让小伙伴们方便理解，我们先来介绍一个概念：水平半径与垂直半径：</p>
+<p><img src="http://vinceimage.oss-cn-beijing.aliyuncs.com/blog/331CB1A4-8119-4077-A4B6-21AF83C7D428.jpeg" alt="image"></p>
+<p>如果要画一个椭圆，依照之前那种水平半径和垂直半径相等的圆角去削一个矩形是无法做到的，border-radius给我们提供了这样的方案：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">border-radius</span>：水平半径 ／ 垂直半径;</span><br></pre></td></tr></table></figure>
+<p>有了这个方案我们，我们就能画一个用椭圆“削”的圆角图形：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.box1</span>&#123;</span><br><span class="line">      <span class="attribute">height</span>: <span class="number">100px</span>;</span><br><span class="line">      <span class="attribute">width</span>: <span class="number">200px</span>;</span><br><span class="line">      <span class="attribute">background-color</span>: pink;</span><br><span class="line">      <span class="attribute">border-radius</span>: <span class="number">70px</span> / <span class="number">30px</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>效果图：</p>
+<p><img src="http://vinceimage.oss-cn-beijing.aliyuncs.com/blog/44A1D006-436F-4325-AF0F-928D7212B64B.jpeg" alt="image"></p>
+<h3 id="画一个椭圆"><a href="#画一个椭圆" class="headerlink" title="画一个椭圆"></a>画一个椭圆</h3><p>当我们把水平半径设置为矩形长的二分之一，垂直半径设置为矩形宽的二分之一时候，那么就能完美地画一个椭圆啦：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.box1</span>&#123;</span><br><span class="line">      <span class="attribute">width</span>: <span class="number">200px</span>;</span><br><span class="line">      <span class="attribute">height</span>: <span class="number">100px</span>;</span><br><span class="line">      <span class="attribute">background-color</span>: pink;</span><br><span class="line">      <span class="attribute">border-radius</span>: <span class="number">100px</span> / <span class="number">50px</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>效果图：</p>
+<p><img src="http://vinceimage.oss-cn-beijing.aliyuncs.com/blog/2FD507A4-1E0F-4ABD-B4EA-D5C624E3E6CE.jpeg" alt="image"></p>
+<h3 id="画一个半椭圆"><a href="#画一个半椭圆" class="headerlink" title="画一个半椭圆"></a>画一个半椭圆</h3><p>我们回想border-radius有四个角之分，那么我们是不是可以利用这一点画一个半圆呢：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.box1</span>&#123;</span><br><span class="line">      <span class="attribute">width</span>: <span class="number">200px</span>;</span><br><span class="line">      <span class="attribute">height</span>: <span class="number">100px</span>;</span><br><span class="line">      <span class="attribute">background-color</span>: pink;</span><br><span class="line">      border-radius: 200px 0 0 200px / 50px 0 0 50px;;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>效果图：</p>
+<p><img src="http://vinceimage.oss-cn-beijing.aliyuncs.com/blog/57C2685E-594D-42A0-9AE9-863E779148B0.jpeg" alt="image"></p>
+<h3 id="画一个四分之一椭圆"><a href="#画一个四分之一椭圆" class="headerlink" title="画一个四分之一椭圆"></a>画一个四分之一椭圆</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.box1</span>&#123;</span><br><span class="line">      <span class="attribute">width</span>: <span class="number">200px</span>;</span><br><span class="line">      <span class="attribute">height</span>: <span class="number">100px</span>;</span><br><span class="line">      <span class="attribute">background-color</span>: pink;</span><br><span class="line">      border-radius: 200px 0 0 0 / 100px 0 0 0;;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>效果图：</p>
+<p><img src="http://vinceimage.oss-cn-beijing.aliyuncs.com/blog/BEEC6CD6-0960-4CA5-98D7-65FCA3CBF311.jpeg" alt="image"></p>
+<h2 id="奇形怪状的图"><a href="#奇形怪状的图" class="headerlink" title="奇形怪状的图"></a>奇形怪状的图</h2><h3 id="画一个鸡蛋"><a href="#画一个鸡蛋" class="headerlink" title="画一个鸡蛋"></a>画一个鸡蛋</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.box1</span>&#123;</span><br><span class="line">      <span class="attribute">width</span>: <span class="number">100px</span>;</span><br><span class="line">      <span class="attribute">height</span>: <span class="number">200px</span>;</span><br><span class="line">      <span class="attribute">background-color</span>: pink;</span><br><span class="line">      <span class="attribute">border-radius</span>: <span class="number">50px</span> <span class="number">50px</span> <span class="number">50px</span> <span class="number">50px</span>/<span class="number">150px</span> <span class="number">150px</span> <span class="number">50px</span> <span class="number">50px</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>效果图：</p>
+<p><img src="http://vinceimage.oss-cn-beijing.aliyuncs.com/blog/BF29E7B5-2E93-482D-AFCB-1832B87687C5.jpeg" alt="image"></p>
+<p>千万要注意英文字符下的“/”和中文字符下的“／”是完全不一样的，小伙伴们不要写错了哦。</p>
+<h3 id="画一片树叶"><a href="#画一片树叶" class="headerlink" title="画一片树叶"></a>画一片树叶</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.box1</span>&#123;</span><br><span class="line">      <span class="attribute">width</span>: <span class="number">200px</span>;</span><br><span class="line">      <span class="attribute">height</span>: <span class="number">200px</span>;</span><br><span class="line">      <span class="attribute">background-color</span>: green;</span><br><span class="line">      <span class="attribute">border-radius</span>: <span class="number">200px</span> <span class="number">0</span> <span class="number">200px</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>效果图： </p>
+<p><img src="http://vinceimage.oss-cn-beijing.aliyuncs.com/blog/61B9D7AA-CA06-4D0A-A2F8-E9CE62B0377D.jpeg" alt="image"></p>
+<h3 id="画一个爱心"><a href="#画一个爱心" class="headerlink" title="画一个爱心"></a>画一个爱心</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&lt;style media="screen"&gt;</span><br><span class="line">    <span class="selector-class">.box</span>&#123;</span><br><span class="line">      <span class="attribute">display</span>: flex;</span><br><span class="line">      <span class="attribute">justify-content</span>: center;</span><br><span class="line">      <span class="attribute">align-items</span>: center;</span><br><span class="line">      <span class="attribute">height</span>: <span class="number">400px</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="selector-class">.box1</span>&#123;</span><br><span class="line">      <span class="attribute">width</span>: <span class="number">100px</span>;</span><br><span class="line">      <span class="attribute">height</span>: <span class="number">170px</span>;</span><br><span class="line">      <span class="attribute">background-color</span>: red;</span><br><span class="line">      <span class="attribute">border-radius</span>: <span class="number">50px</span> <span class="number">50px</span> <span class="number">0px</span> <span class="number">0</span>;</span><br><span class="line">      <span class="attribute">transform-origin</span>: <span class="number">50px</span> <span class="number">50px</span>;</span><br><span class="line">      <span class="attribute">transform</span>: <span class="built_in">rotate</span>(-45deg);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="selector-class">.box2</span>&#123;</span><br><span class="line">      <span class="attribute">width</span>: <span class="number">100px</span>;</span><br><span class="line">      <span class="attribute">height</span>: <span class="number">170px</span>;</span><br><span class="line">      <span class="attribute">background-color</span>: red;</span><br><span class="line">      <span class="attribute">border-radius</span>: <span class="number">50px</span> <span class="number">50px</span> <span class="number">0px</span> <span class="number">0</span>;</span><br><span class="line">      <span class="attribute">transform-origin</span>: <span class="number">50px</span> <span class="number">50px</span>;</span><br><span class="line">      <span class="attribute">transform</span>: <span class="built_in">rotate</span>(45deg);</span><br><span class="line">    &#125;</span><br><span class="line">  &lt;/style&gt;</span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">  &lt;div class="box"&gt;</span><br><span class="line">    &lt;div class="box1"&gt;&lt;/div&gt;</span><br><span class="line">    &lt;div class="box2"&gt;&lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<p>效果图：</p>
+<p><img src="http://vinceimage.oss-cn-beijing.aliyuncs.com/blog/F9197750-5690-4F4D-AF95-75706FBC2F56.jpeg" alt="image"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这里只是抛砖引玉地讲解了基本原理，用border-radius可以画出很多有趣的图，当然我们也可以不必要都用px来写定了值，也可以用%来设置，只不过用px更不容易出错易控制，当需要自适应布局的时候，那么就需要用%来设置值。</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://vince.xin">Vince</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://vince.xin/2017/06/19/你可能不知道的 border-radius/">https://vince.xin/2017/06/19/你可能不知道的 border-radius/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/CSS/">CSS</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/07/06/详解Express的上传文件中间件Multer/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">详解Express的上传文件中间件Multer</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/06/03/CSS Sprite雪碧图应用/">
+        <span class="next-text nav-default">CSS Sprite雪碧图应用</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:artistcoder@163.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/Vincedrean" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2017 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Vince</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://vince.xin/2017/06/19/你可能不知道的 border-radius/';
+        this.page.identifier = '2017/06/19/你可能不知道的 border-radius/';
+        this.page.title = '你可能不知道的 border-radius';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//vincehua.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.2"></script>
+
+  </body>
+</html>

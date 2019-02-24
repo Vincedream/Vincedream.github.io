@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="总结项目开发中的一些http性能优化">
+
+
+
+
+  <meta name="keywords" content="Vince, Vince's Blog,前端,Node,React">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Vince's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.2">
+
+
+
+<link rel="canonical" href="https://vince.xin/2018/02/03/总结项目开发中的一些http性能优化/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.2">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 总结项目开发中的一些http性能优化 - Vince's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Vince's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Vince's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          总结项目开发中的一些http性能优化
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-02-03
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/性能优化/">性能优化</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#优化"><span class="toc-text">优化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#减少http的请求数"><span class="toc-text">减少http的请求数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#资源合并与压缩"><span class="toc-text">资源合并与压缩</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CSS-Sprites"><span class="toc-text">CSS Sprites</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#用http缓存避免重复资源请求"><span class="toc-text">用http缓存避免重复资源请求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#用前端状态管理工具避免重复资源请求"><span class="toc-text">用前端状态管理工具避免重复资源请求</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#降低http请求频率"><span class="toc-text">降低http请求频率</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Lazy-Load-Images"><span class="toc-text">Lazy Load Images</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Lazy-Load-Javascript"><span class="toc-text">Lazy Load Javascript</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#减小http请求数据大小"><span class="toc-text">减小http请求数据大小</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#后端只返回需要的数据"><span class="toc-text">后端只返回需要的数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#开启gzip压缩"><span class="toc-text">开启gzip压缩</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>http是性能优化最见效的点<br><a id="more"></a></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>虽然说没有机会参与大型的项目开发，但是自己也捣鼓过几个小项目，作为一个前端开发者，了解和掌握一些后端服务是非常有必要的，记得当初自己学ajax的时候很苦恼，因为压根就找不到合适的数据去请求，要不就是跨域，要不就是访问本地静态文件，所以索性就自己学了node作为后端提供数据接口API，当整个流程走通后，才能真正地理解http性能优化到底要怎么做，怎么样的才是最佳实践，总结以下我所用到的一些优化方案。</p>
+<h2 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h2><p>主要从http的几个维度来分析：</p>
+<ol>
+<li>http请求次数</li>
+<li>http请求频率</li>
+<li>http请求的数据大小</li>
+</ol>
+<p>带着这个几个维度，我们来开始分析http优化。</p>
+<h3 id="减少http的请求数"><a href="#减少http的请求数" class="headerlink" title="减少http的请求数"></a>减少http的请求数</h3><p>我们每次发送一个请求，都会经历一个相同的过程： 发送请求、经过DNS寻址、与服务器建立连接、发送数据、等待服务器响应、接收数据。无论我们请求的数据大或小，都是要经历一个这样相同的过程。</p>
+<p>假如我们设置这个过程的时间固定为1s，请求数据每1M花费1s，我们要从服务器获取10M的json内容，我们有两种方案：</p>
+<ol>
+<li>分10次请求每次获取1M内容，时间是20s。</li>
+<li>一次获取10M内容，时间是11s。</li>
+</ol>
+<p>通过这个简单的分析，就能发现这是一个非常有效的http优化方案，当一个页面有非常多数据的时候，利用这种“合璧”方案就会得到很大的性能提升，那么我们可以从哪些方面着手呢？</p>
+<h4 id="资源合并与压缩"><a href="#资源合并与压缩" class="headerlink" title="资源合并与压缩"></a>资源合并与压缩</h4><p>现在前端模块化开发给我们带来很大的便利，当然将很多模块拆分开来就会形成很多的文件资源，所以一般我们都会用webpack这样的打包工具来将js css的资源合并压缩，这样用户只需要发送一个请求便能获取到页面需要的执行代码。</p>
+<h4 id="CSS-Sprites"><a href="#CSS-Sprites" class="headerlink" title="CSS Sprites"></a>CSS Sprites</h4><p>css雪碧图，这是个非常非常古老的技术，我们利用了background的裁剪，将一张图片拆分成很多的图片供网页使用，我们以京东的官网来看，一般雪碧图用来存放一些小logo，因为网页上要用用到很多，单个logo文件又非常小，索性将它集中在一起，通过css一些黑魔法来实现。</p>
+<p><img src="http://static1.vince.xin/21C0732D-6D07-4C11-8E76-E4FC5E0AD237.png" alt="image"></p>
+<h4 id="用http缓存避免重复资源请求"><a href="#用http缓存避免重复资源请求" class="headerlink" title="用http缓存避免重复资源请求"></a>用http缓存避免重复资源请求</h4><p>http有个状态码是304，这表示数据没有发生变化，无需再次请求，作为后端可以利用这一点优化前端的性能，既能减少用户等待时间，服务器也能节约资源，在我的项目中，用koa或者express做public静态文件处理的时候，会默认实现缓存。</p>
+<h4 id="用前端状态管理工具避免重复资源请求"><a href="#用前端状态管理工具避免重复资源请求" class="headerlink" title="用前端状态管理工具避免重复资源请求"></a>用前端状态管理工具避免重复资源请求</h4><p>原本这是没必要提出来的，但是我的项目中一般都会用redux来存储一些网络数据，比如之前做的博客，当用户第一次进入列表页时，请求到的列表数据存在redux的store中，当用户从其他的页面切换过来的时候，不会再次重复发送请求，但是用状态管理工具来存储数据一定要注意，数据量不能大，像整片博客内容这种大数据最好就不要存在store中，避免内存消耗过大，影响性能。</p>
+<h3 id="降低http请求频率"><a href="#降低http请求频率" class="headerlink" title="降低http请求频率"></a>降低http请求频率</h3><p>由于浏览器进行并发请求的请求数是有上限的，因此请求数多了以后，浏览器需要分批进行请求，因此会增加用户的等待时间，会给 用户造成站点速度慢这样一个印象，即使可能用户能看到的第一屏的资源都已经请求完了，但是浏览器的进度条会一直存在，这就非常影响用户体验了。</p>
+<h4 id="Lazy-Load-Images"><a href="#Lazy-Load-Images" class="headerlink" title="Lazy Load Images"></a>Lazy Load Images</h4><p>当页面上有大量图片的时候，一般为了用户体验都是先加载用户“目前所看到的图片”，像一些购物商城，或者摄影网站，用的非常普遍。</p>
+<h4 id="Lazy-Load-Javascript"><a href="#Lazy-Load-Javascript" class="headerlink" title="Lazy Load Javascript"></a>Lazy Load Javascript</h4><p>首屏渲染往往给用户留下深刻的影响，当输入url按下回车开始，如果超过3s还是空白，那么给用户留下很坏的印象，降低二次访问的欲望。现在前端框架对于这点提出了有效的解决方案，我们从两个方面来看：</p>
+<ol>
+<li><p>当项目打包时，在webpack设置公共库，比如一个react项目，他的react、react-router、redux这些库都是很久不变的，没必要每次项目更新都打包一样的东西在bundle.js中，设置公共库后，打包出来的vendor.js就是你所设置好的公共库，用户下次在再次访问就只要加载哪些有所改变的js代码。</p>
+</li>
+<li><p>我们再来分析，进入一个网页的首屏往往不会操作过多的东西，这样的话，我们就可以在不同的路由下加载不同的包，这样就能减少首屏加载脚本的时间。</p>
+</li>
+</ol>
+<h3 id="减小http请求数据大小"><a href="#减小http请求数据大小" class="headerlink" title="减小http请求数据大小"></a>减小http请求数据大小</h3><p>http请求时间和返回数据的大小是成正比的，这个道理很简单，我们真正开发的时候一定要和后端的小伙伴商量好自己需要哪些东西，不需要的东西一律去除。</p>
+<h4 id="后端只返回需要的数据"><a href="#后端只返回需要的数据" class="headerlink" title="后端只返回需要的数据"></a>后端只返回需要的数据</h4><p>项目开发前和后端小伙伴商量好，哪些内容是必要的，或者哪些内容是暂时还不需要的，尽量不要求一次性请求过多的数据，之前开发的时候，没有注意到这点，获取了非常多不必要的数据，优化后，请求速度有了质的飞跃</p>
+<h4 id="开启gzip压缩"><a href="#开启gzip压缩" class="headerlink" title="开启gzip压缩"></a>开启gzip压缩</h4><p>这是一个非常有效的方法，效果也非常明显，一般能压缩三分之二的内容，但是在高并发的的场景下，服务器可能无法承受大量的压缩任务。下图绿色边框是表示在服务器开启gzip压缩后的大小，边框下面是表示资源本身的大小。</p>
+<p><img src="http://static1.vince.xin/7C4DA84F-9362-4D2A-B3ED-E4E88248D200.png" alt="image"></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>以上便是我开发过程中对于http的性能优化的，虽然说效果很明显，但是距离性能极致话还是远远不够的，非常期待实习的时候能加入一个大团队，在优化上有更深入的探究。</p>
+<p>hava a nice day ：）</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://vince.xin">Vince</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://vince.xin/2018/02/03/总结项目开发中的一些http性能优化/">https://vince.xin/2018/02/03/总结项目开发中的一些http性能优化/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/http/">http</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2018/02/11/使用强大的requestAnimationFrame来制作高性能动画/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">使用强大的requestAnimationFrame来制作高性能动画</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2018/01/22/回到最初的起点--原生Ajax原理浅析/">
+        <span class="next-text nav-default">回到最初的起点--原生Ajax原理浅析</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:artistcoder@163.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/Vincedrean" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2017 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Vince</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://vince.xin/2018/02/03/总结项目开发中的一些http性能优化/';
+        this.page.identifier = '2018/02/03/总结项目开发中的一些http性能优化/';
+        this.page.title = '总结项目开发中的一些http性能优化';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//vincehua.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.2"></script>
+
+  </body>
+</html>

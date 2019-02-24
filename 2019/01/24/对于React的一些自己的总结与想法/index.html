@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="对于React的一些自己的总结与想法">
+
+
+
+
+  <meta name="keywords" content="Vince, Vince's Blog,前端,Node,React">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Vince's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.2">
+
+
+
+<link rel="canonical" href="https://vince.xin/2019/01/24/对于React的一些自己的总结与想法/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.2">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 对于React的一些自己的总结与想法 - Vince's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Vince's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Vince's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          对于React的一些自己的总结与想法
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2019-01-24
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/React/">React</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#组件和容器"><span class="toc-text">组件和容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#列表的唯一id：key"><span class="toc-text">列表的唯一id：key</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#在HTML中写JavaScript"><span class="toc-text">在HTML中写JavaScript</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#表单的最佳事件"><span class="toc-text">表单的最佳事件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#受控表单"><span class="toc-text">受控表单</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#非受控表单"><span class="toc-text">非受控表单</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#多个受控组件"><span class="toc-text">多个受控组件</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#让协作更规范的propTypes"><span class="toc-text">让协作更规范的propTypes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#设置props默认值"><span class="toc-text">设置props默认值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#减少不必要的节点：Fragment"><span class="toc-text">减少不必要的节点：Fragment</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>写了这么久React，该来一些总结了<br><a id="more"></a></p>
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>学习React也有将近一个月的时间，坎坎坷坷，对于熟悉一个框架来说，基础知识还是很重要的，这里的基础只是并不是React的基础只是，而是以往的一些开发思想和经验，以前写过一些html链接一个JavaScript代码，遇到类似的组件和功能，又要copy一份再修改，导致代码臃肿，用原生的方法来实现组件化又显得很繁琐，如果单单只是个展示页面还没有什么，当遇到一些交互复杂的需求，这个时候密集性操作DOM会让代码可读性一落千丈，基本上就是一次性代码，下次再维护更新就好比重构一样复杂。因此这也是为什么会出现React这样以“数据驱动”为原则的前端框架，这里我主要总结了自己学习的一些心得和自己想法。</p>
+<h3 id="组件和容器"><a href="#组件和容器" class="headerlink" title="组件和容器"></a>组件和容器</h3><p>这一点我觉得如果将组件称为木偶组件，将容器称为智能组件会更加贴切一点，木偶是什么呢，就是它是死板的不会动的，只有你驱动它，他才会动，也就是我们平常说的样式组件，只关心样式不关心逻辑。智能组件就是一个“又自己逻辑想法的”组件，它负责页面的逻辑交互、数据获取等较为复杂的事情。我们用一段代码来看：</p>
+<ul>
+<li>组件(木偶组件) </li>
+</ul>
+<p><strong>特点：</strong> 接收父级传来的props改变样式，没有自己的状态和逻辑。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">const Button = (&#123;children&#125;, context) =&gt;</span><br><span class="line">  &lt;button style=&#123;&#123;background: context.color&#125;&#125;&gt;</span><br><span class="line">    &#123;children&#125;</span><br><span class="line">  &lt;/button&gt;;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>容器(智能组件)</li>
+</ul>
+<p><strong>特点：</strong> 继承了React的Component，有自己的状态(state)，有自己的声明周期，向子组件(木偶组件)传递数据</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SidebarContainer</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(props)&#123;</span><br><span class="line">    <span class="keyword">super</span>(props)</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">        items:[]</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">  componentDidMount() &#123;</span><br><span class="line">    fetch(<span class="string">'/url'</span>)</span><br><span class="line">      .then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">          items: res.items,</span><br><span class="line">        &#125;)</span><br><span class="line">      &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;Sidebar&gt;</span><br><span class="line">        &#123;<span class="keyword">this</span>.state.items.map(<span class="function"><span class="params">item</span> =&gt;</span> (</span><br><span class="line">          &lt;SidebarItem data=&#123;<span class="keyword">this</span>.state.items&#125;&gt;&#123;item&#125;&lt;<span class="regexp">/SidebarItem&gt;</span></span><br><span class="line"><span class="regexp">        ))&#125;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>Sidebar&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在实际项目开发中，通常会在src目录中创建一个container文件夹和components文件夹，用来区分木偶智能组件，明确划分了他们的界限，也方便以后的维护。</p>
+<h3 id="列表的唯一id：key"><a href="#列表的唯一id：key" class="headerlink" title="列表的唯一id：key"></a>列表的唯一id：key</h3><p>刚刚接触React的时候，写循环列表总是会忘记写上key，每次看到控制台报错才意识到，但是那时候压根不知道为啥要带上这么一个key，感觉也没啥用呀，后来谷歌后才发现，React是个非常注重效率的框架，Keys可以在DOM中的某些元素被增加或删除的时候帮助React识别哪些元素发生了变化，进一步提升虚拟DOM的效率，因此应当给数组中的每一个元素赋予一个确定的标识。</p>
+<p>一个元素的key最好就是在列表中拥有唯一的字符串，通常我使用mongo数据库传来的id做为key，这样就能确保每个都不一样，如果是在没办法，也能用序列号索引index作为key。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> todoItems = todos.map(<span class="function">(<span class="params">todo</span>) =&gt;</span></span><br><span class="line">  &lt;li key=&#123;todo.id&#125;&gt;</span><br><span class="line">    &#123;todo.text&#125;</span><br><span class="line">  &lt;<span class="regexp">/li&gt;</span></span><br><span class="line"><span class="regexp">);</span></span><br></pre></td></tr></table></figure>
+<p>或者：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> todoItems = todos.map(<span class="function">(<span class="params">todo, index</span>) =&gt;</span></span><br><span class="line">  &lt;li key=&#123;index&#125;&gt;</span><br><span class="line">    &#123;todo.text&#125;</span><br><span class="line">  &lt;<span class="regexp">/li&gt;</span></span><br><span class="line"><span class="regexp">);</span></span><br></pre></td></tr></table></figure>
+<h3 id="在HTML中写JavaScript"><a href="#在HTML中写JavaScript" class="headerlink" title="在HTML中写JavaScript"></a>在HTML中写JavaScript</h3><p>如果用传统是想来看这一点，我我敢保证你分分钟会被谴责，因为传统的文波开发理念是逻辑与html完全分离，但是React打破了这一常规，开始阶段也被骂的很惨，但是慢慢的程序员发现这是一件非常便利的事情，比如说：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [</span><br><span class="line">      &#123;</span><br><span class="line">        name: <span class="string">"huajinbo"</span>,</span><br><span class="line">        sex: <span class="number">0</span></span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        name: <span class="string">"zhuzhu"</span>,</span><br><span class="line">        sex: <span class="number">1</span></span><br><span class="line">      &#125;</span><br><span class="line">    ];</span><br><span class="line">&lt;div&gt;</span><br><span class="line">    &#123;arr.map(<span class="function"><span class="params">v</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> v.sex === <span class="number">0</span> ? <span class="xml"><span class="tag">&lt;<span class="name">p</span>&gt;</span>&#123;v.name&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span> : <span class="xml"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>&#123;v.name&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span>;</span><br><span class="line">    &#125;)&#125;</span><br><span class="line">&lt;<span class="regexp">/div&gt;</span></span><br></pre></td></tr></table></figure>
+<p>如果说让我选择，我当然会使用JavaScript in HTML这一方式，真的很大程度上提高了开发效率。</p>
+<h3 id="表单的最佳事件"><a href="#表单的最佳事件" class="headerlink" title="表单的最佳事件"></a>表单的最佳事件</h3><p>在React中处理表单是件非常优雅的事情，我们可以根据不同的需求，选择不同的方式，以下分别介绍这两种方式：</p>
+<h4 id="受控表单"><a href="#受控表单" class="headerlink" title="受控表单"></a>受控表单</h4><p>受控是指这个表单的一切，都受到react的监控与驱动，我们看下面：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">"react"</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(props) &#123;</span><br><span class="line">    <span class="keyword">super</span>(props);</span><br><span class="line">    <span class="keyword">this</span>.state = &#123;</span><br><span class="line">      email: <span class="string">""</span>,</span><br><span class="line">      errMsg: <span class="string">""</span></span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.handleChange = <span class="keyword">this</span>.handleChange.bind(<span class="keyword">this</span>);</span><br><span class="line">    <span class="keyword">this</span>.handleSubmit = <span class="keyword">this</span>.handleSubmit.bind(<span class="keyword">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  handleChange(event) &#123;</span><br><span class="line">    <span class="keyword">var</span> emailValue = event.target.value</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123; <span class="attr">email</span>: emailValue &#125;);</span><br><span class="line">    <span class="keyword">var</span> reg=<span class="regexp">/^([a-zA-Z0-9]+[-_.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[-_.]?)*[a-zA-Z0-9]+\.[a-zA-Z]&#123;2,6&#125;$/</span>  </span><br><span class="line">    <span class="keyword">if</span> (emailValue === <span class="string">""</span>) &#123;</span><br><span class="line">      <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">        errMsg: <span class="string">'邮箱不为空'</span></span><br><span class="line">      &#125;)</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!reg.test(emailValue)) &#123;</span><br><span class="line">      <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">        errMsg: <span class="string">'邮箱格式不对'</span></span><br><span class="line">      &#125;)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">        errMsg: <span class="string">''</span></span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  handleSubmit(event) &#123;</span><br><span class="line">    alert(<span class="string">"Your email is: "</span> + <span class="keyword">this</span>.state.email);</span><br><span class="line">    event.preventDefault();</span><br><span class="line">  &#125;</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;form onSubmit=&#123;<span class="keyword">this</span>.handleSubmit&#125;&gt;</span><br><span class="line">          &lt;label&gt;</span><br><span class="line">            Email:</span><br><span class="line">            &lt;input</span><br><span class="line">              type=<span class="string">"text"</span></span><br><span class="line">              value=&#123;<span class="keyword">this</span>.state.email&#125;</span><br><span class="line">              onChange=&#123;<span class="keyword">this</span>.handleChange&#125;</span><br><span class="line">            /&gt;</span><br><span class="line">          &lt;<span class="regexp">/label&gt;</span></span><br><span class="line"><span class="regexp">          &lt;input type="submit" value="Submit" /</span>&gt;</span><br><span class="line">          &lt;p style=&#123;&#123;<span class="attr">color</span>:<span class="string">'red'</span>&#125;&#125;&gt;&#123;<span class="keyword">this</span>.state.errMsg&#125;&lt;<span class="regexp">/p&gt;</span></span><br><span class="line"><span class="regexp">        &lt;/</span>form&gt;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp">export default App;</span></span><br></pre></td></tr></table></figure>
+<p>演示：</p>
+<p><img src="http://static1.vince.xin/FDSYGSUJBNJKFSD.gif" alt="image"></p>
+<p>demo略长，我们可以看到在input中监控了这个输入框的的输入变化，实时获得input输入的数据，根据这个数据，我们能够实时地判断输入是否符合规范，做到实时给出错误提醒，当然这个例子并不是完美，和真正表单还差一点，我理解的完美表单是：般输入框在第一次输入时候并不会验证，输入完成后，光标移出输入框，判断是否符合要求，若错误，用户再次输入，这个时候就采用了实时验证提醒错误的标识。不知道是否正确，因为没有机会接触大项目，所以有错误还希望小伙伴们提出。</p>
+<h4 id="非受控表单"><a href="#非受控表单" class="headerlink" title="非受控表单"></a>非受控表单</h4><p>非受控是值，输入框并不会受React对其的控制，这是第二种选择，我们来看看代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">"react"</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(props) &#123;</span><br><span class="line">    <span class="keyword">super</span>(props);</span><br><span class="line">    <span class="keyword">this</span>.state = &#123;</span><br><span class="line">      email: <span class="string">""</span>,</span><br><span class="line">      errMsg:<span class="string">""</span></span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">this</span>.handleSubmit = <span class="keyword">this</span>.handleSubmit.bind(<span class="keyword">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  handleSubmit(event) &#123;</span><br><span class="line">    event.preventDefault();</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.refs.emailInput.value)</span><br><span class="line">    <span class="keyword">let</span> emailValue = <span class="keyword">this</span>.refs.emailInput.value</span><br><span class="line">    <span class="keyword">var</span> reg=<span class="regexp">/^([a-zA-Z0-9]+[-_.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[-_.]?)*[a-zA-Z0-9]+\.[a-zA-Z]&#123;2,6&#125;$/</span>  </span><br><span class="line">    <span class="keyword">if</span> (emailValue === <span class="string">""</span>) &#123;</span><br><span class="line">      <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">        errMsg: <span class="string">'邮箱不为空'</span></span><br><span class="line">      &#125;)</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!reg.test(emailValue)) &#123;</span><br><span class="line">      <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">        errMsg: <span class="string">'邮箱格式不对'</span></span><br><span class="line">      &#125;)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">        errMsg: <span class="string">''</span></span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;form onSubmit=&#123;<span class="keyword">this</span>.handleSubmit&#125;&gt;</span><br><span class="line">          &lt;label&gt;</span><br><span class="line">            Email:</span><br><span class="line">            &lt;input</span><br><span class="line">              type=<span class="string">"text"</span></span><br><span class="line">              ref=<span class="string">"emailInput"</span></span><br><span class="line">            /&gt;</span><br><span class="line">          &lt;<span class="regexp">/label&gt;</span></span><br><span class="line"><span class="regexp">          &lt;input type="submit" value="Submit" /</span>&gt;</span><br><span class="line">          &lt;p style=&#123;&#123;<span class="attr">color</span>:<span class="string">'red'</span>&#125;&#125;&gt;&#123;<span class="keyword">this</span>.state.errMsg&#125;&lt;<span class="regexp">/p&gt;</span></span><br><span class="line"><span class="regexp">        &lt;/</span>form&gt;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp">export default App;</span></span><br></pre></td></tr></table></figure>
+<p>演示：</p>
+<p><img src="http://static1.vince.xin/FDSUSUFDJNF.gif" alt="image"></p>
+<p>这种方法无法实时获取输入数据，所以并不能向上面那样实时提供错误提醒，并且还直接用到了ref，这是React并不推荐的，即不推荐直接操作真实DOM，但是经过我几个小项目的尝试，有时候受控组件因为state渲染组件的问题会导致input失去焦点或者页面卡顿，这个时候如果你或许能试试这种“备胎”方式。</p>
+<h4 id="多个受控组件"><a href="#多个受控组件" class="headerlink" title="多个受控组件"></a>多个受控组件</h4><p>如果你有多个受控的input组件，那么我建议你这么写，即美观又符合不写重复代码的原则：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">handleInputChange(event) &#123;</span><br><span class="line">    <span class="keyword">const</span> target = event.target;</span><br><span class="line">    <span class="keyword">const</span> value = target.type === <span class="string">'checkbox'</span> ? target.checked : target.value;</span><br><span class="line">    <span class="keyword">const</span> name = target.name;</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">      [name]: value</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;form&gt;</span><br><span class="line">    &lt;label&gt;</span><br><span class="line">      Is going:</span><br><span class="line">      &lt;input</span><br><span class="line">        name=<span class="string">"isGoing"</span></span><br><span class="line">        type=<span class="string">"checkbox"</span></span><br><span class="line">        checked=&#123;<span class="keyword">this</span>.state.isGoing&#125;</span><br><span class="line">        onChange=&#123;<span class="keyword">this</span>.handleInputChange&#125; /&gt;</span><br><span class="line">    &lt;<span class="regexp">/label&gt;</span></span><br><span class="line"><span class="regexp">    &lt;br /</span>&gt;</span><br><span class="line">    &lt;label&gt;</span><br><span class="line">      <span class="built_in">Number</span> <span class="keyword">of</span> guests:</span><br><span class="line">      &lt;input</span><br><span class="line">        name=<span class="string">"numberOfGuests"</span></span><br><span class="line">        type=<span class="string">"number"</span></span><br><span class="line">        value=&#123;<span class="keyword">this</span>.state.numberOfGuests&#125;</span><br><span class="line">        onChange=&#123;<span class="keyword">this</span>.handleInputChange&#125; /&gt;</span><br><span class="line">    &lt;<span class="regexp">/label&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>form&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="让协作更规范的propTypes"><a href="#让协作更规范的propTypes" class="headerlink" title="让协作更规范的propTypes"></a>让协作更规范的propTypes</h3><p>之前和小伙伴协作开发一个小项目，他写后端，我写前端，开发前就约定好传来前端的数据，这么做极大地降低了我和小伙伴友情破灭的概率，但是，如果是和小伙伴一起开发前端项目呢，比如你写的一个木偶组件需要给你的小伙伴倒入到容器组件中，这个时候，同样需要这么一套规范，它就是让协作更规范的propTypes，一来降低了代码出错的概率，而来也与小伙伴形成一个约定，何乐而不为呢？</p>
+<p>如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> PropTypes <span class="keyword">from</span> <span class="string">'prop-types'</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Greeting</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;h1&gt;Hello, &#123;<span class="keyword">this</span>.props.name&#125;&lt;<span class="regexp">/h1&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">Greeting.propTypes = &#123;</span></span><br><span class="line"><span class="regexp">  name: PropTypes.string</span></span><br><span class="line"><span class="regexp">&#125;;</span></span><br></pre></td></tr></table></figure>
+<p>常用的几种验证：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">optionalArray: PropTypes.array,</span><br><span class="line">optionalBool: PropTypes.bool,</span><br><span class="line">optionalFunc: PropTypes.func,</span><br><span class="line">optionalNumber: PropTypes.number,</span><br><span class="line">optionalObject: PropTypes.object,</span><br><span class="line">optionalString: PropTypes.string,</span><br><span class="line">optionalSymbol: PropTypes.symbol,</span><br></pre></td></tr></table></figure>
+<h3 id="设置props默认值"><a href="#设置props默认值" class="headerlink" title="设置props默认值"></a>设置props默认值</h3><p>一般来说props是要设置默认值的，特别是像一些需要遍历渲染出列表的组件，设置props值是非常重要的，因此如果传入了非数组(网络请求如还未获取到的数据)，map遍历是会出错的，在es5是这样设置的：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Greeting</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &#123;arr.map(<span class="function"><span class="params">v</span>=&gt;</span>(</span><br><span class="line">            <span class="comment">//somethis</span></span><br><span class="line">        ))</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp">Greeting.defaultProps = &#123;</span></span><br><span class="line"><span class="regexp">  arr: []</span></span><br><span class="line"><span class="regexp">&#125;;</span></span><br></pre></td></tr></table></figure>
+<p>ES6后，我们可以在赋值的时候直接设置默认值如</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Greeting</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line"><span class="keyword">const</span> &#123; name=[] &#125; = <span class="keyword">this</span>.props</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &#123;arr.map(<span class="function"><span class="params">v</span>=&gt;</span>(</span><br><span class="line">            <span class="comment">//somethis</span></span><br><span class="line">        ))</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<h3 id="减少不必要的节点：Fragment"><a href="#减少不必要的节点：Fragment" class="headerlink" title="减少不必要的节点：Fragment"></a>减少不必要的节点：Fragment</h3><p>在HTML中嵌套过多层的组件事件非常不好的事情，降低了可读性不说，而且性能也不好，所以在React16.2中推出了Fragment，它就是一个“空标签”包装，在DOM树中不会渲染出任何东西，代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TestCom</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span></span>&#123;</span><br><span class="line">  render()&#123;</span><br><span class="line">    <span class="keyword">return</span>(</span><br><span class="line">      &lt;React.Fragment&gt;</span><br><span class="line">        &lt;h1&gt;<span class="number">111</span>&lt;<span class="regexp">/h1&gt;</span></span><br><span class="line"><span class="regexp">        &lt;h1&gt;222&lt;/</span>h1&gt;</span><br><span class="line">      &lt;<span class="regexp">/React.Fragment&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">export default TestCom</span></span><br></pre></td></tr></table></figure>
+<p>其实也可以这么写：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">render()&#123;</span><br><span class="line">    <span class="keyword">return</span>(</span><br><span class="line">      &lt;&gt;</span><br><span class="line">        &lt;h1&gt;<span class="number">111</span>&lt;<span class="regexp">/h1&gt;</span></span><br><span class="line"><span class="regexp">        &lt;h1&gt;222&lt;/</span>h1&gt;</span><br><span class="line">      &lt;<span class="regexp">/&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br></pre></td></tr></table></figure>
+<p>只不过现在版本的webpack还不支持而已，会直接报错。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>基本上以上内容在文档上都有写，但是有些细节上的问题，我这里还是提出来了，一来巩固自己的知识，而来分享给大家，或许能帮助你少踩几个坑呢～</p>
+<p>one today is worth two tomorrows. ：）</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://vince.xin">Vince</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://vince.xin/2019/01/24/对于React的一些自己的总结与想法/">https://vince.xin/2019/01/24/对于React的一些自己的总结与想法/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/总结/">总结</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/2018/12/28/2018年终总结——在酷家乐实习的半年/">
+        <span class="next-text nav-default">2018年终总结——在酷家乐实习的半年</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:artistcoder@163.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/Vincedrean" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2017 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Vince</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://vince.xin/2019/01/24/对于React的一些自己的总结与想法/';
+        this.page.identifier = '2019/01/24/对于React的一些自己的总结与想法/';
+        this.page.title = '对于React的一些自己的总结与想法';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//vincehua.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.2"></script>
+
+  </body>
+</html>

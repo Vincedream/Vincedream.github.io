@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="Webpack 4.x 从入门到实践（一）——基础概念">
+
+
+
+
+  <meta name="keywords" content="Vince, Vince's Blog,前端,Node,React">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Vince's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.2">
+
+
+
+<link rel="canonical" href="https://vince.xin/2018/06/14/Webpack 4.x 从入门到实践（一）——基础概念/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.2">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> Webpack 4.x 从入门到实践（一）——基础概念 - Vince's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Vince's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Vince's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Webpack 4.x 从入门到实践（一）——基础概念
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-06-14
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/Webpack/">Webpack</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#why-this"><span class="toc-text">why this ?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基础的概念"><span class="toc-text">基础的概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#主要结构"><span class="toc-text">主要结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#entry"><span class="toc-text">entry</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#output"><span class="toc-text">output</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#plugins"><span class="toc-text">plugins</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#module-loader"><span class="toc-text">module(loader)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#last"><span class="toc-text">last</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>Webpack的基础概念很简单<br><a id="more"></a></p>
+<h2 id="why-this"><a href="#why-this" class="headerlink" title="why this ?"></a>why this ?</h2><p>对于我来说webpack始终是学习路上遇到的一颗难以跨越的坎，看着create-react-app或者vue-cli脚手架生成的webpack.config.js文件都会望而却步，深知webpack是个学习曲线非常高的一个知识区块，分析其原因主要还是由以下几点：</p>
+<ul>
+<li>配置选项复杂</li>
+<li>更新迭代快</li>
+<li>插件或者loader之间会产生冲突</li>
+<li>脚手架包含webpack配置，懒得配</li>
+</ul>
+<p>我觉得…主要是由第四点造成的，被脚手架惯坏了，自己都不愿意动手，想着反正怎么配都不如脚手架配的那么完美，那就不配吧。。。</p>
+<p>知道前段时间，新的需求需要添加一些webpack的plugins，结果各种倒腾都没解决，自愧无知，主要原因还是对webpack的不熟悉，连一些很基础的插件、机制都不了解，还敢号称自己是前端工程师？</p>
+<h2 id="基础的概念"><a href="#基础的概念" class="headerlink" title="基础的概念"></a>基础的概念</h2><p>本系列博客是基于webpack4.x版本来分析，或许不久后又会推出5.x…，没办法啊，学不动都是假的，与其抱怨版本更新迭代快，还不如期待新版本的技术带来了哪些改进与新功能。</p>
+<h3 id="主要结构"><a href="#主要结构" class="headerlink" title="主要结构"></a>主要结构</h3><p>一个最简单的webpack.config主要是由以下结构组成：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  entry: <span class="string">''</span>,</span><br><span class="line">  output: &#123;&#125;,</span><br><span class="line">  plugins: &#123;&#125;,</span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      &#123; <span class="attr">test</span>: <span class="regexp">/\.jsx?$/</span>, <span class="attr">loader</span>: <span class="string">'babel-loader'</span> &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>下面我将简述其几大部分的概念以及作用</p>
+<h3 id="entry"><a href="#entry" class="headerlink" title="entry"></a>entry</h3><p>webpack是个打包工具，它需要一个或多个很明确的打包入口，webpack会根据这个入口，找到所有被引用的模块，将它们汇集成一个bundle文件：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.export = <span class="function">(<span class="params">event, argv</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        entry: <span class="string">'./src/index.js'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上的意思就是入口在webpack.config所在目录下的<code>./src/index.js</code>中。</p>
+<h3 id="output"><a href="#output" class="headerlink" title="output"></a>output</h3><p>output是指明webpack打包完成后的文件存储在哪个位置，以及如何命名这些文件，默认值是<code>./dist</code>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.export = <span class="function">(<span class="params">event, argv</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        entry: <span class="string">'./src/index.js'</span>,</span><br><span class="line">        output: &#123;</span><br><span class="line">            path: path.resolve(__dirname, <span class="string">'dist'</span>),</span><br><span class="line">            filename: <span class="string">'js/bundle.js'</span> <span class="comment">// js文件的名称与位置</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意，path是指打包资源存放处，而filename只是单独指出js文件的位置以及文件名。</p>
+<h3 id="plugins"><a href="#plugins" class="headerlink" title="plugins"></a>plugins</h3><p>plugins做的事情就比较杂了，他没有特定的功能，包括打包压缩，打包优化，全局环境变量设置等等等…，plugins的功能非常强大，可以用来处理各种繁杂的任务，以实现我们对打包的各种特殊的要求:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> HtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">'html-webpack-plugin'</span>)</span><br><span class="line"><span class="keyword">const</span> CleanWebpackPlugin = <span class="built_in">require</span>(<span class="string">'clean-webpack-plugin'</span>)</span><br><span class="line"><span class="built_in">module</span>.export = <span class="function">(<span class="params">event, argv</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        ...</span><br><span class="line">        plugins: [</span><br><span class="line">            <span class="keyword">new</span> CleanWebpackPlugin([<span class="string">'dist'</span>]),</span><br><span class="line">            <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">                template: <span class="string">'./index.html'</span>,</span><br><span class="line">                filename: <span class="string">'index.html'</span></span><br><span class="line">            &#125;)</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们要注意，插件因为是来自各方开发者开发的，所以一些非webpack自带的插件是要手动安装的，如上两个插件，CleanWebpackPlugin这个插件是当执行build的时候。自动删除webpack.config.js同级目录下的dist文件夹，而HtmlWebpackPlugin的功能就复杂许多，当我们指定html模版时，HtmlWebpackPlugin会根据我们的html模版，生成打包项目中的index.html入口页面，并且自动地将打包js文件引入到html中。</p>
+<h3 id="module-loader"><a href="#module-loader" class="headerlink" title="module(loader)"></a>module(loader)</h3><p>因为webpack本身指支持打包js文件，但是如果要打包css文件的话，就需要loader来进行转义了，为了更好地规划各种module，将每种不同类型文件分开处理，即<code>test</code>为指定文件类型。<code>loader</code>为转义这类文件需要用到什么loader:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.export = <span class="function">(<span class="params">event, argv</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="built_in">module</span>: &#123;</span><br><span class="line">            rules: [</span><br><span class="line">                &#123;</span><br><span class="line">                    test: <span class="regexp">/\.(png|jpg|gif|jpeg|svg)$/</span>,</span><br><span class="line">                    use: [</span><br><span class="line">                        &#123;</span><br><span class="line">                            loader: <span class="string">'url-loader'</span>,</span><br><span class="line">                            options: &#123;</span><br><span class="line">                                limit: <span class="number">1024</span>,</span><br><span class="line">                                name: <span class="string">'[name].[hash:6].[ext]'</span>,</span><br><span class="line">                                outputPath: <span class="string">'images/'</span>,</span><br><span class="line">                                publicPath: <span class="string">'../images'</span></span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                    ]</span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的配置是指当webpack遇到jsx或者<code>png|jpg|gif|jpeg|svg</code>这些类别的文件时，使用url-loader来进行处理，我们可以对options进行配置，limit是表示当文件小于1024b的时候，自动转化为base64格式，name是表示文件打包后的命名，outputPath是指打包后文件的存放位置，publicPath是指当其他模块引用这些文件时，在路径最前面加上<code>../images</code>以组成正确的引用路径。</p>
+<p>这几大结构是webpack最基础的配置，虽然webpack说是说开箱即用，但是它往往不是那么智能，要想配出自己想要的打包工具，还得自己属性各种配置的作用，下面我们将配置一个满足最基础开发的规则</p>
+<h2 id="last"><a href="#last" class="headerlink" title="last"></a>last</h2><p>我们理清楚了webpack最基础的概念，理解了各个结构的“职能”，下一步，我将会讲解如何从零配置一个“基本能用”的webpack，请关注我后续的博客～</p>
+<p>Work bears witness who does well. ：）</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://vince.xin">Vince</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://vince.xin/2018/06/14/Webpack 4.x 从入门到实践（一）——基础概念/">https://vince.xin/2018/06/14/Webpack 4.x 从入门到实践（一）——基础概念/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2018/06/26/Webpack 4.x 从入门到实践（二）——基础配置实践/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Webpack 4.x 从入门到实践（二）——基础配置实践</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2018/06/01/写CSS时对图片hover动效的一些思考与探索/">
+        <span class="next-text nav-default">写CSS时对图片hover动效的一些思考与探索</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:artistcoder@163.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/Vincedrean" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2017 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Vince</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://vince.xin/2018/06/14/Webpack 4.x 从入门到实践（一）——基础概念/';
+        this.page.identifier = '2018/06/14/Webpack 4.x 从入门到实践（一）——基础概念/';
+        this.page.title = 'Webpack 4.x 从入门到实践（一）——基础概念';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//vincehua.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.2"></script>
+
+  </body>
+</html>

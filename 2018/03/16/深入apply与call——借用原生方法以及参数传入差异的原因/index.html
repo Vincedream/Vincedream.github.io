@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="深入apply与call——借用原生方法以及参数传入差异的原因">
+
+
+
+
+  <meta name="keywords" content="Vince, Vince's Blog,前端,Node,React">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Vince's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.2">
+
+
+
+<link rel="canonical" href="https://vince.xin/2018/03/16/深入apply与call——借用原生方法以及参数传入差异的原因/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.2">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 深入apply与call——借用原生方法以及参数传入差异的原因 - Vince's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Vince's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Vince's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          深入apply与call——借用原生方法以及参数传入差异的原因
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-03-16
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/JavaScript/">JavaScript</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#借用原生方法"><span class="toc-text">借用原生方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参数传入差异的原因"><span class="toc-text">参数传入差异的原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>一些细节操作，有兴趣吗<br><a id="more"></a></p>
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>之前简单分析过apply与call之间的简单区别和用法，并没有对他们的做进一步的深究，赶上今天上课老师出差让我们自习，借用这个时间，来分享我关于apply和call的一些学习总结，用apply和call来借用原生方法，和apply、call之间传入参数为什么要设计成不一样，这两个问题进行分享。</p>
+<h3 id="借用原生方法"><a href="#借用原生方法" class="headerlink" title="借用原生方法"></a>借用原生方法</h3><p>在JavaScript里面，对象的地位或许有点低，为什么这么说呢？因为数组和字符串都有很多用来遍历或者修饰的方法，而对象却没有那么多。那怎么办，总得生存下去呀，这个时候对象“自力更生”，通过call和apply来借用数组或者字符串的方法，来弥补自己不被“重视”的不足。</p>
+<p>我们想想对象是不是和数组在很多方面都很类似，比图说下面的这个对象我们可以视它为一个“类数组对象”：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> likeObjectArr = &#123;</span><br><span class="line">  <span class="number">0</span>:<span class="string">'hua'</span>,</span><br><span class="line">  <span class="number">1</span>:<span class="string">'jin'</span>,</span><br><span class="line">  <span class="number">2</span>:[<span class="string">'photo'</span>, <span class="string">'trip'</span>],</span><br><span class="line">  length: <span class="number">3</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(likeObjectArr[<span class="number">1</span>]) <span class="comment">// jin</span></span><br></pre></td></tr></table></figure>
+<p>所谓类数组对象，就是指有自己的非负数的整型键。由于对象上不存在length属性，但是数组上有这个属性，所以最好是在这个对象上添加一个表示这个对象长度的length属性，要不然就无法使用Array上的一些方法。</p>
+<p>那么，我们就可以利用call或apply来使用数组的方法，如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> likeArr = &#123;</span><br><span class="line">  <span class="number">0</span>:<span class="string">'hua'</span>,</span><br><span class="line">  <span class="number">1</span>:<span class="string">'jin'</span>,</span><br><span class="line">  <span class="number">2</span>:[<span class="string">'photo'</span>, <span class="string">'trip'</span>],</span><br><span class="line">  length: <span class="number">3</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 裁剪对象</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Array</span>.prototype.slice.call(likeArr, <span class="number">1</span>,<span class="number">3</span>)) </span><br><span class="line"><span class="comment">// [ 'jin', [ 'photo', 'trip' ] ]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 查看对象中是否含有某个值</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Array</span>.prototype.indexOf.call(likeArr,<span class="string">'jin'</span>) !== <span class="number">-1</span>) </span><br><span class="line"><span class="comment">// true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 吐出最后的一个对象值（直接对原值产生影响）</span></span><br><span class="line"><span class="built_in">Array</span>.prototype.pop.call(likeArr)</span><br><span class="line"><span class="built_in">console</span>.log(likeArr)</span><br><span class="line"><span class="comment">//  '0': 'hua', '1': 'jin', length: 2 &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 反转对象（直接对原值产生影响）</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Array</span>.prototype.reverse.call(likeArr)) </span><br><span class="line"><span class="comment">// &#123; '0': 'jin', '1': 'hua', length: 2 &#125;</span></span><br></pre></td></tr></table></figure>
+<p>这里我们时刻注意到，类数组对象在使用数组的方法时，那个length属性是不受影响的，你可以忽视它，它的存在只是告诉数组方法这个类数组对象的“长度”。这几个例子只是抛砖引玉，还有很多方法都可以用上去，这里就让大家自己去探索啦～</p>
+<h3 id="参数传入差异的原因"><a href="#参数传入差异的原因" class="headerlink" title="参数传入差异的原因"></a>参数传入差异的原因</h3><p>也许我们会奇怪，apply和call都是一个作用，还为啥要设计两种不一样的参数传入方法呢？ECMA当然不会吃饱了没事干要这么做，一切的设计在某方面都是有作用的，这次我来给大家解答疑惑，虽然说不一定就因为这一点原因，但是希望能给大家带来思考。</p>
+<p>假如我们要判断一个数组中最大的数，这个时候我们会怎么做？想都不用想，用max呀：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> maxNum = <span class="built_in">Math</span>.max(<span class="number">1</span>,<span class="number">3</span>,<span class="number">12</span>,<span class="number">52</span>,<span class="number">5</span>) <span class="comment">// 52</span></span><br></pre></td></tr></table></figure></p>
+<p>但是如果我们又一个数组要判断呢，我开始也是这么想的：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> array = [<span class="number">1</span>,<span class="number">3</span>,<span class="number">12</span>,<span class="number">52</span>,<span class="number">5</span>]</span><br><span class="line"><span class="keyword">let</span> maxNum = <span class="built_in">Math</span>.max(array) <span class="comment">// NaN</span></span><br></pre></td></tr></table></figure></p>
+<p>WTF? 这不是一样传入的吗？怎么会出错？不存在的呀！！！</p>
+<p>原来，有一种函数叫<strong>变参函数</strong>，这种函数可以接受任意数量的参数，在函数内部通过使用arguments来获取传入的参数，像上面的Math.max一样，就是典型的变参函数，它接受的不是一个数组，而是多个参数。这个时候，要解决上面的问题，就要用到了apply的特殊用法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Math.max.apply(null, [1,3,5,65]) == Math.max(1,3,5,65)</span><br></pre></td></tr></table></figure></p>
+<p>我们用个==来表示apply的特殊用法，apply可以通过将自己的“数组”参数，转化为实际函数当中的“单个参数”，这就完美解决了我们上面遇到的问题：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> array = [<span class="number">1</span>,<span class="number">3</span>,<span class="number">12</span>,<span class="number">52</span>,<span class="number">5</span>]</span><br><span class="line"><span class="keyword">let</span> maxNum = <span class="built_in">Math</span>.max.apply(<span class="literal">null</span>,array) <span class="comment">// 52</span></span><br></pre></td></tr></table></figure>
+<p>到这里你大概能知道apply的存在的意义吧～没错，它很多时候会被用来解决变参函数的参数传入问题。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这篇文章主要是讲解一些apply和call不被新手知道的几个点，特别是借用方法，这个在看很多大佬的源码当中经常看到，这个时候我们就不会一脸懵逼啦，还有简单解释下apply和call的传参差异的原因，如有错误欢迎指正～</p>
+<p>No one can call back yesterday. Yesterday will not be called again. ：）</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://vince.xin">Vince</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://vince.xin/2018/03/16/深入apply与call——借用原生方法以及参数传入差异的原因/">https://vince.xin/2018/03/16/深入apply与call——借用原生方法以及参数传入差异的原因/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/this/">this</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2018/03/25/不是copy这么简单：JavaScript对象的浅拷贝与深拷贝/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">不是copy这么简单：JavaScript对象的浅拷贝与深拷贝</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2018/03/15/正则表达学习笔记以及常用的正则验证/">
+        <span class="next-text nav-default">正则表达学习笔记以及常用的正则验证</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:artistcoder@163.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/Vincedrean" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2017 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Vince</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://vince.xin/2018/03/16/深入apply与call——借用原生方法以及参数传入差异的原因/';
+        this.page.identifier = '2018/03/16/深入apply与call——借用原生方法以及参数传入差异的原因/';
+        this.page.title = '深入apply与call——借用原生方法以及参数传入差异的原因';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//vincehua.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.2"></script>
+
+  </body>
+</html>

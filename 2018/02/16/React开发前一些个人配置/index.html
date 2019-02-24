@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="React开发前一些个人配置">
+
+
+
+
+  <meta name="keywords" content="Vince, Vince's Blog,前端,Node,React">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Vince's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.2">
+
+
+
+<link rel="canonical" href="https://vince.xin/2018/02/16/React开发前一些个人配置/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.2">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> React开发前一些个人配置 - Vince's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Vince's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Vince's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          React开发前一些个人配置
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-02-16
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/React/">React</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#弹出自定义配置"><span class="toc-text">弹出自定义配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#热加载"><span class="toc-text">热加载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#添加路由"><span class="toc-text">添加路由</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#封装axios配置"><span class="toc-text">封装axios配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#添加状态管理redux"><span class="toc-text">添加状态管理redux</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#添加对装饰器的支持"><span class="toc-text">添加对装饰器的支持</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置less"><span class="toc-text">配置less</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>我都配置了什么呢？<br><a id="more"></a></p>
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在开发日常项目时，每次create-react-app后都要做一些重复性修改，比如说添加less的支持或者添加装饰器的支持，还有假如react-router或者redux的支持，于是这次将他们一次性封装完成，下次再次启动新项目时，就直接从自己的仓库中clone来开发就好。</p>
+<h3 id="弹出自定义配置"><a href="#弹出自定义配置" class="headerlink" title="弹出自定义配置"></a>弹出自定义配置</h3><p>这是自定义cli的基础，以便我们修改cli的部分文件，记住又一个坑，必须要先git add . 和 git commit 后才能进行，要不然npm直接会报错。<br>运行<code>npm run eject</code>,操作之前切记需要<code>git commit</code></p>
+<h3 id="热加载"><a href="#热加载" class="headerlink" title="热加载"></a>热加载</h3><p>一直很疑惑这个功能为啥原生脚手架不自动开启，对于我这种对css有极度强迫症的人来说，修改一点css后瞬间出效果，而不要再次刷新页面，简直提高了很多效率。</p>
+<p>在<code>index.js</code>最后添加</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="built_in">module</span>.hot) &#123;</span><br><span class="line">  <span class="built_in">module</span>.hot.accept();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="添加路由"><a href="#添加路由" class="headerlink" title="添加路由"></a>添加路由</h3><p>这是开发SPA的基础，但是在实际开发过程中，this.props.history并不是在所有js文件中都能使用的，比如说在redux和封装的axios中，因为一般redux都是和组件拆分的，所以在antion函数中并不存在this.props.history这个对象，那怎么解决呢，在github上找到一个黑科技的解决方案，只要引入自己设置的history，无论是在哪里，都不需要用this.pros.history，直接使用自己封装的history，具体步骤如下：</p>
+<ol>
+<li>下载router包</li>
+</ol>
+<p><code>npm i react-router-dom  -S</code></p>
+<ol start="2">
+<li>在src中的config文件夹下创建<code>history.js</code></li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> createHistory <span class="keyword">from</span> <span class="string">'history/createBrowserHistory'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> createHistory();</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>在index.js中引入</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; BrowserRouter, Router &#125; <span class="keyword">from</span> <span class="string">"react-router-dom"</span>;</span><br><span class="line"><span class="keyword">import</span> history <span class="keyword">from</span> <span class="string">"./config/history"</span></span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>将App组件被路由所包裹</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ReactDOM.render(</span><br><span class="line">  &lt;BrowserRouter&gt;</span><br><span class="line">    &lt;Router history=&#123;history&#125;&gt;</span><br><span class="line">      &lt;App /&gt;</span><br><span class="line">    &lt;<span class="regexp">/Router&gt;</span></span><br><span class="line"><span class="regexp">  &lt;/</span>BrowserRouter&gt;,</span><br><span class="line">  <span class="built_in">document</span>.getElementById(<span class="string">"root"</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>在container中创建Index组件，并在<code>app.js</code>中添加以下代码</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React, &#123; Component &#125; <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; Route, Switch, withRouter&#125; <span class="keyword">from</span> <span class="string">'react-router-dom'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> Index <span class="keyword">from</span> <span class="string">'./container/index'</span></span><br><span class="line"></span><br><span class="line">@withRouter</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;Switch&gt;</span><br><span class="line">          &lt;Route exact path=<span class="string">"/"</span> component=&#123;Index&#125;&gt;<span class="xml"><span class="tag">&lt;/<span class="name">Route</span>&gt;</span></span></span><br><span class="line">        &lt;<span class="regexp">/Switch&gt;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>div&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> App;</span><br></pre></td></tr></table></figure>
+<h3 id="封装axios配置"><a href="#封装axios配置" class="headerlink" title="封装axios配置"></a>封装axios配置</h3><p>记得刚刚入门的时候，对axios的使用基本上就停留在他的promise中，虽然听说过axios还有拦截器这一操作，但是一直未尝试，后来在开发中，实在忍受不了每个请求都要手动加上token，每个返回结果都要判断是否需要弹出错误提醒和请求超时再次重新请求，后来发现axios拦截器真是个神器，于是就在每次开启新的项目中，都先配置axios拦截，妈妈再也不需要担心我写多余重复的代码啦～</p>
+<ol>
+<li><p>下载必要包<br><code>npm i axios</code></p>
+</li>
+<li><p>在config文件夹中添加<code>axios.js</code></p>
+</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">'axios'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> &#123; getCookie &#125; <span class="keyword">from</span> <span class="string">"../config/token"</span></span><br><span class="line"><span class="keyword">import</span> history <span class="keyword">from</span> <span class="string">"../config/history"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> instance = axios.create(&#123;</span><br><span class="line">  timeout: <span class="number">5000</span>,</span><br><span class="line">  baseURL: <span class="string">'http://localhost:3067'</span></span><br><span class="line">&#125;)</span><br><span class="line">instance.interceptors.request.use(</span><br><span class="line">  req =&gt; &#123;</span><br><span class="line">    <span class="comment">// const token = getCookie('token')</span></span><br><span class="line">    <span class="comment">// // 公共请求API,请求头不带有Authorization</span></span><br><span class="line">    <span class="comment">// const publicUrl = ["/signup", "/signin", "/email/validate", "/user/reset", "/temp/all" ]</span></span><br><span class="line">    <span class="comment">// const url = req.url</span></span><br><span class="line">    <span class="comment">// // 其他需要Authorization的请求</span></span><br><span class="line">    <span class="comment">// if (publicUrl.indexOf(url) === -1) &#123;</span></span><br><span class="line">    <span class="comment">//   req.headers.Authorization = token</span></span><br><span class="line">    <span class="comment">//   if (!token)&#123;</span></span><br><span class="line">    <span class="comment">//     history.push('/login') // 当cookie中存储的token过期后自动跳转到登录页</span></span><br><span class="line">    <span class="comment">//   &#125;</span></span><br><span class="line">    <span class="comment">// &#125;</span></span><br><span class="line">    <span class="keyword">return</span> req</span><br><span class="line">  &#125;,</span><br><span class="line">  err =&gt; &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'发起请求出错'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">instance.interceptors.response.use(</span><br><span class="line">  res =&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line">  &#125;,</span><br><span class="line">  err =&gt; &#123;</span><br><span class="line">    <span class="comment">// 本地环境错误</span></span><br><span class="line">    <span class="keyword">if</span> (err.message === <span class="string">"Network Error"</span>) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>( <span class="string">'网络环境太差，请稍后再试！'</span>)</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (err.message === <span class="string">"timeout of 5000ms exceeded"</span>) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>( <span class="string">'请求超时，请稍后再试！'</span>)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">throw</span> err   <span class="comment">// 非本地环境错误</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> instance</span><br></pre></td></tr></table></figure>
+<h3 id="添加状态管理redux"><a href="#添加状态管理redux" class="headerlink" title="添加状态管理redux"></a>添加状态管理redux</h3><p>redux在开发稍微复杂点的项目来说，提供了很多便利，所有的状态就在一个store中管理，将各个组件零零散散的状态集中起来，还能在各个组件中传递，这样在各个组件传递信息时候，就再也不需要写层层嵌套props的垃圾代码。</p>
+<p>虽然前期学习成本有点高，但是领悟到了redux的思想后，便是一劳永逸，付出还是值得的。</p>
+<ol>
+<li>安装必要包</li>
+</ol>
+<p><code>npm i redux redux-thunk react-redux -S</code></p>
+<ol start="2">
+<li><p>在src中添加<code>redux</code>文件以及<code>reducer.js</code>文件夹</p>
+</li>
+<li><p>在<code>redux</code>中创建<code>article.redux.js</code></p>
+</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">"../config/axios"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> GET_ARTICLE_DATA = <span class="string">"GET_ARTICLE_DATA"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> initState = &#123;</span><br><span class="line">  total: <span class="number">0</span>,</span><br><span class="line">  items: []</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">article</span>(<span class="params">state = initState, action</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">switch</span> (action.type) &#123;</span><br><span class="line">    <span class="keyword">case</span> GET_ARTICLE_DATA:</span><br><span class="line">      <span class="keyword">return</span> &#123;...state, ...action.payload&#125;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">      <span class="keyword">return</span> state</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getArticleSuccess</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123; <span class="attr">type</span>: GET_ARTICLE_DATA, <span class="attr">payload</span>: obj &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 获取所有文章数据</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">getArticleData</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">async</span> dispatch =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> getData = axios.get(<span class="string">'/article/all/'</span>,&#123;</span><br><span class="line">      params: &#123;</span><br><span class="line">        page: <span class="number">1</span>,</span><br><span class="line">        pageSize: <span class="number">10</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="keyword">let</span> result = <span class="keyword">await</span> getData</span><br><span class="line">      <span class="keyword">if</span> (result.status === <span class="number">200</span>) &#123;</span><br><span class="line">        dispatch(getArticleSuccess(result.data.data))</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(e)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>在<code>reducer.js</code>中将redux集合</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; combineReducers &#125; <span class="keyword">from</span> <span class="string">'redux'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> &#123; article &#125; <span class="keyword">from</span> <span class="string">"./redux/article.redux"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> combineReducers(&#123; article &#125;)</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>在index.js中引入必要文件</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createStore, applyMiddleware, compose &#125; <span class="keyword">from</span> <span class="string">"redux"</span>;</span><br><span class="line"><span class="keyword">import</span> thunk <span class="keyword">from</span> <span class="string">"redux-thunk"</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; Provider &#125; <span class="keyword">from</span> <span class="string">"react-redux"</span>;</span><br><span class="line"><span class="keyword">import</span> reducers <span class="keyword">from</span> <span class="string">"./reducer"</span>;</span><br></pre></td></tr></table></figure>
+<ol start="6">
+<li>创建<code>store</code></li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> store = createStore(</span><br><span class="line">  reducers,</span><br><span class="line">  compose(</span><br><span class="line">    applyMiddleware(thunk),</span><br><span class="line">    <span class="built_in">window</span>.devToolsExtension ? <span class="built_in">window</span>.devToolsExtension() : <span class="function"><span class="params">f</span> =&gt;</span> f</span><br><span class="line">  )</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<ol start="7">
+<li>将App组件被redux包围</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;Provider store=&#123;store&#125;&gt;</span><br><span class="line">    &lt;BrowserRouter&gt;</span><br><span class="line">      &lt;Router history=&#123;history&#125;&gt;</span><br><span class="line">        &lt;App /&gt;</span><br><span class="line">      &lt;<span class="regexp">/Router&gt;</span></span><br><span class="line"><span class="regexp">    &lt;/</span>BrowserRouter&gt;</span><br><span class="line">  &lt;<span class="regexp">/Provider&gt;,</span></span><br></pre></td></tr></table></figure>
+<h3 id="添加对装饰器的支持"><a href="#添加对装饰器的支持" class="headerlink" title="添加对装饰器的支持"></a>添加对装饰器的支持</h3><p>第一次接触装饰器还是在阮大大中ES6入门上看到的，当时似懂非懂地理解，后来在实际项目中也没怎么用到过，直到后来在react-router中的withRouter用法时，才明白装饰器是怎么回事，但是目前脚手架原生并不支持，所以需要自己配置babel。</p>
+<ol>
+<li>安装装饰器的babel</li>
+</ol>
+<p><code>npm i babel-plugin-transform-decorators-legacy -D</code></p>
+<ol start="2">
+<li>在package.json中设置babel参数</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&quot;babel&quot;: &#123;</span><br><span class="line">    &quot;presets&quot;: [</span><br><span class="line">      &quot;react-app&quot;</span><br><span class="line">    ],</span><br><span class="line">    &quot;plugins&quot;: [</span><br><span class="line">      &quot;transform-decorators-legacy&quot;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="配置less"><a href="#配置less" class="headerlink" title="配置less"></a>配置less</h3><p>这个就不用多说，less比起其他的预编译器来说，能够在其中写原生css，没有很多限制，并且也有其他预编译器的功能，所以是我期待的。</p>
+<p>1.安装必要包</p>
+<p><code>npm i less less-loader -D</code></p>
+<p>2.修改根目录config中的webpack配置文件<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    test: <span class="regexp">/\.(css|less)$/</span>,</span><br><span class="line">    use: [</span><br><span class="line">    &#123;</span><br><span class="line">        loader: <span class="built_in">require</span>.resolve(<span class="string">'less-loader'</span>) <span class="comment">// compiles Less to CSS</span></span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://vince.xin">Vince</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://vince.xin/2018/02/16/React开发前一些个人配置/">https://vince.xin/2018/02/16/React开发前一些个人配置/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2018/02/17/一劳永逸的axios拦截器封装总结/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">一劳永逸的axios拦截器封装总结</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2018/02/11/使用强大的requestAnimationFrame来制作高性能动画/">
+        <span class="next-text nav-default">使用强大的requestAnimationFrame来制作高性能动画</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:artistcoder@163.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/Vincedrean" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2017 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Vince</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://vince.xin/2018/02/16/React开发前一些个人配置/';
+        this.page.identifier = '2018/02/16/React开发前一些个人配置/';
+        this.page.title = 'React开发前一些个人配置';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//vincehua.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.2"></script>
+
+  </body>
+</html>

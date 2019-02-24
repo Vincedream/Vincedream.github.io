@@ -523,7 +523,7 @@ h6 {
     .post .post-header .post-title {
       margin: 0;
       font-size: 27px;
-      font-weight: 400;
+      font-weight: 600;
       font-family: Athelas, STHeiti, Microsoft Yahei, serif; }
     .post .post-header .post-link {
       display: inline-block;
@@ -1034,7 +1034,7 @@ h6 {
 
 .archive {
   margin: 2em 0px;
-  max-width: 550px; }
+  max-width: 650px; }
   .archive .archive-title {
     font-family: Athelas, STHeiti, Microsoft Yahei, serif; }
     .archive .archive-title.tag, .archive .archive-title.category {

@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="深入理解CSS背景定位——background-position">
+
+
+
+
+  <meta name="keywords" content="Vince, Vince's Blog,前端,Node,React">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Vince's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.2">
+
+
+
+<link rel="canonical" href="https://vince.xin/2018/05/06/深入理解CSS背景定位——background-position/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.2">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 深入理解CSS背景定位——background-position - Vince's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Vince's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Vince's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          深入理解CSS背景定位——background-position
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-05-06
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/CSS/">CSS</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#用它来干嘛"><span class="toc-text">用它来干嘛</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#精准定位图片"><span class="toc-text">精准定位图片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现CSS雪碧图"><span class="toc-text">实现CSS雪碧图</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解读各种值的含义"><span class="toc-text">解读各种值的含义</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#方位名为属性"><span class="toc-text">方位名为属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#具体值为属性"><span class="toc-text">具体值为属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#以百分比为属性值"><span class="toc-text">以百分比为属性值</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#错误打开方式"><span class="toc-text">错误打开方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#正确打开方式"><span class="toc-text">正确打开方式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#缺省值"><span class="toc-text">缺省值</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>background-position能为CSS提供精确的定位背景<br><a id="more"></a></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>四月份入职实习后，因为忙(lang)，就没什么时间来写博客，但这都不是理由，在公司实习期间还是学到挺多的，查漏补缺。对于一些知识点有了自己新的理解，这段时间将会做一个小总结，今天就来总结一下用的比较多的background-position～</p>
+<h2 id="用它来干嘛"><a href="#用它来干嘛" class="headerlink" title="用它来干嘛"></a>用它来干嘛</h2><h3 id="精准定位图片"><a href="#精准定位图片" class="headerlink" title="精准定位图片"></a>精准定位图片</h3><p>有时候我们想放一张图片到html中，这时我们或许会选择使用img标签，但是谁用谁知道，img标签就相当于一个普通元素，如果要实现裁剪、偏移、缩放是非常繁琐的，于是有时候我们就会将图片放入到一个“空”元素中作为背景图片，然后利用background给我们的各种属性实现图片的各种操作，来按照自己的想法合理地给展示图片。</p>
+<h3 id="实现CSS雪碧图"><a href="#实现CSS雪碧图" class="headerlink" title="实现CSS雪碧图"></a>实现CSS雪碧图</h3><p>CSS雪碧图我之前写过一个小文章简述他的使用方式，简单来说就是将许多小的icon合并为一张图片，然后用background-position来进行“裁剪”，极大的减少了http的请求，具体请移步到<a href="http://vince.xin/article/5acc326d6b78214ab8ac58b3">CSS Sprite雪碧图应用
+</a></p>
+<h2 id="解读各种值的含义"><a href="#解读各种值的含义" class="headerlink" title="解读各种值的含义"></a>解读各种值的含义</h2><p>background-position的属性指可以设置为：left,center等方位名、30%百分比、100px具体值。对于之前对该css属性不太熟悉的我还是比较懵的。于是在此做一个总结。</p>
+<h3 id="方位名为属性"><a href="#方位名为属性" class="headerlink" title="方位名为属性"></a>方位名为属性</h3><p>个人认为设置为方位名比较容易理解与操作，background-position其实是background-position-x与background-position-y的缩写，取值为：</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>background-position-x</td>
+<td>left center right</td>
+</tr>
+<tr>
+<td>background-position-y</td>
+<td>top center bottom</td>
+</tr>
+</tbody>
+</table>
+<p>代码示例：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="css">    <span class="selector-class">.box</span> &#123;</span></span><br><span class="line"><span class="undefined">        height: 400px;</span></span><br><span class="line"><span class="undefined">        width: 550px;</span></span><br><span class="line"><span class="undefined">        float: left;</span></span><br><span class="line"><span class="undefined">        margin: 20px;</span></span><br><span class="line"><span class="undefined">        border: 1px solid red;</span></span><br><span class="line"><span class="undefined">        background: url(./test.jpg);</span></span><br><span class="line"><span class="undefined">        background-repeat: no-repeat;</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="css">    <span class="selector-class">.box1</span>&#123;</span></span><br><span class="line"><span class="undefined">        background-position: right bottom;            </span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="css">    <span class="selector-class">.box2</span>&#123;</span></span><br><span class="line"><span class="undefined">        background-position: left bottom;            </span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="css">    <span class="selector-class">.box3</span>&#123;</span></span><br><span class="line"><span class="undefined">        background-position: center center;            </span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="css">    <span class="selector-class">.box4</span>&#123;</span></span><br><span class="line"><span class="undefined">        background-position: center bottom;       </span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box1 box"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box2 box"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box3 box"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box4 box"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>如图：<img src="http://static4.vince.xin/FD700CBE-5736-481F-A4EE-D3AB64FF5147.png" alt="image"></p>
+<h3 id="具体值为属性"><a href="#具体值为属性" class="headerlink" title="具体值为属性"></a>具体值为属性</h3><p>默认背景图片的起始位置为父元素的左上角对其，这里我们要注意：当属性值为正数时，向“内”偏移，反之向“外”偏移，这也是很好理解，我们以下代码以及实例来分析：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;<span class="selector-tag">style</span>&gt;</span><br><span class="line">    <span class="selector-class">.box1</span>&#123;</span><br><span class="line">        <span class="comment">/* background-position: 100px 100px;             */</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="selector-class">.box2</span>&#123;</span><br><span class="line">        <span class="attribute">background-position</span>: -<span class="number">100px</span> -<span class="number">100px</span>;            </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="selector-class">.box3</span>&#123;</span><br><span class="line">        <span class="attribute">background-position</span>: <span class="number">100px</span> <span class="number">100px</span>;            </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="selector-class">.box4</span>&#123;</span><br><span class="line">        <span class="attribute">background-position</span>: <span class="number">100px</span> -<span class="number">100px</span>;       </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;<span class="selector-tag">body</span>&gt;</span><br><span class="line">    &lt;div class="box1 box"&gt;&lt;/div&gt;</span><br><span class="line">    &lt;div class="box2 box"&gt;&lt;/div&gt;</span><br><span class="line">    &lt;div class="box3 box"&gt;&lt;/div&gt;</span><br><span class="line">    &lt;div class="box4 box"&gt;&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+<p>如图：<br><img src="http://static4.vince.xin/bsdfbjksdfnkdsfs.png" alt="image"></p>
+<p>这里我们当然也可以设置值为不同的单位，比如rem em 等，一般会使用具体值来定位裁剪css雪碧图。</p>
+<h3 id="以百分比为属性值"><a href="#以百分比为属性值" class="headerlink" title="以百分比为属性值"></a>以百分比为属性值</h3><h4 id="错误打开方式"><a href="#错误打开方式" class="headerlink" title="错误打开方式"></a>错误打开方式</h4><p>这是这个属性比较难以理解的点，如果对此不太熟悉的你，或许会以为他的百分比是根据其父元素来设置的，但是并非如此，我们demo的图片大小为480 x 300，父元素框600 x 600，我们简单来设置一个百分比:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="css">    <span class="selector-class">.box</span> &#123;</span></span><br><span class="line"><span class="undefined">        height: 600px;</span></span><br><span class="line"><span class="undefined">        width: 600px;</span></span><br><span class="line"><span class="undefined">        float: left;</span></span><br><span class="line"><span class="undefined">        margin: 20px;</span></span><br><span class="line"><span class="undefined">        border: 1px solid red;</span></span><br><span class="line"><span class="undefined">        background: url(./test.jpg);</span></span><br><span class="line"><span class="undefined">        background-repeat: no-repeat;</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="css">    <span class="selector-class">.box1</span>&#123;</span></span><br><span class="line"><span class="undefined">        background-position: 30% 30%;            </span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box1 box"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>如图：<br><img src="http://static4.vince.xin/BCD23DD1-4A9C-4117-B715-34342E0DDA5A.png" alt="image"></p>
+<p>我们看到demo图示，如果说按照我们之前的yy，根据父元素大小来设置百分比，30% * 600 = 180px ,但是实际上却不是这样，所以说，我们之前的想法是错误的。</p>
+<h4 id="正确打开方式"><a href="#正确打开方式" class="headerlink" title="正确打开方式"></a>正确打开方式</h4><p>我们带着疑问来到了谷歌，查阅资料才发现事情并不是这么简单：</p>
+<p>background-postion:x y;</p>
+<p>x：{容器(container)的宽度—背景图片的宽度} x 百分比，超出的部分隐藏。</p>
+<p>y：{容器(container)的高度—背景图片的高度} x 百分比，超出的部分隐藏。</p>
+<p>根据这一套换算方式，我们可以算出具体的值，我们还是以上面的例子来换算：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="css">    <span class="selector-class">.box</span> &#123;</span></span><br><span class="line"><span class="undefined">        height: 600px;</span></span><br><span class="line"><span class="undefined">        width: 600px;</span></span><br><span class="line"><span class="undefined">        float: left;</span></span><br><span class="line"><span class="undefined">        margin: 20px;</span></span><br><span class="line"><span class="undefined">        border: 1px solid red;</span></span><br><span class="line"><span class="undefined">        background: url(./test.jpg);</span></span><br><span class="line"><span class="undefined">        background-repeat: no-repeat;</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="css">    <span class="selector-class">.box1</span>&#123;</span></span><br><span class="line"><span class="undefined">        background-position: 30% 30%;            </span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box1 box"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>如图：<br><img src="http://static4.vince.xin/E6D30378-2343-470F-AB52-A1AFFDE52FC1.png" alt="image"></p>
+<p>尽管我们弄明白了这个换算方式，但是我并不建议大家使用百分比来设置定位，但是有一种是可以推荐使用的：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">background-position</span>: 50% 50%;</span><br></pre></td></tr></table></figure>
+<p>按照我们之前换算：</p>
+<p>x：(600-480)*50% = 60px</p>
+<p>y: (600-300)*50% = 150px</p>
+<p>我们发现，他刚好使背景居中放置，这和我们之前设置的center是等价的：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">background-position</span>: <span class="selector-tag">center</span> <span class="selector-tag">center</span>;</span><br></pre></td></tr></table></figure>
+<p>如图：<img src="http://static4.vince.xin/18169FCC-A9AB-4447-BEE5-105C81A75F68.png" alt="image"></p>
+<h3 id="缺省值"><a href="#缺省值" class="headerlink" title="缺省值"></a>缺省值</h3><p>当我们设置属性值的时候，position-x的值，那么会发 怎样的情况呢?</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"> <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="css">    <span class="selector-class">.box</span> &#123;</span></span><br><span class="line"><span class="undefined">        height: 600px;</span></span><br><span class="line"><span class="undefined">        width: 600px;</span></span><br><span class="line"><span class="undefined">        float: left;</span></span><br><span class="line"><span class="undefined">        margin: 20px;</span></span><br><span class="line"><span class="undefined">        border: 1px solid red;</span></span><br><span class="line"><span class="undefined">        background: url(./test.jpg);</span></span><br><span class="line"><span class="undefined">        background-repeat: no-repeat;</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="css">    <span class="selector-class">.box1</span>&#123;</span></span><br><span class="line"><span class="undefined">        background-position: 100px;       </span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="css">    <span class="selector-class">.box2</span>&#123;</span></span><br><span class="line"><span class="undefined">        background-position: right;            </span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="css">    <span class="selector-class">.box3</span>&#123;</span></span><br><span class="line"><span class="undefined">        background-position: 30%;            </span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box1 box"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box2 box"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"box3 box"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>如图：<br><img src="http://static4.vince.xin/C2A3364B-C968-420A-953D-4AB78A32F8B5.png" alt="image"></p>
+<p>我们猜测如果没有设置第二个属性，那么默认值为center也就是50%，没错， 档上确实也是这样的。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>background-position其实并没有什么难点，常用的也就那几个值，就能满足基本上所有的需求，但是当我们看到别人的代码，使用了百分比，这个时候我们就能辨别出该代码作者的用意以及精确的值，对于我们维护有着较大的帮助。</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://vince.xin">Vince</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://vince.xin/2018/05/06/深入理解CSS背景定位——background-position/">https://vince.xin/2018/05/06/深入理解CSS背景定位——background-position/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2018/05/18/理解CSS中伪元素：的常见用法/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">理解CSS中伪元素：的常见用法</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2018/04/18/优雅解决React中this.setState合并执行问题/">
+        <span class="next-text nav-default">优雅解决React中this.setState合并执行问题</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:artistcoder@163.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/Vincedrean" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2017 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Vince</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://vince.xin/2018/05/06/深入理解CSS背景定位——background-position/';
+        this.page.identifier = '2018/05/06/深入理解CSS背景定位——background-position/';
+        this.page.title = '深入理解CSS背景定位——background-position';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//vincehua.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.2"></script>
+
+  </body>
+</html>

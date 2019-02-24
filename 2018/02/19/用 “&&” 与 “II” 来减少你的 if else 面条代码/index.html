@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="用 “&&” 与 “II” 来减少你的 if else 面条代码">
+
+
+
+
+  <meta name="keywords" content="Vince, Vince's Blog,前端,Node,React">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Vince's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.2">
+
+
+
+<link rel="canonical" href="https://vince.xin/2018/02/19/用 “&&” 与 “II” 来减少你的 if else 面条代码/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.2">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 用 “&&” 与 “II” 来减少你的 if else 面条代码 - Vince's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Vince's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Vince's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          用 “&&” 与 “II” 来减少你的 if else 面条代码
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-02-19
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/JavaScript/">JavaScript</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#初步解决方案：Switch"><span class="toc-text">初步解决方案：Switch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#升级解决办法：-amp-amp-与-的组合"><span class="toc-text">升级解决办法：&amp;&amp; 与 || 的组合</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#操作符"><span class="toc-text">|| 操作符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#amp-amp-操作符"><span class="toc-text">&amp;&amp; 操作符</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#具体用法"><span class="toc-text">具体用法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#简单用法"><span class="toc-text">简单用法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#高级用法"><span class="toc-text">高级用法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>代码不规范，同事两行泪<br><a id="more"></a></p>
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>前几天帮对床室友调bug，看到他代码中有这么一大段(如下)，我内心是抗拒的，但是看在亲室友的份上，还是强忍下给他解决了问题，后来我反省，发现在自己写过的代码中也有一些这样的面条代码，一大串，不仅占地面积大，阅读性更是差，要想万一我的github里面的代码被看到是这样的，岂不是很丢脸，于是带着问题，开始了就“如何减少if else面条代码”这一问题的探究。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> () &#123;</span><br><span class="line">    <span class="comment">// something</span></span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> () &#123;</span><br><span class="line">    <span class="comment">// something</span></span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> () &#123;</span><br><span class="line">    <span class="comment">// something</span></span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> () &#123;</span><br><span class="line">    <span class="comment">// something</span></span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> () &#123;</span><br><span class="line">    <span class="comment">// something</span></span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> () &#123;</span><br><span class="line">    <span class="comment">// something</span></span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> () &#123;</span><br><span class="line">    <span class="comment">// something</span></span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// something</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="初步解决方案：Switch"><a href="#初步解决方案：Switch" class="headerlink" title="初步解决方案：Switch"></a>初步解决方案：Switch</h3><p>当然，这似乎可以改善那么一点儿，但是还是不够简洁不够优雅</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> b = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">var</span> a = <span class="number">12</span>;</span><br><span class="line"><span class="keyword">switch</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">  <span class="keyword">case</span> a &lt;= <span class="number">5</span>:</span><br><span class="line">    b = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">  <span class="keyword">case</span> (a &gt;= <span class="number">5</span> &amp;&amp; a &lt; <span class="number">10</span>):</span><br><span class="line">    b = <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">  <span class="keyword">case</span> (a &gt;= <span class="number">10</span> &amp;&amp; a &lt; <span class="number">15</span>):</span><br><span class="line">    b = <span class="number">3</span>;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">  <span class="keyword">case</span> (a &gt;= <span class="number">15</span> &amp;&amp; a &lt; <span class="number">20</span>):</span><br><span class="line">    b = <span class="number">4</span>;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">  <span class="keyword">default</span>:</span><br><span class="line">    b = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(b);</span><br></pre></td></tr></table></figure>
+<h3 id="升级解决办法：-amp-amp-与-的组合"><a href="#升级解决办法：-amp-amp-与-的组合" class="headerlink" title="升级解决办法：&amp;&amp; 与 || 的组合"></a>升级解决办法：&amp;&amp; 与 || 的组合</h3><p>这是一个用一行代码便可以解决很多条件判断的黑科技，在此之前我们需要详细了解&amp;&amp;与||的执行机制，我们先从最基础的判断来看：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="literal">true</span> || <span class="literal">false</span>); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="literal">false</span> || <span class="literal">true</span>); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="literal">true</span> &amp;&amp; <span class="literal">true</span>); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="literal">false</span> &amp;&amp; <span class="literal">false</span>); <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+<p>这都不难理解，但是&amp;&amp;与||的威力远远不止用来判断简单的true和false，我们在看下面的示例：</p>
+<p>先了解一个概念，以下值在JavaScript逻辑判断中都为false：</p>
+<ul>
+<li>0</li>
+<li>”“</li>
+<li>null</li>
+<li>false</li>
+<li>undefined</li>
+<li>NaN</li>
+</ul>
+<h4 id="操作符"><a href="#操作符" class="headerlink" title="|| 操作符"></a>|| 操作符</h4><p>talk is cheap，先来看几个例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="number">0</span> || <span class="number">1</span>); <span class="comment">// 1</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">2</span> || <span class="number">1</span>); <span class="comment">// 2</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"a"</span> || <span class="number">1</span>); <span class="comment">// 'a'</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">""</span> || <span class="number">1</span>); <span class="comment">// 1</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">""</span> || <span class="number">1</span> || <span class="number">3</span>); <span class="comment">// 1（递进）</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"a"</span> || <span class="number">0</span>); <span class="comment">//'a'</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">""</span> || <span class="number">0</span>); <span class="comment">// 0</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">""</span> || <span class="number">0</span> || <span class="number">3</span>); <span class="comment">// 3 （递进）</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">0</span> || <span class="string">""</span>); <span class="comment">// ""</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">0</span> || <span class="string">""</span> || <span class="number">1</span>); <span class="comment">// 1 (递进)</span></span><br></pre></td></tr></table></figure>
+<p>看到这里，或许你会疑惑，||怎么还有这种用法，又或者说，||是怎么来判断返回值呢？经过以上的几个分析，我们得到以下规律：</p>
+<ol>
+<li><p>只要“||”前面为false,假如只有一个||操作符，不管“||”后面是true还是false，都返回“||”后面的值，如有多个，则逐步递进。</p>
+</li>
+<li><p>只要“||”前面为true,假如只有一个||操作符，不管“||”后面是true还是false，都返回“||”前面的值，如有多个，则逐步递进。</p>
+</li>
+</ol>
+<p>我称这种为短路原理： 知道了前面第一个的结果就知道后的输出，如果为第一个为：true，则取第一个的值，如果第一个为false，则取第后面的值。</p>
+<h4 id="amp-amp-操作符"><a href="#amp-amp-操作符" class="headerlink" title="&amp;&amp; 操作符"></a>&amp;&amp; 操作符</h4><p>依旧先看例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">""</span> &amp;&amp; <span class="number">1</span>); <span class="comment">// ''</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">""</span> &amp;&amp; <span class="number">0</span>); <span class="comment">// ''</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"a"</span> &amp;&amp; <span class="number">1</span>); <span class="comment">// 1</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"a"</span> &amp;&amp; <span class="number">0</span>); <span class="comment">// 0</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"a"</span> &amp;&amp; <span class="string">""</span>); <span class="comment">// ''</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"a"</span> &amp;&amp; <span class="string">""</span> &amp;&amp; <span class="number">3</span>); <span class="comment">// '' （不递进）</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">0</span> &amp;&amp; <span class="string">"a"</span>); <span class="comment">// 0</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">0</span> &amp;&amp; <span class="string">"a"</span> &amp;&amp; <span class="number">2</span>); <span class="comment">// 0 （不递进）</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">0</span> &amp;&amp; <span class="string">""</span>); <span class="comment">// 0</span></span><br></pre></td></tr></table></figure>
+<p>分析得知</p>
+<p>1、只要“&amp;&amp;”前面是false，无论“&amp;&amp;”后面是true还是false，结果都将返“&amp;&amp;”前面的值，即false;</p>
+<p>2、只要“&amp;&amp;”前面是true，无论“&amp;&amp;”后面是true还是false，结果都将返“&amp;&amp;”后面的值，并且不会向||一样递进;</p>
+<h3 id="具体用法"><a href="#具体用法" class="headerlink" title="具体用法"></a>具体用法</h3><h4 id="简单用法"><a href="#简单用法" class="headerlink" title="简单用法"></a>简单用法</h4><p>熟知上面&amp;&amp;与||的基本用法后，我们来开始真正的实战，假如有这么一个需求：</p>
+<blockquote>
+<p>变量a是不确定的，如果a没有赋值，那么a的默认值是12.</p>
+</blockquote>
+<p>按照新手思想来，会写出以下下代码，这样写固然没有错误，但是如果变量多，那么代码中太多的if(){}显然不是那么的美观。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!a) &#123;</span><br><span class="line">  a = <span class="number">12</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> (a == <span class="literal">null</span> || a == <span class="string">""</span> || a == <span class="literal">undefined</span>) &#123;</span><br><span class="line">  a = <span class="number">12</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>改进：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a = a || <span class="number">12</span>;</span><br></pre></td></tr></table></figure>
+<p>只需要一行代码，无需过多解释，很精辟，在实际项目中用的非常多，并且辨识度也很高，我们在看一题：</p>
+<blockquote>
+<p>当变量a的值大于2，则给变量b赋值6，否则b为false</p>
+</blockquote>
+<p>if else当然可以解决问题，但是用&amp;&amp;会更骚</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">3</span>;</span><br><span class="line"><span class="keyword">var</span> b;</span><br><span class="line"><span class="keyword">if</span> (a&gt;<span class="number">2</span>) &#123;</span><br><span class="line">  b = <span class="number">6</span></span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  b = <span class="literal">false</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(b) <span class="comment">// 6</span></span><br></pre></td></tr></table></figure>
+<p>改进：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">2</span>;</span><br><span class="line"><span class="keyword">let</span> b = a &gt; <span class="number">0</span> &amp;&amp; <span class="number">6</span>;</span><br><span class="line"><span class="built_in">console</span>.log(b); <span class="comment">// 6</span></span><br></pre></td></tr></table></figure>
+<p>很酷炫用没有，是不是发现之前写的代码都是很垃圾，但是！！！假如将 &amp;&amp; 与 || 结合起来，那么你就可以改变世界了～</p>
+<h4 id="高级用法"><a href="#高级用法" class="headerlink" title="高级用法"></a>高级用法</h4><p>有这么一个判断需求：</p>
+<blockquote>
+<p>根据人的年龄处在哪个范围，输出处于那个年龄阶段，0-5(幼年),5-12(少年),12-18(青年),18-40(成年)，40-60(中年),&gt;60(老年).</p>
+</blockquote>
+<p>emmmm，好像判断条件有点多，用if else是这样判断的，不忍直视。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> age = <span class="number">22</span>;</span><br><span class="line"><span class="keyword">if</span> (age &gt;= <span class="number">0</span> &amp;&amp; age &lt; <span class="number">5</span>) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">"幼年"</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (age &gt;= <span class="number">5</span> &amp;&amp; age &lt; <span class="number">12</span>) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">"少年"</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (age &gt;= <span class="number">12</span> &amp;&amp; age &lt; <span class="number">18</span>) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">"青年"</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (age &gt;= <span class="number">18</span> &amp;&amp; age &lt; <span class="number">40</span>) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">"成年"</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (age &gt;= <span class="number">40</span> &amp;&amp; age &lt; <span class="number">60</span>) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">"中年"</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">"老年"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么用&amp;&amp;与||怎么解决呢，改变世界的时刻到了：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> man =</span><br><span class="line">  (age &gt;= <span class="number">0</span> &amp;&amp; age &lt; <span class="number">5</span> &amp;&amp; <span class="string">"幼年"</span>) ||</span><br><span class="line">  (age &gt;= <span class="number">5</span> &amp;&amp; age &lt; <span class="number">12</span> &amp;&amp; <span class="string">"少年"</span>) ||</span><br><span class="line">  (age &gt;= <span class="number">18</span> &amp;&amp; age &lt; <span class="number">40</span> &amp;&amp; <span class="string">"青年"</span>) ||</span><br><span class="line">  (age &gt;= <span class="number">18</span> &amp;&amp; age &lt; <span class="number">40</span> &amp;&amp; <span class="string">"成年"</span>) ||</span><br><span class="line">  (age &gt;= <span class="number">40</span> &amp;&amp; age &lt; <span class="number">60</span> &amp;&amp; <span class="string">"中年"</span>) ||</span><br><span class="line">  <span class="string">"老年"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(man);</span><br></pre></td></tr></table></figure>
+<p>如果说理解了上面讲的操作法判断方法，理解这段代码也很简单，比起if else来说，真的美观多了，我们可以总结出下面这个模板，但是条件1和条件2切勿重叠，这是一个要非常注意的点。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">((条件<span class="number">1</span>) &amp;&amp; (满足条件<span class="number">1</span>后的值)) || ((条件<span class="number">2</span>) &amp;&amp; (满足条件<span class="number">2</span>后的值)) || ...</span><br></pre></td></tr></table></figure>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>通过这次探索，切实的感受到了可读性高的简写会给代码质量带来很的提升，&amp;&amp;和||学习成本也不大，只要项目中用习惯了，便是一件一劳永逸的事情，你的小伙伴再也不会抱怨你的代码太丑，如果你小伙伴看不懂你用&amp;&amp;和||写的判断语句，那么欢迎你向他推荐我这篇文章～</p>
+<p>Time is money ：）</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://vince.xin">Vince</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://vince.xin/2018/02/19/用 “&&” 与 “II” 来减少你的 if else 面条代码/">https://vince.xin/2018/02/19/用 “&&” 与 “II” 来减少你的 if else 面条代码/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2018/03/03/状态码304与200：HTTP缓存/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">状态码304与200：HTTP缓存</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2018/02/17/一劳永逸的axios拦截器封装总结/">
+        <span class="next-text nav-default">一劳永逸的axios拦截器封装总结</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:artistcoder@163.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/Vincedrean" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2017 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Vince</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://vince.xin/2018/02/19/用 “&&” 与 “II” 来减少你的 if else 面条代码/';
+        this.page.identifier = '2018/02/19/用 “&&” 与 “II” 来减少你的 if else 面条代码/';
+        this.page.title = '用 “&&” 与 “II” 来减少你的 if else 面条代码';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//vincehua.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.2"></script>
+
+  </body>
+</html>

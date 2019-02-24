@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="用Node EJS写一个爬虫脚本每天定时给心爱的她发一封暖心邮件">
+
+
+
+
+  <meta name="keywords" content="Vince, Vince's Blog,前端,Node,React">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Vince's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.2">
+
+
+
+<link rel="canonical" href="https://vince.xin/2017/12/09/用Node EJS写一个爬虫脚本每天定时给心爱的她发一封暖心邮件/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.2">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 用Node EJS写一个爬虫脚本每天定时给心爱的她发一封暖心邮件 - Vince's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Vince's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Vince's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          用Node EJS写一个爬虫脚本每天定时给心爱的她发一封暖心邮件
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-12-09
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/Node-js/">Node.js</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#写在前面"><span class="toc-text">写在前面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#确认主题"><span class="toc-text">确认主题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#剧透"><span class="toc-text">剧透</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#待解决的问题"><span class="toc-text">待解决的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编写代码"><span class="toc-text">编写代码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#网页爬虫"><span class="toc-text">网页爬虫</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#EJS模版引擎生成HTML"><span class="toc-text">EJS模版引擎生成HTML</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#用Node发送邮件"><span class="toc-text">用Node发送邮件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Node定时执行任务"><span class="toc-text">Node定时执行任务</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#思路与步骤"><span class="toc-text">思路与步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装与使用"><span class="toc-text">安装与使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#用PM2部署到云服务器"><span class="toc-text">用PM2部署到云服务器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最后"><span class="toc-text">最后</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>谁说程序员都不懂浪漫？<br><a id="more"></a></p>
+<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>自从用邮箱注册了很多账号后，便会收到诸如以下类似的邮件,刚开始还以为是一张图片，后来仔细一看不是图片呀，好像还是HTML呀，于是好奇宝宝我Google一下，查阅多篇资料后总结出怎么用前端知识和Node做一个这样的“邮件网页”。</p>
+<p><img src="http://blogpic.vince.xin/CF951178-3DFD-43D6-9A68-9DBD2706C98B.png" alt="image"></p>
+<h2 id="确认主题"><a href="#确认主题" class="headerlink" title="确认主题"></a>确认主题</h2><p>知道怎么实现功能后，思考着我该写什么主题呢，用一个HTML模板随便给小伙伴们发个邮件炫个技？不行，作为一个很cool的程序员怎么能这么low呢，最近天气变化幅度大，温度捉摸不定，女朋友总是抱怨穿少了又冷穿多了又热，嗨呀，要不我就写个每天定时给宝宝发送天气预报的邮件，另外想起宝宝喜欢看ONE·一个这个APP上的每日更新，要不发天气预报的同时，再附赠一个“ONE的每日订阅”？机智又浪漫，开始搬砖～</p>
+<h2 id="剧透"><a href="#剧透" class="headerlink" title="剧透"></a>剧透</h2><p>本来是想最后放效果图的，怕你们看到一半就没兴趣了，就在前面剧透一下我最后做出来的效果图吧～</p>
+<p><img src="http://blogpic.vince.xin/2C971663-4C02-4CDD-8E13-1C71B8170EB4.png" alt="image"></p>
+<h2 id="待解决的问题"><a href="#待解决的问题" class="headerlink" title="待解决的问题"></a>待解决的问题</h2><p><strong>1. 如何获取天气预报和ONE上的data？</strong></p>
+<p>答：获取data有两种方法，第一种方法是获取天气预报和ONE的API，第二种是用node爬虫获取天气预报和ONE网页的信息。后来找了下，发现ONE并没有API接口，为了让两者统一，于是决定使用node上的一个插件叫<code>cheerio</code>,配合<code>superagent</code>能够很方便地爬取网页上的信息。</p>
+<p><strong>2. 如何做出HTML的这种邮件？</strong></p>
+<p>答：之前学过一段时间的express这个框架，接触到模版引擎这个概念，传入data便可获得html文件，再结合node的fs模块，获取到这个html文件，便可以结合node的邮件插件发送HTML邮件啦！</p>
+<p><strong>3. 如何用node发送邮件？</strong></p>
+<p>感谢无私的开源开发者，开发了一款发送邮件的Node插件<code>nodemailer</code>,兼容主流的Email厂商，只需要配置好邮箱账号和smtp授权码，便可以用你的邮箱账号在node脚本上发文件，很cool有没有～</p>
+<p><strong>4. 如何做到每日定时发送？</strong></p>
+<p>其实可以通过各种hack的方式写这么一个定时任务，但是既然node社区有这个定时的轮子，那我们直接用就好了，<code>node-schedule</code>是一个有着各种配置的定时任务发生器，可以定时每个月、每个礼拜、每天具体什么时候执行什么任务，这正符合每天早晨定时给宝宝发送邮件的需求。</p>
+<p><strong>一切准备就绪，开始做一次浪漫的程序员</strong></p>
+<h2 id="编写代码"><a href="#编写代码" class="headerlink" title="编写代码"></a>编写代码</h2><h3 id="网页爬虫"><a href="#网页爬虫" class="headerlink" title="网页爬虫"></a>网页爬虫</h3><p>这里我们使用到<code>superagent</code>和<code>cheerio</code>组合来实现爬虫：</p>
+<ul>
+<li>分析网页DOM结构，如下图所示：</li>
+</ul>
+<p><img src="http://blogpic.vince.xin/B7509558-D988-4818-8969-77FE5028882A.png" alt="image"></p>
+<ul>
+<li>用superagent来获取指定网页的所有DOM：</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">superagent.get(URL).end(<span class="function"><span class="keyword">function</span>(<span class="params">err,res</span>)</span>&#123;</span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>用cheerio来筛选superagent获取到的DOM，取出需要的DOM</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">imgUrl:$(todayOne).find(<span class="string">'.fp-one-imagen'</span>).attr(<span class="string">'src'</span>),</span><br><span class="line">type:$(todayOne).find(<span class="string">'.fp-one-imagen-footer'</span>).text().replace(<span class="regexp">/(^\s*)|(\s*$)/g</span>, <span class="string">""</span>),</span><br><span class="line">text:$(todayOne).find(<span class="string">'.fp-one-cita'</span>).text().replace(<span class="regexp">/(^\s*)|(\s*$)/g</span>, <span class="string">""</span>)</span><br></pre></td></tr></table></figure>
+<p><strong>以下就是爬取ONE的代码，天气预报网页也是一个道理：</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> superagent = <span class="built_in">require</span>(<span class="string">'superagent'</span>); <span class="comment">//发送网络请求获取DOM</span></span><br><span class="line"><span class="keyword">const</span> cheerio = <span class="built_in">require</span>(<span class="string">'cheerio'</span>); <span class="comment">//能够像Jquery一样方便获取DOM节点</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> OneUrl = <span class="string">"http://wufazhuce.com/"</span>; <span class="comment">//ONE的web版网站</span></span><br><span class="line"></span><br><span class="line">superagent.get(OneUrl).end(<span class="function"><span class="keyword">function</span>(<span class="params">err,res</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(err)&#123;</span><br><span class="line">       <span class="built_in">console</span>.log(err);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">let</span> $ = cheerio.load(res.text);</span><br><span class="line">    <span class="keyword">let</span> selectItem=$(<span class="string">'#carousel-one .carousel-inner .item'</span>);</span><br><span class="line">    <span class="keyword">let</span> todayOne=selectItem[<span class="number">0</span>]; <span class="comment">//获取轮播图第一个页面，也就是当天更新的内容</span></span><br><span class="line">    <span class="keyword">let</span> todayOneData=&#123;  <span class="comment">//保存到一个json中</span></span><br><span class="line">        imgUrl:$(todayOne).find(<span class="string">'.fp-one-imagen'</span>).attr(<span class="string">'src'</span>),</span><br><span class="line">        type:$(todayOne).find(<span class="string">'.fp-one-imagen-footer'</span>).text().replace(<span class="regexp">/(^\s*)|(\s*$)/g</span>, <span class="string">""</span>),</span><br><span class="line">        text:$(todayOne).find(<span class="string">'.fp-one-cita'</span>).text().replace(<span class="regexp">/(^\s*)|(\s*$)/g</span>, <span class="string">""</span>)</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="built_in">console</span>.log(todayOneData);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h3 id="EJS模版引擎生成HTML"><a href="#EJS模版引擎生成HTML" class="headerlink" title="EJS模版引擎生成HTML"></a>EJS模版引擎生成HTML</h3><p>通过爬虫获取到了数据,那么我们就能够通过将date输入到EJS渲染出HTML，我们在目录下创建js脚本和ejs模版文件：</p>
+<ul>
+<li>app.js</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> ejs = <span class="built_in">require</span>(<span class="string">'ejs'</span>); <span class="comment">//ejs模版引擎</span></span><br><span class="line"><span class="keyword">const</span> fs  = <span class="built_in">require</span>(<span class="string">'fs'</span>); <span class="comment">//文件读写</span></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>); <span class="comment">//路径配置</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//传给EJS的数据</span></span><br><span class="line"><span class="keyword">let</span> data=&#123;</span><br><span class="line">    title:<span class="string">'nice to meet you~'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//将目录下的mail.ejs获取到，得到一个模版</span></span><br><span class="line"><span class="keyword">const</span> template = ejs.compile(fs.readFileSync(path.resolve(__dirname, <span class="string">'mail.ejs'</span>), <span class="string">'utf8'</span>));</span><br><span class="line"><span class="comment">//将数据传入模版中，生成HTML</span></span><br><span class="line"><span class="keyword">const</span> html = template(data);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(html)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>mail.ejs</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=<span class="string">"en"</span>&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=<span class="string">"UTF-8"</span>&gt;</span><br><span class="line">    &lt;meta name=<span class="string">"viewport"</span> content=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span><br><span class="line">    &lt;meta http-equiv=<span class="string">"X-UA-Compatible"</span> content=<span class="string">"ie=edge"</span>&gt;</span><br><span class="line">    &lt;title&gt;Document&lt;<span class="regexp">/title&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;h1&gt;</span><br><span class="line">        &lt;%= title %&gt;</span><br><span class="line">    &lt;<span class="regexp">/h1&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>body&gt;</span><br><span class="line">&lt;<span class="regexp">/html&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="用Node发送邮件"><a href="#用Node发送邮件" class="headerlink" title="用Node发送邮件"></a>用Node发送邮件</h3><p>这里我们可以发送纯text也可以发送html，注意的是邮箱密码不是你登录邮箱的密码，而是smtp授权码，什么是smtp授权码呢？就是你的邮箱账号可以使用这个smtp授权码在别的地方发邮件，一般smtp授权码在邮箱官网的设置中可以看的到，设置如下注释。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> nodemailer = <span class="built_in">require</span>(<span class="string">'nodemailer'</span>); <span class="comment">//发送邮件的node插件</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> transporter = nodemailer.createTransport(&#123;</span><br><span class="line">    service: <span class="string">'126'</span>, <span class="comment">// 发送者的邮箱厂商，支持列表：https://nodemailer.com/smtp/well-known/</span></span><br><span class="line">    port: <span class="number">465</span>, <span class="comment">// SMTP 端口</span></span><br><span class="line">    secureConnection: <span class="literal">true</span>, <span class="comment">// SSL安全链接</span></span><br><span class="line">    auth: &#123;   <span class="comment">//发送者的账户密码</span></span><br><span class="line">      user: <span class="string">'账户@126.com'</span>, <span class="comment">//账户</span></span><br><span class="line">      pass: <span class="string">'smtp授权码'</span>, <span class="comment">//smtp授权码，到邮箱设置下获取</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> mailOptions = &#123;</span><br><span class="line">    <span class="keyword">from</span>: <span class="string">'"发送者昵称" &lt;地址@126.com&gt;'</span>, <span class="comment">// 发送者昵称和地址</span></span><br><span class="line">    to: <span class="string">'like@vince.studio'</span>, <span class="comment">// 接收者的邮箱地址</span></span><br><span class="line">    subject: <span class="string">'一封暖暖的小邮件'</span>, <span class="comment">// 邮件主题</span></span><br><span class="line">    text: <span class="string">'test mail'</span>,  <span class="comment">//邮件的text</span></span><br><span class="line">    <span class="comment">// html: html  //也可以用html发送  </span></span><br><span class="line">  &#125;;</span><br><span class="line">  </span><br><span class="line"><span class="comment">//发送邮件</span></span><br><span class="line">transporter.sendMail(mailOptions, (error, info) =&gt; &#123;  </span><br><span class="line">    <span class="keyword">if</span> (error) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">console</span>.log(error);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'邮件发送成功 ID：'</span>, info.messageId);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="Node定时执行任务"><a href="#Node定时执行任务" class="headerlink" title="Node定时执行任务"></a>Node定时执行任务</h3><p>这里我们用到了<code>node-schedule</code>来定时执行任务，示例如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> schedule = <span class="built_in">require</span>(<span class="string">"node-schedule"</span>);  </span><br><span class="line"></span><br><span class="line"><span class="comment">//1. 确定的时间执行</span></span><br><span class="line"><span class="keyword">var</span> date = <span class="keyword">new</span> <span class="built_in">Date</span>(<span class="number">2017</span>,<span class="number">12</span>,<span class="number">10</span>,<span class="number">15</span>,<span class="number">50</span>,<span class="number">0</span>);  </span><br><span class="line">schedule.scheduleJob(date, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;  </span><br><span class="line">   <span class="built_in">console</span>.log(<span class="string">"执行任务"</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">//2. 秒为单位执行 </span></span><br><span class="line"><span class="comment">//比如:每5秒执行一次</span></span><br><span class="line"><span class="keyword">var</span> rule1     = <span class="keyword">new</span> schedule.RecurrenceRule();  </span><br><span class="line"><span class="keyword">var</span> times1    = [<span class="number">1</span>,<span class="number">6</span>,<span class="number">11</span>,<span class="number">16</span>,<span class="number">21</span>,<span class="number">26</span>,<span class="number">31</span>,<span class="number">36</span>,<span class="number">41</span>,<span class="number">46</span>,<span class="number">51</span>,<span class="number">56</span>];  </span><br><span class="line">rule1.second  = times1;  </span><br><span class="line">schedule.scheduleJob(rule1, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"执行任务"</span>);    </span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">//3.以分为单位执行</span></span><br><span class="line"><span class="comment">//比如:每5分种执行一次</span></span><br><span class="line"><span class="keyword">var</span> rule2     = <span class="keyword">new</span> schedule.RecurrenceRule();  </span><br><span class="line"><span class="keyword">var</span> times2    = [<span class="number">1</span>,<span class="number">6</span>,<span class="number">11</span>,<span class="number">16</span>,<span class="number">21</span>,<span class="number">26</span>,<span class="number">31</span>,<span class="number">36</span>,<span class="number">41</span>,<span class="number">46</span>,<span class="number">51</span>,<span class="number">56</span>];  </span><br><span class="line">rule2.minute  = times2;  </span><br><span class="line">schedule.scheduleJob(rule2, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;  </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"执行任务"</span>);    </span><br><span class="line">&#125;);  </span><br><span class="line"></span><br><span class="line"><span class="comment">//4.以天单位执行</span></span><br><span class="line"><span class="comment">//比如:每天6点30分执行</span></span><br><span class="line"><span class="keyword">var</span> rule = <span class="keyword">new</span> schedule.RecurrenceRule();</span><br><span class="line">rule.dayOfWeek = [<span class="number">0</span>, <span class="keyword">new</span> schedule.Range(<span class="number">1</span>, <span class="number">6</span>)];</span><br><span class="line">rule.hour = <span class="number">6</span>;</span><br><span class="line">rule.minute =<span class="number">30</span>;</span><br><span class="line"><span class="keyword">var</span> j = schedule.scheduleJob(rule, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"> 　　　　<span class="built_in">console</span>.log(<span class="string">"执行任务"</span>);</span><br><span class="line">        getData();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="思路与步骤"><a href="#思路与步骤" class="headerlink" title="思路与步骤"></a>思路与步骤</h2><p>当所有的问题都解决后，便是开始结合代码成一段完整的程序，思路很简单，我们来逐步分析：</p>
+<ol>
+<li>由于获取数据是异步的，并且不能判断出哪个先获取到数据，这个是可以将获取数据的函数封装成一个Promise对象，最后在一起用Promise.all来判断所有数据获取完毕，再发送邮件</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 其中一个数据获取函数，其他的也是类似</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getOneData</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">let</span> p = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve,reject</span>)</span>&#123;</span><br><span class="line">        superagent.get(OneUrl).end(<span class="function"><span class="keyword">function</span>(<span class="params">err, res</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (err) &#123;</span><br><span class="line">                reject(err);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">let</span> $ = cheerio.load(res.text);</span><br><span class="line">            <span class="keyword">let</span> selectItem = $(<span class="string">"#carousel-one .carousel-inner .item"</span>);</span><br><span class="line">            <span class="keyword">let</span> todayOne = selectItem[<span class="number">0</span>];</span><br><span class="line">            <span class="keyword">let</span> todayOneData = &#123;</span><br><span class="line">              imgUrl: $(todayOne)</span><br><span class="line">                .find(<span class="string">".fp-one-imagen"</span>)</span><br><span class="line">                .attr(<span class="string">"src"</span>),</span><br><span class="line">              type: $(todayOne)</span><br><span class="line">                .find(<span class="string">".fp-one-imagen-footer"</span>)</span><br><span class="line">                .text()</span><br><span class="line">                .replace(<span class="regexp">/(^\s*)|(\s*$)/g</span>, <span class="string">""</span>),</span><br><span class="line">              text: $(todayOne)</span><br><span class="line">                .find(<span class="string">".fp-one-cita"</span>)</span><br><span class="line">                .text()</span><br><span class="line">                .replace(<span class="regexp">/(^\s*)|(\s*$)/g</span>, <span class="string">""</span>)</span><br><span class="line">            &#125;;</span><br><span class="line">            resolve(todayOneData)</span><br><span class="line">          &#125;);</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">return</span> p</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>将爬取数据统一处理，作为EJS的参数，发送邮件模板。</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getAllDataAndSendMail</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">let</span> HtmlData = &#123;&#125;;</span><br><span class="line">    <span class="comment">// how long with</span></span><br><span class="line">    <span class="keyword">let</span> today = <span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">    <span class="keyword">let</span> initDay = <span class="keyword">new</span> <span class="built_in">Date</span>(startDay);</span><br><span class="line">    <span class="keyword">let</span> lastDay = <span class="built_in">Math</span>.floor((today - initDay) / <span class="number">1000</span> / <span class="number">60</span> / <span class="number">60</span> / <span class="number">24</span>);</span><br><span class="line">    <span class="keyword">let</span> todaystr =</span><br><span class="line">      today.getFullYear() +</span><br><span class="line">      <span class="string">" / "</span> +</span><br><span class="line">      (today.getMonth() + <span class="number">1</span>) +</span><br><span class="line">      <span class="string">" / "</span> +</span><br><span class="line">      today.getDate();</span><br><span class="line">    HtmlData[<span class="string">"lastDay"</span>] = lastDay;</span><br><span class="line">    HtmlData[<span class="string">"todaystr"</span>] = todaystr;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Promise</span>.all([getOneData(),getWeatherTips(),getWeatherData()]).then(</span><br><span class="line">        <span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</span><br><span class="line">            HtmlData[<span class="string">"todayOneData"</span>] = data[<span class="number">0</span>];</span><br><span class="line">            HtmlData[<span class="string">"weatherTip"</span>] = data[<span class="number">1</span>];</span><br><span class="line">            HtmlData[<span class="string">"threeDaysData"</span>] = data[<span class="number">2</span>];</span><br><span class="line">            sendMail(HtmlData)</span><br><span class="line">        &#125;</span><br><span class="line">    ).catch(<span class="function"><span class="keyword">function</span>(<span class="params">err</span>)</span>&#123;</span><br><span class="line">        getAllDataAndSendMail() <span class="comment">//再次获取</span></span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'获取数据失败： '</span>,err);</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>发送邮件具体代码</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sendMail</span>(<span class="params">HtmlData</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> template = ejs.compile(</span><br><span class="line">      fs.readFileSync(path.resolve(__dirname, <span class="string">"email.ejs"</span>), <span class="string">"utf8"</span>)</span><br><span class="line">    );</span><br><span class="line">    <span class="keyword">const</span> html = template(HtmlData);</span><br><span class="line">  </span><br><span class="line">    <span class="keyword">let</span> transporter = nodemailer.createTransport(&#123;</span><br><span class="line">      service: EmianService,</span><br><span class="line">      port: <span class="number">465</span>,</span><br><span class="line">      secureConnection: <span class="literal">true</span>,</span><br><span class="line">      auth: EamilAuth</span><br><span class="line">    &#125;);</span><br><span class="line">  </span><br><span class="line">    <span class="keyword">let</span> mailOptions = &#123;</span><br><span class="line">      <span class="keyword">from</span>: EmailFrom,</span><br><span class="line">      to: EmailTo,</span><br><span class="line">      subject: EmailSubject,</span><br><span class="line">      html: html</span><br><span class="line">    &#125;;</span><br><span class="line">    transporter.sendMail(mailOptions, (error, info) =&gt; &#123;</span><br><span class="line">      <span class="keyword">if</span> (error) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(error);</span><br><span class="line">        sendMail(HtmlData); <span class="comment">//再次发送</span></span><br><span class="line">      &#125;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">"Message sent: %s"</span>, info.messageId);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="安装与使用"><a href="#安装与使用" class="headerlink" title="安装与使用"></a>安装与使用</h2><p>如果你觉得这封邮件的内容适合你发送的对象，可以按照以下步骤，改少量参数即可运行程序；</p>
+<ol>
+<li>git clone <a href="https://github.com/Vincedream/NodeMail" target="_blank" rel="noopener">https://github.com/Vincedream/NodeMail</a></li>
+<li>打开main.js，修改配置项</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//纪念日</span></span><br><span class="line"><span class="keyword">let</span> startDay = <span class="string">"2016/6/24"</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//当地拼音,需要在下面的墨迹天气url确认</span></span><br><span class="line"><span class="keyword">const</span> local = <span class="string">"xiangtan"</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//发送者邮箱厂家</span></span><br><span class="line"><span class="keyword">let</span> EmianService = <span class="string">"163"</span>;</span><br><span class="line"><span class="comment">//发送者邮箱账户SMTP授权码</span></span><br><span class="line"><span class="keyword">let</span> EamilAuth = &#123;</span><br><span class="line">  user: <span class="string">"xxxxxx@163.com"</span>,</span><br><span class="line">  pass: <span class="string">"xxxxxx"</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//发送者昵称与邮箱地址</span></span><br><span class="line"><span class="keyword">let</span> EmailFrom = <span class="string">'"name" &lt;xxxxxx@163.com&gt;'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//接收者邮箱地</span></span><br><span class="line"><span class="keyword">let</span> EmailTo = <span class="string">"like@vince.studio"</span>;</span><br><span class="line"><span class="comment">//邮件主题</span></span><br><span class="line"><span class="keyword">let</span> EmailSubject = <span class="string">"一封暖暖的小邮件"</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//每日发送时间</span></span><br><span class="line"><span class="keyword">let</span> EmailHour = <span class="number">6</span>;</span><br><span class="line"><span class="keyword">let</span> EmialMinminute= <span class="number">30</span>;</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>终端输入<code>npm install</code>安装依赖，再输入<code>node main.js</code>，运行脚本，当然你的电脑不可能不休眠，建议你部署到你的云服务器上运行。</li>
+</ol>
+<h2 id="用PM2部署到云服务器"><a href="#用PM2部署到云服务器" class="headerlink" title="用PM2部署到云服务器"></a>用PM2部署到云服务器</h2><p>如果你还没有部署自己的云服务器，可以看我这篇博文:<a href="https://vince.studio/post/5a31544e4c09fb508714615f" target="_blank" rel="noopener">手摸手教你从购买服务器到部署第一个Node项目</a>不熟悉PM2的部署，可以查看我的另外一篇文章：<a href="https://vince.studio/post/5a31544e4c09fb508714615f" target="_blank" rel="noopener">用PM2一键部署你的Node项目</a>,本地代码完成后将删除掉<code>node_modules</code>，这样本地上传代码和服务器拉取代码就不会耗时太久，因为PM2已经在服务器上为你做了<code>npm install</code>这件事，PM2部署配置文件：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"apps"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">"name"</span>:<span class="string">"NodeMail"</span>,  <span class="comment">//项目名称</span></span><br><span class="line">            <span class="string">"script"</span>:<span class="string">"main.js"</span>,  <span class="comment">//项目入口文件</span></span><br><span class="line">            <span class="string">"env"</span>: &#123;</span><br><span class="line">                <span class="string">"COMMON_VARIABLE"</span>: <span class="string">"true"</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="string">"env_production"</span>:&#123;</span><br><span class="line">                <span class="string">"NODE_ENV"</span>: <span class="string">"NodeMail"</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    ],</span><br><span class="line">    <span class="string">"deploy"</span>: &#123;</span><br><span class="line">        <span class="string">"NodeMail"</span>: &#123;</span><br><span class="line">            <span class="string">"user"</span>: <span class="string">"user账号"</span>,  <span class="comment">//登录服务器的user账号</span></span><br><span class="line">            <span class="string">"host"</span>: [<span class="string">"公网ip地址"</span>],  <span class="comment">//登录服务器的公网ip地址</span></span><br><span class="line">            <span class="string">"ref"</span>: <span class="string">"origin/master"</span>,  <span class="comment">//远端名称及分支名</span></span><br><span class="line">            <span class="string">"repo"</span>: <span class="string">"git仓库地址"</span>, <span class="comment">//git仓库地址也就是这个项目的仓库地址</span></span><br><span class="line">            <span class="string">"path"</span>: <span class="string">"/home/vince/www/NodeMail"</span>,  <span class="comment">//远程服务器部署目录，需要填写user具备写入权限的目录</span></span><br><span class="line">            <span class="string">"ssh_options"</span>: <span class="string">"StrictHostKeyChecking=no"</span>, <span class="comment">//ssh检查设置</span></span><br><span class="line">            <span class="comment">//部署后执行的命令</span></span><br><span class="line">            <span class="string">"post-deploy"</span>: <span class="string">"npm install &amp;&amp; pm2 startOrRestart ecosystem.json --env production"</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>冬天到了，是不是也该用程序员的专业知识给身边的人带来一些温暖呢，源代码与demo已经放到github上，要不试一试？</p>
+<p>GitHub：<a href="https://github.com/Vincedream/NodeMail" target="_blank" rel="noopener">https://github.com/Vincedream/NodeMail</a></p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://vince.xin">Vince</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://vince.xin/2017/12/09/用Node EJS写一个爬虫脚本每天定时给心爱的她发一封暖心邮件/">https://vince.xin/2017/12/09/用Node EJS写一个爬虫脚本每天定时给心爱的她发一封暖心邮件/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/爬出/">爬出</a>
+            
+              <a href="/tags/定时邮件/">定时邮件</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/12/11/用PM2一键部署你的Node项目/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">用PM2一键部署你的Node项目</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/12/05/手摸手教你从购买服务器到部署第一个Node项目/">
+        <span class="next-text nav-default">手摸手教你从购买服务器到部署第一个Node项目</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:artistcoder@163.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/Vincedrean" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2017 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Vince</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://vince.xin/2017/12/09/用Node EJS写一个爬虫脚本每天定时给心爱的她发一封暖心邮件/';
+        this.page.identifier = '2017/12/09/用Node EJS写一个爬虫脚本每天定时给心爱的她发一封暖心邮件/';
+        this.page.title = '用Node EJS写一个爬虫脚本每天定时给心爱的她发一封暖心邮件';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//vincehua.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.2"></script>
+
+  </body>
+</html>

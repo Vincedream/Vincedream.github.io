@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="Webpack 4.x 从入门到实践（五）—— Babel的配置">
+
+
+
+
+  <meta name="keywords" content="Vince, Vince's Blog,前端,Node,React">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Vince's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.2">
+
+
+
+<link rel="canonical" href="https://vince.xin/2018/07/27/Webpack 4.x 从入门到实践（五）—— Babel的配置/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.2">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> Webpack 4.x 从入门到实践（五）—— Babel的配置 - Vince's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Vince's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Vince's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Webpack 4.x 从入门到实践（五）—— Babel的配置
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-07-27
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/Webpack/">Webpack</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Start"><span class="toc-text">Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么我们需要Babel来转译？"><span class="toc-text">为什么我们需要Babel来转译？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#认识ES新规范"><span class="toc-text">认识ES新规范</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Webpack配置步骤"><span class="toc-text">Webpack配置步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#依赖安装"><span class="toc-text">依赖安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置webpack-config-js"><span class="toc-text">配置webpack.config.js</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置-babelrc文件"><span class="toc-text">配置.babelrc文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#试一试"><span class="toc-text">试一试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Last"><span class="toc-text">Last</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>最重要的还是Babel的配置<br><a id="more"></a></p>
+<h2 id="Start"><a href="#Start" class="headerlink" title="Start"></a>Start</h2><h3 id="为什么我们需要Babel来转译？"><a href="#为什么我们需要Babel来转译？" class="headerlink" title="为什么我们需要Babel来转译？"></a>为什么我们需要Babel来转译？</h3><p>js作为一种宿主语言，依赖执行的环境（浏览器、node等），不同环境对js语法的支持不尽相同，特别是ES6之后，ECMAScrip对版本的更新已经到了一年一次的节奏，当我们想使用这些激动人心的新语法时，却又担心浏览器环境并不支持新语法，那怎么办呢？<br>babel的出现就是为了解决这个问题，把那些使用新标准编写的代码转译为当前环境可运行的代码，简单点说就是把ES6代码转译到ES5。</p>
+<h3 id="认识ES新规范"><a href="#认识ES新规范" class="headerlink" title="认识ES新规范"></a>认识ES新规范</h3><p>JavaScript语言是集万千开发者共同维护的语言，当你有什么新的idea，你可以向他们组织提出你的想法，从提出想法到正式列入语言规范会经历很多步骤，当然时间也是很久的，假如你想使用哪些还没列入规范的新语法，就要用到babel来转译，我们来看看具体是哪几个阶段：</p>
+<p>被纳入到ES标准的语法必须要经过如下五个阶段:</p>
+<ol>
+<li>Stage 0: strawman</li>
+<li>Stage 1: proposal</li>
+<li>Stage 2: draft   - 必须包含2个实验性的具体实现，其中一个可以是用转译器实现的，例如Babel。</li>
+<li>Stage 3: candidate  -  至少要有2个符合规范的具体实现。</li>
+<li>Stage 4: finished</li>
+</ol>
+<p>一般当到达了Stage 2后，我们就能用babel来转译这项新的语法，用到实际开发当中。</p>
+<h2 id="Webpack配置步骤"><a href="#Webpack配置步骤" class="headerlink" title="Webpack配置步骤"></a>Webpack配置步骤</h2><h3 id="依赖安装"><a href="#依赖安装" class="headerlink" title="依赖安装"></a>依赖安装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">npm install</span><br><span class="line">babel-loader</span><br><span class="line">babel-core</span><br><span class="line">babel-preset-env</span><br><span class="line">babel-plugin-transform-runtime</span><br><span class="line">-D</span><br></pre></td></tr></table></figure>
+<p>我们安装前,来分别了解一下这些依赖都是有什么作用</p>
+<ul>
+<li>babel-loader</li>
+</ul>
+<p>作为webpack的loader的一种，作用同其他loader一样，实现对特定文件类型的处理，也就是去处理.js文件</p>
+<ul>
+<li>babel-core</li>
+</ul>
+<p>babel-core是作为babel的核心存在，babel的核心api都在这个模块里面，当webpack使用babel-loader处理文件时，babel-loader实际上调用了babel-core的api</p>
+<ul>
+<li>babel-preset-env</li>
+</ul>
+<p>babel有几种规则都可以实现对ES6语法的转码，如babel-preset-es2015、babel-preset-es2016、babel-preset-es2017，不过官方现已建议采用babel-preset-env，为什么会这样呢？</p>
+<p>我们首先要了解到，ES6发布在2015年，距离现在3年了，很多浏览器已经支持了很大一部分ES6语法，这些浏览器是能够识别ES6语法的，而babel-preset-es2015是将所有ES6语法全部转译为ES5，这就导致一个问题：打包文件过大。</p>
+<p>那么babel-preset-env给我们带来什么好处呢？他能够按照我们自定义规则，让你指定一个环境且仅仅转译在那个环境中缺少的特性，怎么理解呢？假如我们只需要适配安卓7.0的移动端web浏览器，这个时候，我们只需要找到安卓7.0中不支持的语法(一小部分)，将这部分代码转译为ES5即可，就不必将所有的代码一把梭地转译为ES5，具体配置我们下面会详细说明。</p>
+<ul>
+<li>babel-plugin-transform-runtime</li>
+</ul>
+<p>首先babel基础包(不安装额外东西)并不是支持完整的新规范语言，当我们在项目中用到哪些新的语法，那么就会从transform-runtime来获取到他的转译源码。</p>
+<h3 id="配置webpack-config-js"><a href="#配置webpack-config-js" class="headerlink" title="配置webpack.config.js"></a>配置webpack.config.js</h3><p>这里我们选择使用babel-loader来处理.js文件，我们只需要在rule加上：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">    &#123;</span><br><span class="line">        test: <span class="regexp">/\.js$/</span>,</span><br><span class="line">        exclude: <span class="regexp">/node_modules/</span>,</span><br><span class="line">        loader: <span class="string">'babel-loader'</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="配置-babelrc文件"><a href="#配置-babelrc文件" class="headerlink" title="配置.babelrc文件"></a>配置.babelrc文件</h3><p>当然我们也可以直接在webpack.config.js文件里面配置这些规则，我们在根目录文件下添加<code>.babelrc</code>文件：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"presets"</span>: [</span><br><span class="line">        <span class="string">"env"</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="string">"plugins"</span>: [<span class="string">"transform-runtime"</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样我们就简单的配置完了一个babel配置，但是在没有任何配置选项的情况下，babel-preset-env 与 babel-preset-latest（或者babel-preset-es2015，babel-preset-es2016和babel-preset-es2017一起）的行为完全相同。也就是相当于这样：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"presets"</span>: [</span><br><span class="line">        <span class="string">"es2015"</span>,</span><br><span class="line">        <span class="string">"es2016"</span>,</span><br><span class="line">        <span class="string">"es2017"</span>,</span><br><span class="line">    ],</span><br><span class="line">    <span class="string">"plugins"</span>: [<span class="string">"transform-runtime"</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样岂不是还是将所有的代码打包成ES5？所以我们需要自己配置babel-env：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"presets"</span>: [</span><br><span class="line">        [<span class="string">"env"</span>, &#123;</span><br><span class="line">            <span class="string">"targets"</span>: &#123; <span class="comment">//指定要转译到哪个环境</span></span><br><span class="line">                <span class="comment">//浏览器环境，这里要适配现在浏览器的前两个版本，以及safari大于7的版本</span></span><br><span class="line">                <span class="string">"browsers"</span>: [<span class="string">"last 2 versions"</span>, <span class="string">"safari &gt;= 7"</span>]</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="string">"modules"</span>: <span class="string">"commonjs"</span>, <span class="comment">//使用commonjs的modules规范</span></span><br><span class="line">            <span class="string">"debug"</span>: <span class="literal">true</span>, <span class="comment">// 开启env的debug，这样我们在控制台能够看到详细的env信息</span></span><br><span class="line">            <span class="string">"include"</span>: [<span class="string">"transform-es2015-arrow-functions"</span>], <span class="comment">//强制开启某些模块，默认为[]</span></span><br><span class="line">            <span class="string">"exclude"</span>: [<span class="string">"transform-es2015-for-of"</span>] <span class="comment">//禁用某些模块，默认为[]</span></span><br><span class="line">        &#125;]</span><br><span class="line">    ],</span><br><span class="line">    <span class="string">"plugins"</span>: [<span class="string">"transform-runtime"</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上配置就能满足大部分开发了，具体配置还需要去官网查看详细的说明：  <a href="https://www.babeljs.cn/docs/plugins/preset-env/" target="_blank" rel="noopener">Babel</a></p>
+<h3 id="试一试"><a href="#试一试" class="headerlink" title="试一试"></a>试一试</h3><p>配置完所有的选项后，我们在index.js试一试使用新的语法：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">'./index.css'</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">'./test.js'</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'222'</span>)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(name, age) &#123;</span><br><span class="line">    <span class="keyword">this</span>.name = name</span><br><span class="line">    <span class="keyword">this</span>.age = age</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> a1 = <span class="keyword">new</span> App(<span class="string">'vince'</span>, <span class="number">15</span>)</span><br><span class="line"><span class="built_in">console</span>.log(a1.age)</span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'async'</span>)</span><br><span class="line">&#125;</span><br><span class="line">test()</span><br><span class="line"><span class="keyword">if</span> (<span class="built_in">module</span>.hot) &#123;</span><br><span class="line">  <span class="comment">// 实现热更新</span></span><br><span class="line">  <span class="built_in">module</span>.hot.accept()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行<code>npm run dev</code>后便能看到控制台打印了正确的信息，以及用import正确引入了文件。</p>
+<h2 id="Last"><a href="#Last" class="headerlink" title="Last"></a>Last</h2><p>这一章节我们了解到了Babel的一些基本知识，以及配置了可以满足大部分开发需求的Babel，请关注后续Webpack的博文。</p>
+<p>本章节的代码已经上传到Github，传送门<a href="https://github.com/Vincedream/webpack-study" target="_blank" rel="noopener">webpack-study</a>,请自行切换到chapter-04分支。</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://vince.xin">Vince</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://vince.xin/2018/07/27/Webpack 4.x 从入门到实践（五）—— Babel的配置/">https://vince.xin/2018/07/27/Webpack 4.x 从入门到实践（五）—— Babel的配置/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2018/08/05/Webpack 4.x 从入门到实践（六）—— React、骨架屏/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Webpack 4.x 从入门到实践（六）—— React、骨架屏</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2018/07/13/Webpack 4.x 从入门到实践（四）—— ESlint、pre-commit规范书写/">
+        <span class="next-text nav-default">Webpack 4.x 从入门到实践（四）—— ESlint、pre-commit规范书写</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:artistcoder@163.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/Vincedrean" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2017 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Vince</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://vince.xin/2018/07/27/Webpack 4.x 从入门到实践（五）—— Babel的配置/';
+        this.page.identifier = '2018/07/27/Webpack 4.x 从入门到实践（五）—— Babel的配置/';
+        this.page.title = 'Webpack 4.x 从入门到实践（五）—— Babel的配置';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//vincehua.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.2"></script>
+
+  </body>
+</html>
