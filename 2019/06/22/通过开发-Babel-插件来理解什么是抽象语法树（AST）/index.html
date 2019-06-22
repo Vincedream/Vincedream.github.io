@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="通过开发 Babel 插件来理解什么是抽象语法树（AST）">
+
+
+
+
+  <meta name="keywords" content="Vince, Vince's Blog,前端,Node,React">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Vince's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.2">
+
+
+
+<link rel="canonical" href="https://vince.xin/2019/06/22/通过开发-Babel-插件来理解什么是抽象语法树（AST）/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.2">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 通过开发 Babel 插件来理解什么是抽象语法树（AST） - Vince's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Vince's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Vince's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          通过开发 Babel 插件来理解什么是抽象语法树（AST）
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2019-06-22
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/Bebel/">Bebel</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Babel-运行阶段"><span class="toc-text">Babel 运行阶段</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#解析"><span class="toc-text">解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#转换"><span class="toc-text">转换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#生成"><span class="toc-text">生成</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是-AST"><span class="toc-text">什么是 AST</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开发-Babel-插件-Demo"><span class="toc-text">开发 Babel 插件 Demo</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基础概念"><span class="toc-text">基础概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#需求分析"><span class="toc-text">需求分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#初始化项目"><span class="toc-text">初始化项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#节点对比"><span class="toc-text">节点对比</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#plugin-编写"><span class="toc-text">plugin 编写</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试plugin"><span class="toc-text">测试plugin</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>如果你能熟练地操作 AST ，那么你真的可以为所欲为。<br><a id="more"></a></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>说到 babel 你肯定会先想到 babel 可以将还未被浏览器实现的 ES6 规范转换成能够运行 ES5 规范，或者可以将 JSX 转换为浏览器能识别的  HTML 结构，那么 babel 是如何进行这个转换的步骤呢，下面我将通过开发一个简单的 babel 插件来解释这整个过程，希望你对 Babel 插件原理与 AST 有新的认知。</p>
+<h2 id="Babel-运行阶段"><a href="#Babel-运行阶段" class="headerlink" title="Babel 运行阶段"></a>Babel 运行阶段</h2><p>从上面的分析，我们大概能猜出 Babel 的运行过程是：原始代码 -&gt; 修改代码，那么在这个转换的过程中，我们需要知道以下三个重要的步骤。</p>
+<h3 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h3><p>首先需要将 JavaScript 字符串经过词法分析、语法分析后，转换为计算机更易处理的表现形式，称之为“抽象语法树(AST)”，这个步骤我们使用了 <a href="https://github.com/babel/babylon" target="_blank" rel="noopener">Babylon</a> 解析器。</p>
+<h3 id="转换"><a href="#转换" class="headerlink" title="转换"></a>转换</h3><p>当 JavaScript 从字符串转换为 AST 后，我们就能更方便地对其进行浏览、分析和有规律的修改，根据我们的需求，将其转换为新的 AST，<a href="https://www.npmjs.com/package/babel-traverse" target="_blank" rel="noopener">babel-traverse</a> 是一个很好的转换工具，使得我们能够很便利的操作 AST 。</p>
+<h3 id="生成"><a href="#生成" class="headerlink" title="生成"></a>生成</h3><p>最后，我们将修改完的 AST 进行反向处理，生成 JavaScript 字符串，整个转换过程也就完成了，这一步当中，我们使用到了 <a href="https://www.npmjs.com/package/babel-generator" target="_blank" rel="noopener">babel-generator</a> 模块。</p>
+<h2 id="什么是-AST"><a href="#什么是-AST" class="headerlink" title="什么是 AST"></a>什么是 AST</h2><p>之前听过一句话：“如果你能熟练地操作 AST ，那么你真的可以为所欲为。”，当时并不理解其含义，直到真正了解 AST 后，才发现 AST 对编程语言的重要性是不可估量的。</p>
+<p>在计算机科学中，抽象语法树（abstract syntax tree 或者缩写为 AST），或者语法树（syntax tree），是源代码的抽象语法结构的树状表现形式，这里特指编程语言的源代码。树上的每个节点都表示源代码中的一种结构。</p>
+<blockquote>
+<p>之所以说语法是「抽象」的，是因为这里的语法并不会表示出真实语法中出现的每个细节。</p>
+</blockquote>
+<p>JavaScript 程序一般是由一系列字符组成的，我们可以使用匹配的字符（[], {}, ()），成对的字符（’’, “”）和缩进让程序解析起来更加简单，但是对计算机来说，这些字符在内存中仅仅是个数值，并不能处理这些高级问题，所以我们需要找到一种方式，将其转换成计算机能理解的结构。</p>
+<p>我们简单看下面的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">let a = 2;</span><br><span class="line">a * 8</span><br></pre></td></tr></table></figure>
+<p>将其转换为 AST 会是怎样的呢，我们使用 <a href="https://astexplorer.net/" target="_blank" rel="noopener">astexplorer</a> 在线 AST 转换工具，可以得到以下树结构：</p>
+<p><img src="http://static1.vince.xin/4031A1B3-7A16-4152-8A8F-B829CA4E3386.png?imageView2/2/w/500" alt="image"></p>
+<p>为了更形象表述，我们将其转换为更直观的结构图形：</p>
+<p><img src="http://static1.vince.xin/859D6AA9-4876-4073-887D-29A7D2C20ACF.png?imageView2/2/w/500" alt="image"></p>
+<p>AST 的根节点都是 Program ，这个例子中包含了两部分：</p>
+<ol>
+<li><p>一个变量申明(VariableDeclarator)，将标识符(Identifier) a 赋值为数值(NumericLiteral) 3。</p>
+</li>
+<li><p>一个二元表达式语句(BinaryExpression)，描述为标志符(Identifier)为 a，操作符(operator) + 和数值(NumericLiteral) 5。</p>
+</li>
+</ol>
+<p>这只是一个简单的例子，在实际开发中，AST 将会是一个巨型节点树，将字符串形式的源代码转换成树状的结构，计算机便能更方便地处理，我们使用的 Babel 插件，也就是对 AST 进行插入/移动/替换/删除节点，创建成新的 AST ，再将 AST 转换为字符串源代码，这便是 Babel 插件的原理，之所以能够“为所欲为”，其原因就是可以将原始代码按照指定逻辑转换为你想要的代码。</p>
+<h2 id="开发-Babel-插件-Demo"><a href="#开发-Babel-插件-Demo" class="headerlink" title="开发 Babel 插件 Demo"></a>开发 Babel 插件 Demo</h2><h3 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h3><p>一个典型的 Babel 插件结构，如下代码所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">export default function(babel) &#123;</span><br><span class="line">  var t = babel.types;</span><br><span class="line">  return &#123;</span><br><span class="line">    visitor: &#123;</span><br><span class="line">      ArrayExpression(path, state) &#123;</span><br><span class="line">          path.replaceWith(</span><br><span class="line">            t.callExpression(</span><br><span class="line">              t.memberExpression(t.identifier(&apos;mori&apos;), t.identifier(&apos;vector&apos;)),</span><br><span class="line">              path.node.elements</span><br><span class="line">            )</span><br><span class="line">          );</span><br><span class="line">      &#125;,</span><br><span class="line">      ASTNodeTypeHere(path, state) &#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>我们要关注的几个点为：</p>
+<ul>
+<li><code>babel.types</code>: 用来操作 AST 节点，如创建、转换、校验等。</li>
+<li><code>vistor</code>: Babel 采用递归的方式访问 AST 的每个节点，之所以叫做visitor，只是因为有个类似的设计模式叫做访问者模式，如上述代码中的 <code>ArrayExpression</code> ，当遍历到 <code>ArrayExpression</code> 节点时，即触发对应函数。</li>
+<li><code>path</code>: path 是指 AST 节点的对象，可以用来获取节点的属性、节点之间的关联。</li>
+<li><code>state</code>: 指插件的状态，可以用过 state 来获取插件中的配置项。</li>
+<li><code>ArrayExpression、ASTNodeTypeHere</code>: 指 AST 中的节点类型。</li>
+</ul>
+<h3 id="需求分析"><a href="#需求分析" class="headerlink" title="需求分析"></a>需求分析</h3><p>因为是 Demo ，我们需求很简单，我们开发的 Bable 插件名称叫 <code>vincePlugin</code>，在使用的时候，能配置插件的参数，使得插件能按照我们配置的参数进行转换。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// babel 参数配置</span><br><span class="line"></span><br><span class="line">plugins: [</span><br><span class="line">    [vincePlugin, &#123;</span><br><span class="line">        name: &apos;vince&apos;</span><br><span class="line">    &#125;]</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>转换效果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var fool = [1,2,3];</span><br><span class="line">// translate to =&gt;</span><br><span class="line">var fool = vince.init(1,2,3)</span><br></pre></td></tr></table></figure>
+<h3 id="初始化项目"><a href="#初始化项目" class="headerlink" title="初始化项目"></a>初始化项目</h3><p>为了大家更方便的阅读代码，源码已经上传到GitHub： <a href="https://github.com/Vincedream/babel-plugin-demo" target="_blank" rel="noopener">babel-plugin-demo</a></p>
+<p>了解了以上概念与需求后，我们就可以开始进行 Babel 插件开发，开始之前先创建一个项目目录，初始化 npm ，并安装 babel-core ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir babel-plugin-demo &amp;&amp; cd babel-plugin-demo</span><br><span class="line">npm init -y</span><br><span class="line">npm install --save-dev babel-core</span><br></pre></td></tr></table></figure>
+<p>创建 <code>plugin.js</code> babel 插件文件，我们将会在这里写转换的逻辑代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// plugin.js</span><br><span class="line">module.exports = function(babel) &#123;</span><br><span class="line">    var t = babel.types;</span><br><span class="line">    return &#123;</span><br><span class="line">      visitor: &#123;</span><br><span class="line">        // ...</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>创建原始代码 <code>index.js</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var fool = [1,2,3];</span><br></pre></td></tr></table></figure>
+<p>创建 <code>test.js</code> 测试函数，这里我们进行对插件的测试：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">// test.js</span><br><span class="line">var fs = require(&apos;fs&apos;);</span><br><span class="line">var babel = require(&apos;babel-core&apos;);</span><br><span class="line">var vincePlugin = require(&apos;./plugin&apos;);</span><br><span class="line"></span><br><span class="line">// read the code from this file</span><br><span class="line">fs.readFile(&apos;index.js&apos;, function(err, data) &#123;</span><br><span class="line">  if(err) throw err;</span><br><span class="line"></span><br><span class="line">  // convert from a buffer to a string</span><br><span class="line">  var src = data.toString();</span><br><span class="line"></span><br><span class="line">  // use our plugin to transform the source</span><br><span class="line">  var out = babel.transform(src, &#123;</span><br><span class="line">    plugins: [</span><br><span class="line">        [vincePlugin, &#123;</span><br><span class="line">            name: &apos;vince&apos;</span><br><span class="line">        &#125;]</span><br><span class="line">    ]</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  // print the generated code to screen</span><br><span class="line">  console.log(out.code);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>我们通过 <code>node test.js</code>，来测试 babel 插件的转换输出。</p>
+<h3 id="节点对比"><a href="#节点对比" class="headerlink" title="节点对比"></a>节点对比</h3><ul>
+<li>原始代码 <code>var fool = [1,2,3];</code> 通过 AST 分析出来的节点如图：</li>
+</ul>
+<p><img src="http://static1.vince.xin/01D7FD05-91D7-4124-A764-3BF4D13F9C05.png?imageView2/2/w/500" alt="image"></p>
+<ul>
+<li>转换后代码 <code>var bar = vince.init(1, 2, 3);</code>，通过 AST 分析出来的节点如图：</li>
+</ul>
+<p><img src="http://static1.vince.xin/6E4FB4AD-C22C-45A6-B162-966AA31DF2A0.png?imageView2/2/w/500" alt="image"></p>
+<p>我们通过用红色标注来区分原始与转换后的 AST 结构图，现在我们可以很清晰的看到我们需要替换的节点，将 ArrayExpression 替换为 CallExpression ，在 CallExpression 节点中中增加一个 MemberExpression，并且保留原始的三个 NumericLiteral。</p>
+<h3 id="plugin-编写"><a href="#plugin-编写" class="headerlink" title="plugin 编写"></a>plugin 编写</h3><p>首先，我们需要替换的是 ArrayExpression ，所以给 vistor 添加 ArrayExpression 方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// plugin.js</span><br><span class="line">module.exports = function(babel) &#123;</span><br><span class="line">    var t = babel.types;</span><br><span class="line">    return &#123;</span><br><span class="line">      visitor: &#123;</span><br><span class="line">        ArrayExpression: function(path, state) &#123;</span><br><span class="line">            // ...</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>当 Babel 遍历 AST 时，当发现含有 visitor 上有对呀节点方法时，即会触发这个方法，并且将上下文传入(path, state)，在函数里面我们进行节点的分析和替换操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">// plugin.js</span><br><span class="line">module.exports = function(babel) &#123;</span><br><span class="line">    var t = babel.types;</span><br><span class="line">    return &#123;</span><br><span class="line">      visitor: &#123;</span><br><span class="line">        ArrayExpression: function(path, state) &#123;</span><br><span class="line">            // 替换该节点</span><br><span class="line">            path.replaceWith(</span><br><span class="line">              // 创建一个 callExpression </span><br><span class="line">              t.callExpression(</span><br><span class="line">                t.memberExpression(t.identifier(state.opts.name), t.identifier(&apos;init&apos;)),</span><br><span class="line">                path.node.elements</span><br><span class="line">              )</span><br><span class="line">            );</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>我们需要将 ArrayExpression 替换为 CallExpression，可以通过 t.callExpression(callee, arguments) 来生成 CallExpression，第一个参数是 MemberExpression，通过t.memberExpression(object, property) 来生成，然后再将原有的三个 NumericLiteral 设置为第二个参数，于是就完成了我们的需求。</p>
+<p>这里我们要注意 <code>state.opts.name</code> 中指的是配置 plugin 时，设置的 config 参数。</p>
+<p>更多的转换方式和节点属性，可以查阅 <a href="https://github.com/babel/babel/tree/master/packages/babel-types#babel-types" target="_blank" rel="noopener">babel-types</a> 的文档</p>
+<h3 id="测试plugin"><a href="#测试plugin" class="headerlink" title="测试plugin"></a>测试plugin</h3><p>我们回到<code>test.js</code>，运行<code>node test.js</code>，便会得出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">node test.js</span><br><span class="line"></span><br><span class="line">=&gt; var bar = vince.init(1, 2, 3);</span><br></pre></td></tr></table></figure>
+<p>到这里，我们简易的 Babel 插件便完成好了，实际上的开发需求要复杂的多，但是主要的逻辑还是离不开上面的几个概念。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>还是回到开始那句话“如果你能熟练地操作 AST ，那么你真的可以为所欲为。”，我们能够通过 AST 将原始代码转换成我们所需要的任何代码，甚至你能创建一个私人的 <code>ESXXX</code>，添加你创造的新规范。AST 并不是一个很复杂的技术活，很大一部分可以视为“苦力活”，因为遇到复杂的转换需求可能需要编写写很多逻辑代码。</p>
+<p>通过阅读这篇文章，我们了解了 Babel 插件的实现原理，并且实践了一个 Plugin，除此之外，我们也理解了 AST 的概念，认识到了其强大之处。</p>
+<p>引用：</p>
+<p><a href="https://github.com/jamiebuilds/babel-handbook/blob/master/translations/zh-Hans/user-handbook.md" target="_blank" rel="noopener">Babel 用户手册</a></p>
+<p><a href="https://github.com/jamiebuilds/babel-handbook/blob/master/translations/zh-Hans/plugin-handbook.md#toc-visitors" target="_blank" rel="noopener">Babel 插件手册</a></p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://vince.xin">Vince</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://vince.xin/2019/06/22/通过开发-Babel-插件来理解什么是抽象语法树（AST）/">https://vince.xin/2019/06/22/通过开发-Babel-插件来理解什么是抽象语法树（AST）/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/Babel-Plugin/">Babel Plugin</a>
+            
+              <a href="/tags/AST/">AST</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/2019/05/21/使用-Serverless-为后端服务开发一个有趣的-Chrome-扩展程序/">
+        <span class="next-text nav-default">使用 Serverless 为后端服务开发一个有趣的 Chrome 扩展程序</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:artistcoder@163.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/Vincedrean" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2017 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Vince</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://vince.xin/2019/06/22/通过开发-Babel-插件来理解什么是抽象语法树（AST）/';
+        this.page.identifier = '2019/06/22/通过开发-Babel-插件来理解什么是抽象语法树（AST）/';
+        this.page.title = '通过开发 Babel 插件来理解什么是抽象语法树（AST）';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//vincehua.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.2"></script>
+
+  </body>
+</html>
