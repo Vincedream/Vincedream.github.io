@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="CSS 3D 实践：从简单正方体到房屋全景漫游图">
+
+
+
+
+  <meta name="keywords" content="Vince, Vince's Blog,前端,Node,React">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Vince's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.2">
+
+
+
+<link rel="canonical" href="https://vince.xin/2019/08/22/CSS-3D-实践：从简单正方体到房屋全景漫游图/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.2">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> CSS 3D 实践：从简单正方体到房屋全景漫游图 - Vince's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Vince's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Vince's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          CSS 3D 实践：从简单正方体到房屋全景漫游图
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2019-08-22
+        </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#3D-是-CSS-范畴的吗？"><span class="toc-text">3D 是 CSS 范畴的吗？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现的效果"><span class="toc-text">实现的效果</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#两个重要的属性"><span class="toc-text">两个重要的属性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#perspective"><span class="toc-text">perspective</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#概念"><span class="toc-text">概念</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#代码效果"><span class="toc-text">代码效果</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#生效范围"><span class="toc-text">生效范围</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#perspective-origin"><span class="toc-text">perspective-origin</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#transform-style"><span class="toc-text">transform-style</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现一个正方体"><span class="toc-text">实现一个正方体</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使得视角处在正方体内部"><span class="toc-text">使得视角处在正方体内部</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#全景图实现"><span class="toc-text">全景图实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#refs"><span class="toc-text">refs</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>在你未尝试之前，永远不要认为它很难，一起来看看 CSS 3D 能实现那些酷炫的东西吧</p>
+<a id="more"></a>
+<h2 id="3D-是-CSS-范畴的吗？"><a href="#3D-是-CSS-范畴的吗？" class="headerlink" title="3D 是 CSS 范畴的吗？"></a>3D 是 CSS 范畴的吗？</h2><p>在印象当中，web 实现 3D 第一时间会联想到 three.js 或者原生的 canvas WebGL，后来看到一些比较酷炫的 CSS 动画才意识到原来 CSS3 中早已经能实现简单的 3D 效果了，接下来，我将以实现一个 3D 场景下的正方体到全景漫游图为目标，具体讲解几个实现 CSS 3D 重要属性。</p>
+<h2 id="实现的效果"><a href="#实现的效果" class="headerlink" title="实现的效果"></a>实现的效果</h2><p><img src="http://static.vince.xin/JIFDIFDFSWD.gif" alt="image"></p>
+<p>源码: <a href="https://github.com/Vincedream/web-pano" target="_blank" rel="noopener">web-pano</a></p>
+<h2 id="两个重要的属性"><a href="#两个重要的属性" class="headerlink" title="两个重要的属性"></a>两个重要的属性</h2><h3 id="perspective"><a href="#perspective" class="headerlink" title="perspective"></a>perspective</h3><h4 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h4><p>perspective 指 3D  场景下透视距离，要理解这个属性，首先需要将平面的屏幕想像成一个 3D 的场景，假设我们距离屏幕 200px ，此时perspective即为200px，这个时候你在屏幕上绘制一个 50px 长宽的正方形，假设该正方体沿着 Z 轴移动 +100px，也就是向你面前靠近 100px，此时，根据“近大远小”的视觉效果，该正方形会变得越来越大，如果该正方体沿着 Z 轴移动 +199px，也就是移动到了你最靠近眼睛的位置，此时你将被一个正方形平面给完全盖住，眼前所有的东西都只是一个正方体，再进一步，如果该正方体沿着 Z 轴移动 +201px，此时，正方形将越过你眼睛，在你眼睛后面，你将不会在看到该正方形。perspective 就是这么简单的概念，我们看一段简单的代码，来实践上述所描述的场景。</p>
+<h4 id="代码效果"><a href="#代码效果" class="headerlink" title="代码效果"></a>代码效果</h4><p>这里我们使用一个动画，沿着Z轴不断移动，直到越过你眼睛。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div class=&quot;card&quot;&gt;</span><br><span class="line">        card</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line"></span><br><span class="line">body &#123;</span><br><span class="line">    height: 100vh;</span><br><span class="line">    display: flex;</span><br><span class="line">    justify-content: center;</span><br><span class="line">    align-items: center;</span><br><span class="line">    /* 透视距离 */</span><br><span class="line">    perspective: 200px; </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@keyframes rotate &#123;</span><br><span class="line">    0% &#123;</span><br><span class="line">        transform: translateZ(0px);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    100% &#123;</span><br><span class="line">        transform: translateZ(200px);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.card &#123;</span><br><span class="line">    width: 100px;</span><br><span class="line">    height: 100px;</span><br><span class="line">    background: green;</span><br><span class="line">    /* 空间移动距离 */</span><br><span class="line">    transform: translateZ(0px);</span><br><span class="line">    animation-duration: 2s;</span><br><span class="line">    animation-timing-function: linear;</span><br><span class="line">    animation-name:rotate;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="http://static.vince.xin/GYIJDJIFNMF.gif" alt="image"></p>
+<h4 id="生效范围"><a href="#生效范围" class="headerlink" title="生效范围"></a>生效范围</h4><p>perspective 生效范围是设置该属性容器内的子元素， 它可以设置在任意容器上，假设我们只需要在一个小场景下实现 3D 效果，比如我们设置在一个宽高固定的容器上，当容器内效果超出容器长宽后，需要设置 <code>overflow: hidden;</code> 才能隐藏超出的效果，如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div class=&quot;container&quot;&gt;</span><br><span class="line">        &lt;div class=&quot;card&quot;&gt;</span><br><span class="line">            card</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">body &#123;</span><br><span class="line">    height: 100vh;</span><br><span class="line">    display: flex;</span><br><span class="line">    justify-content: center;</span><br><span class="line">    align-items: center;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@keyframes rotate &#123;</span><br><span class="line">    0% &#123;</span><br><span class="line">        transform: translateZ(0px);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    100% &#123;</span><br><span class="line">        transform: translateZ(300px);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.container &#123;</span><br><span class="line">    width: 300px;</span><br><span class="line">    height: 300px;</span><br><span class="line">    display: flex;</span><br><span class="line">    justify-content: center;</span><br><span class="line">    align-items: center;</span><br><span class="line">    /* 透视距离 */</span><br><span class="line">    perspective: 200px;</span><br><span class="line">    border: 1px solid red;</span><br><span class="line">    /* 超出即隐藏 */</span><br><span class="line">    overflow: hidden;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.card &#123;</span><br><span class="line">    width: 100px;</span><br><span class="line">    height: 100px;</span><br><span class="line">    background: green;</span><br><span class="line">    /* 空间移动距离 */</span><br><span class="line">    transform: translateZ(0px);</span><br><span class="line">    animation-duration: 2s;</span><br><span class="line">    animation-timing-function: linear;</span><br><span class="line">    animation-name:rotate;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="http://static.vince.xin/FOSONMFDOD.gif" alt="image"></p>
+<h4 id="perspective-origin"><a href="#perspective-origin" class="headerlink" title="perspective-origin"></a>perspective-origin</h4><p>perspective-origin，透视视角，该属性是表示“眼睛处在容器的哪个方位”，默认值是 <code>perspective-origin: 50% 50%;</code>，即容器的中间，也就是为什么上面两个3D效果都是朝你眼睛正中扑面而来，我们多设置几个“视角”来体验该属性的效果：</p>
+<p>如下三个视角分别是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">.container1 &#123;</span><br><span class="line">    perspective-origin: 50% 50%;</span><br><span class="line">&#125;</span><br><span class="line">.container2 &#123;</span><br><span class="line">    perspective-origin: 0 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.container3 &#123;</span><br><span class="line">    perspective-origin: 50% 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="http://static.vince.xin/WSDBSJKLISUYGVB.gif" alt="image"></p>
+<h3 id="transform-style"><a href="#transform-style" class="headerlink" title="transform-style"></a>transform-style</h3><p>transform-style 指定子元素如何在3D空间中呈现，有两个属性值：flat和preserve-3d，其中 flat 值为默认值，表示所有子元素在2D平面呈现。preserve-3d 表示所有子元素在3D空间中呈现，简单来讲 flat 场景下，只有 x,y 轴的效果，而 preserve-3d 具有 x,y,z 三轴方向，比如两个平面在空间里相交，在 flat 只有覆盖效果，而 preserve-3d 具有真实的前后相交的效果，我们直接看代码效果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;card card1&quot;&gt;card1&lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;card card2&quot;&gt;card2&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">.container &#123;</span><br><span class="line">    position: relative;</span><br><span class="line">    height: 300px;</span><br><span class="line">    width: 300px;</span><br><span class="line">    border: 1px solid red;</span><br><span class="line">    /* transform-style: preserve-3d; */</span><br><span class="line">    perspective: 200px;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.card &#123;</span><br><span class="line">    height: 160px;</span><br><span class="line">    width: 240px;</span><br><span class="line">    position: absolute;</span><br><span class="line">    left: 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.card1 &#123;</span><br><span class="line">    background: red;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.card2 &#123;</span><br><span class="line">    width: 290px;</span><br><span class="line">    background: green;</span><br><span class="line">    transform: rotateX(40deg);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>transform-style: flat:</li>
+</ul>
+<p><img src="http://static.vince.xin/7d3e337c-ef61-4a07-ae61-9b416b0deb05.png" alt="image"></p>
+<ul>
+<li>transform-style: preserve-3d:</li>
+</ul>
+<p><img src="http://static.vince.xin/4f035ebd-1fe0-43a9-a796-bf04bea06ee6.png" alt="image"></p>
+<h2 id="实现一个正方体"><a href="#实现一个正方体" class="headerlink" title="实现一个正方体"></a>实现一个正方体</h2><p>在理解上述两个重要属性后，我们开始实现一个正方体，拼一个正方体需要6个平面，分别将其在 3D 场景下放置到合理位置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class=&quot;box&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;scene&quot;&gt;</span><br><span class="line">        &lt;div class=&quot;cube&quot;&gt;</span><br><span class="line">            &lt;div class=&quot;side-back slide&quot;&gt;&lt;/div&gt;</span><br><span class="line">            &lt;div class=&quot;side-front slide&quot;&gt;&lt;/div&gt;</span><br><span class="line">            &lt;div class=&quot;side-left slide&quot;&gt;&lt;/div&gt;</span><br><span class="line">            &lt;div class=&quot;side-right slide&quot;&gt;&lt;/div&gt;</span><br><span class="line">            &lt;div class=&quot;side-top slide&quot;&gt;&lt;/div&gt;</span><br><span class="line">            &lt;div class=&quot;side-bottom slide&quot;&gt;&lt;/div&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">.box &#123;</span><br><span class="line">    perspective: 90px;</span><br><span class="line">    height: 300px;</span><br><span class="line">    width: 600px;</span><br><span class="line">    overflow: hidden;</span><br><span class="line">    border: 1px solid red;</span><br><span class="line">&#125;</span><br><span class="line">@keyframes rotate &#123;</span><br><span class="line">    0% &#123;</span><br><span class="line">      transform:translateZ(-400px) rotateY(0deg) ;</span><br><span class="line">    &#125;  </span><br><span class="line">    100% &#123;</span><br><span class="line">      transform:translateZ(-400px) rotateY(360deg);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">.scene &#123;</span><br><span class="line">    display: flex;</span><br><span class="line">    justify-content: center;</span><br><span class="line">    align-items: center;</span><br><span class="line">    width: 100%;</span><br><span class="line">    height: 100%;</span><br><span class="line">    transform-style: preserve-3d;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.cube &#123;</span><br><span class="line">    position: absolute;</span><br><span class="line">    width: 400px;</span><br><span class="line">    height: 400px;</span><br><span class="line">    transform-style: preserve-3d;</span><br><span class="line">    transform-origin: center center;</span><br><span class="line">    transform: translateZ(-400px) rotateY(0);</span><br><span class="line">    animation: rotate 12s linear infinite;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.slide &#123;</span><br><span class="line">    position: absolute;</span><br><span class="line">    width: 100%;</span><br><span class="line">    height: 100%;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.side-front &#123;</span><br><span class="line">    transform: rotateY(0) translateZ(-200px);</span><br><span class="line">    background: yellow;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.side-back &#123;</span><br><span class="line">    transform: rotateY(180deg) translateZ(-200px);</span><br><span class="line">    background: skyblue;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.side-left &#123;</span><br><span class="line">    transform: rotateY(90deg) translateZ(-200px);</span><br><span class="line">    background: green;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.side-right &#123;</span><br><span class="line">    transform: rotateY(-90deg) translateZ(-200px);</span><br><span class="line">    background: blue;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.side-top &#123;</span><br><span class="line">    transform: rotateX(-90deg) translateZ(-200px);</span><br><span class="line">    background: rebeccapurple;</span><br><span class="line">&#125;</span><br><span class="line">.side-bottom &#123;</span><br><span class="line">    transform: rotateX(90deg) translateZ(-200px);</span><br><span class="line">    background: salmon;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>效果：</p>
+<p><img src="http://static.vince.xin/OKOKSOJDIJIS.gif" alt="image"></p>
+<h2 id="使得视角处在正方体内部"><a href="#使得视角处在正方体内部" class="headerlink" title="使得视角处在正方体内部"></a>使得视角处在正方体内部</h2><p>假设我想看到正方体内部的 3D 效果，我们可以将该容器沿着 Z 轴向我们视角靠近，我们初始的透视距离是 90px，正方体的长宽高是 400px，我们想处在正方体中间，那么就需要将正方体容器沿着 Z 轴移动 +290px：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">.scene &#123;</span><br><span class="line">    display: flex;</span><br><span class="line">    justify-content: center;</span><br><span class="line">    align-items: center;</span><br><span class="line">    width: 100%;</span><br><span class="line">    height: 100%;</span><br><span class="line">    transform-style: preserve-3d;</span><br><span class="line">    transform: translateZ(290px);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>效果：</p>
+<p><img src="http://static.vince.xin/IJFODOFKDOFF.gif" alt="image"></p>
+<h2 id="全景图实现"><a href="#全景图实现" class="headerlink" title="全景图实现"></a>全景图实现</h2><p>假设每一块平面是真实的图像场景，我们使用特殊的相机，或者使用渲染引擎渲染出整个前后左右上下的场景，在中心点，向六个面分别拍摄一张照片，将其贴入正方体内部的六个面，那么就能以假乱真地渲染出 3D 全景图的效果，我们试一试：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">.scene &#123;</span><br><span class="line">   ...</span><br><span class="line">    /* 调整到最佳位置 */</span><br><span class="line">    transform: translateZ(480px);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line">.side-front &#123;</span><br><span class="line">    transform: rotateY(0) translateZ(-200px);</span><br><span class="line">    /* background: yellow; */</span><br><span class="line">    background-image: url(&quot;https://qhyxpicoss.kujiale.com/r/2019/07/10/L3D224S3ENDIA5FTCIUI5N2GLUF3P3WC888.0_12000x2000.jpg_f?x-oss-process=image/resize,m_fill,w_1024,h_1024&quot;);</span><br><span class="line">&#125;</span><br><span class="line">.side-front &#123;</span><br><span class="line">    transform: rotateY(0) translateZ(-200px);</span><br><span class="line">    /* background: yellow; */</span><br><span class="line">    background-image: url(&quot;http://static.vince.xin/UYCFVGBHNJMK.jpg&quot;);</span><br><span class="line">&#125;</span><br><span class="line">.side-back &#123;</span><br><span class="line">    transform: rotateY(180deg) translateZ(-200px);</span><br><span class="line">    /* background: skyblue; */</span><br><span class="line">    background-image: url(&quot;http://static.vince.xin/FRTGYHUJKBHNJ.jpg&quot;);</span><br><span class="line">&#125;</span><br><span class="line">.side-left &#123;</span><br><span class="line">    transform: rotateY(90deg) translateZ(-200px);</span><br><span class="line">    /* background: green; */</span><br><span class="line">    background-image: url(&quot;http://static.vince.xin/YGVGBHJNKM.jpg&quot;);</span><br><span class="line">&#125;</span><br><span class="line">.side-right &#123;</span><br><span class="line">    transform: rotateY(-90deg) translateZ(-200px);</span><br><span class="line">    /* background: blue; */</span><br><span class="line">    background-image: url(&quot;http://static.vince.xin/YJMEDFGHJKIUH.jpg&quot;);</span><br><span class="line">&#125;</span><br><span class="line">.side-top &#123;</span><br><span class="line">    transform: rotateX(-90deg) translateZ(-200px);</span><br><span class="line">    /* background: rebeccapurple; */</span><br><span class="line">    background-image: url(&quot;http://static.vince.xin/YTGHJKLSDF.jpg&quot;);</span><br><span class="line">&#125;</span><br><span class="line">.side-bottom &#123;</span><br><span class="line">    transform: rotateX(90deg) translateZ(-200px);</span><br><span class="line">    /* background: salmon; */</span><br><span class="line">    background-image: url(&quot;http://static.vince.xin/YOKSDCVBNM.jpg&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>效果：</p>
+<p><img src="http://static.vince.xin/JIFDIFDFSWD.gif" alt="image"></p>
+<p>这里主要的难点在于，如何找到最佳的 perspective 透视距离和容器移动的 Z 轴距离，其他都是比较简单的 CSS 3D 移动。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总的来说，CSS 中的 3D 效果还是比较简单的，我们理解了上面两个重要属性后，将元素在 X,Y,Z 轴移动结合，就能实现很多酷炫的效果，想要熟练地掌握需要我们多试错与实践，Thanks～</p>
+<h2 id="refs"><a href="#refs" class="headerlink" title="refs"></a>refs</h2><ul>
+<li><a href="https://www.zhangxinxu.com/wordpress/2012/09/css3-3d-transform-perspective-animate-transition/" target="_blank" rel="noopener">好吧，CSS3 3D transform变换，不过如此！</a></li>
+<li><a href="http://www.alloyteam.com/2012/10/the-css3-transform-perspective-property/" target="_blank" rel="noopener">CSS3 Transform 的 perspective 属性</a></li>
+</ul>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://vince.xin">Vince</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://vince.xin/2019/08/22/CSS-3D-实践：从简单正方体到房屋全景漫游图/">https://vince.xin/2019/08/22/CSS-3D-实践：从简单正方体到房屋全景漫游图/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/CSS/">CSS</a>
+            
+              <a href="/tags/全景图/">全景图</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/2019/07/25/领域驱动设计在前端中的应用/">
+        <span class="next-text nav-default">领域驱动设计在前端中的应用</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:artistcoder@163.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/Vincedrean" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2017 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Vince</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://vince.xin/2019/08/22/CSS-3D-实践：从简单正方体到房屋全景漫游图/';
+        this.page.identifier = '2019/08/22/CSS-3D-实践：从简单正方体到房屋全景漫游图/';
+        this.page.title = 'CSS 3D 实践：从简单正方体到房屋全景漫游图';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//vincehua.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.2"></script>
+
+  <script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>
