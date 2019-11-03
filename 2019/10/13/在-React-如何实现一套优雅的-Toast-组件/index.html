@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="在 React 如何实现一套优雅的 Toast 组件">
+
+
+
+
+  <meta name="keywords" content="Vince, Vince's Blog,前端,Node,React">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Vince's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.2">
+
+
+
+<link rel="canonical" href="https://vince.xin/2019/10/13/在-React-如何实现一套优雅的-Toast-组件/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.2">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 在 React 如何实现一套优雅的 Toast 组件 - Vince's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Vince's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Vince's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          在 React 如何实现一套优雅的 Toast 组件
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2019-10-13
+        </span>
+        
+          <span class="post-category">
+            
+              <a href="/categories/React/">React</a>
+            
+          </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关键点"><span class="toc-text">关键点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#使用足够简单"><span class="toc-text">使用足够简单</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#无需手动插入组件容器"><span class="toc-text">无需手动插入组件容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多个-Toast-互不影响"><span class="toc-text">多个 Toast 互不影响</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mini-版-toast"><span class="toc-text">mini 版 toast</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#实现"><span class="toc-text">实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#问题"><span class="toc-text">问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#完整版实现"><span class="toc-text">完整版实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#调用方法"><span class="toc-text">调用方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#动态注入-Dom-关键方法"><span class="toc-text">动态注入 Dom 关键方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#具体实现"><span class="toc-text">具体实现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#完善功能"><span class="toc-text">完善功能</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#定时隐藏-Toast"><span class="toc-text">定时隐藏 Toast</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#强制隐藏-Toast"><span class="toc-text">强制隐藏 Toast</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>进来看看 Toast 组件的特殊实现方法 ～<br><a id="more"></a></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在业务开发中，特别是移动端的业务，Toast 使用非常频繁，几乎涵盖所有操作结果反馈的交互：如提交表单成功、验证表单失败提示、loading 态提醒…，这种轻量且使用较为频繁的组件，我们要求它使用足够简单，不侵入业务代码，即用即丢，基于这些要求，Toast 组件的实现方式也与其他组件有着不一样的关键点，这也是本篇博客的存在意义。</p>
+<h2 id="关键点"><a href="#关键点" class="headerlink" title="关键点"></a>关键点</h2><h3 id="使用足够简单"><a href="#使用足够简单" class="headerlink" title="使用足够简单"></a>使用足够简单</h3><p>因为使用非常频繁，且要求其随地可用，因此，我们希望只用一行代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Toast.info(&apos;this is a toast&apos;, 1000);</span><br></pre></td></tr></table></figure>
+<h3 id="无需手动插入组件容器"><a href="#无需手动插入组件容器" class="headerlink" title="无需手动插入组件容器"></a>无需手动插入组件容器</h3><p>我们使用其他诸如 antd 组件时，大部分的组件需要注入到业务 Dom 中，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">render() &#123;</span><br><span class="line">    return (</span><br><span class="line">        &lt;div&gt;other components...&lt;/div&gt;</span><br><span class="line">        &lt;Dropdown overlay=&#123;menu&#125;&gt;</span><br><span class="line">            &lt;a className=&quot;ant-dropdown-link&quot; href=&quot;#&quot;&gt;</span><br><span class="line">              Hover me &lt;Icon type=&quot;down&quot; /&gt;</span><br><span class="line">            &lt;/a&gt;</span><br><span class="line">        &lt;/Dropdown&gt;,</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然而因为 Toast 组件无需常驻页面当中，即用即丢，且使用的位置千变万化，假如需要每次都在需要 Toast 的页面当中手动注入组件的话，会非常影响效率和业务代码的可维护性。</p>
+<h3 id="多个-Toast-互不影响"><a href="#多个-Toast-互不影响" class="headerlink" title="多个 Toast 互不影响"></a>多个 Toast 互不影响</h3><p>业务中往往会存在多个提示同时发出的场景，比如两个接口同时请求失败需要同事提示错误原因，那么 Toast 就要求不能产生冲突。</p>
+<h2 id="mini-版-toast"><a href="#mini-版-toast" class="headerlink" title="mini 版 toast"></a>mini 版 toast</h2><p>按照我们书写组件的惯性思维，我们实现一版最简单的 toast，只需要满足其基本使用，实现后，我们再分析其存在的问题。</p>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>再不考虑上述关键点的情况下，我们书写如下代码来实现最简单粗暴的 Toast：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">class App extends React.Component &#123;</span><br><span class="line"></span><br><span class="line">    state = &#123;</span><br><span class="line">        isToastShow: false, // 是否展示 Toast</span><br><span class="line">        toastText: &apos;&apos;, // Toast 文字内容</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 设置 Toast 属性</span><br><span class="line">    handleToastShow = (toastText, showTime) =&gt; &#123;</span><br><span class="line">        this.setState(&#123;</span><br><span class="line">            isToastShow: true,</span><br><span class="line">            toastText</span><br><span class="line">        &#125;);</span><br><span class="line">        // 定时销毁 Toast Dom</span><br><span class="line">        setTimeout(() =&gt; &#123;</span><br><span class="line">            this.setState(&#123;</span><br><span class="line">                isToastShow: false</span><br><span class="line">            &#125;)</span><br><span class="line">        &#125;, showTime)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 显示 Toast</span><br><span class="line">    handleShowToast = () =&gt; &#123;</span><br><span class="line">        this.handleToastShow(&apos;this is a toast&apos;, 3000)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    render() &#123;</span><br><span class="line">        const &#123; isToastShow, toastText &#125; = this.state;</span><br><span class="line">        return (</span><br><span class="line">            &lt;div&gt;</span><br><span class="line">                &lt;button onClick=&#123;this.handleShowToast&#125;&gt;show toast&lt;/button&gt;</span><br><span class="line">                &#123;isToastShow &amp;&amp; &lt;div className=&quot;toast-wrap&quot;&gt;</span><br><span class="line">                    &lt;div className=&quot;toast-mask&quot; /&gt;</span><br><span class="line">                    &lt;div className=&quot;toast-text&quot;&gt;&#123;toastText&#125;&lt;/div&gt;</span><br><span class="line">                &lt;/div&gt;&#125;</span><br><span class="line">            &lt;/div&gt;</span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>这里我们发现了几个问题：</p>
+<ol>
+<li>一个简单的 Toast 竟然需要定义两个 state，增大了维护业务逻辑的心智，可维护性降低。</li>
+<li>需要将 Toast 逻辑和 Dom，甚至是样式，注入到业务代码中，降低业务代码的可读性。</li>
+<li>不能同时显示多个 Toast</li>
+</ol>
+<p>针对这些问题，接下来我们逐步实现一个使用简单方便的 Toast。</p>
+<h2 id="完整版实现"><a href="#完整版实现" class="headerlink" title="完整版实现"></a>完整版实现</h2><p>项目源码地址： <a href="https://github.com/Vincedream/easy-toast" target="_blank" rel="noopener">Vincedream/easy-toast</a></p>
+<h3 id="调用方法"><a href="#调用方法" class="headerlink" title="调用方法"></a>调用方法</h3><p>在讲解组件实现前，我们简单地阅览实现后的调用方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">import React from &apos;react&apos;;</span><br><span class="line">import Toast from &apos;./Toast&apos;;</span><br><span class="line"></span><br><span class="line">function App () &#123;</span><br><span class="line">  const handleClick1 = () =&gt; &#123;</span><br><span class="line">    Toast.info(&apos;test111&apos;, 2000);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  const handleClick2 = () =&gt; &#123;</span><br><span class="line">    Toast.info(&apos;test222&apos;, 1000, true);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  const handleClick3 = () =&gt; &#123;</span><br><span class="line">    Toast.info(&apos;test333&apos;, 1000, true);</span><br><span class="line">    Toast.info(&apos;test long duration&apos;, 4000, true);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  const handleHideAllToast = () =&gt; &#123;</span><br><span class="line">    Toast.hide();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  return(</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;button onClick=&#123;handleClick1&#125;&gt;no mask Toast&lt;/button&gt;&lt;br/&gt;</span><br><span class="line">      &lt;button onClick=&#123;handleClick2&#125;&gt;with mask Toast&lt;/button&gt;&lt;br/&gt;</span><br><span class="line">      &lt;button onClick=&#123;handleClick3&#125;&gt;long duration&lt;/button&gt;&lt;br/&gt;</span><br><span class="line">      &lt;button onClick=&#123;handleHideAllToast&#125;&gt;hideAllToast&lt;/button&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">export default App;</span><br></pre></td></tr></table></figure>
+<p>效果：</p>
+<p><img src="http://static4.vince.xin/FTSJFIDJFIOF44534.gif" alt="image"></p>
+<p>这里，我们调用了 <code>Toast.info()</code>后，动态地注入组件到 Dom 中，并没有将 Toast 任何逻辑在业务容器中的 Dom 或者 Style 中注入。</p>
+<h3 id="动态注入-Dom-关键方法"><a href="#动态注入-Dom-关键方法" class="headerlink" title="动态注入 Dom 关键方法"></a>动态注入 Dom 关键方法</h3><p>我们如何在不侵入容器的条件下，动态地注入 Dom，难道是像十年前 jQuery 时代去手动操作 Dom 吗？肯定不是的。这里有个关键的方法：<code>ReactDom.render(&lt;组件/&gt;, 真实 Dom)</code>，下面我们看一个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">class App extends React.Component &#123;</span><br><span class="line"></span><br><span class="line">    handleAddDom = () =&gt; &#123;</span><br><span class="line">        // 在真实 dom 上创建一个真的的 div 宿主节点，并将其加入到页面根节点 body 当中</span><br><span class="line">        const containerDiv = document.createElement(&apos;div&apos;);</span><br><span class="line">        document.body.appendChild(containerDiv);</span><br><span class="line">        // 这里返回的是对该组件的引用</span><br><span class="line">        const TestCompInstance = ReactDom.render(&lt;TestComp /&gt;, containerDiv);</span><br><span class="line">        console.log(TestCompInstance);</span><br><span class="line">        // 这里可以调用任何 TestCompInstance 上的方法，并且能够访问到其 this</span><br><span class="line">        TestCompInstance.sayName();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    render() &#123;</span><br><span class="line">        return (</span><br><span class="line">            &lt;div&gt;</span><br><span class="line">                &lt;button onClick=&#123;this.handleAddDom&#125;&gt;add Dom&lt;/button&gt;</span><br><span class="line">            &lt;/div&gt;</span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>执行结果：</p>
+<p><img src="http://static4.vince.xin/GHJKLTYUIORFVBNM.gif" alt="image"></p>
+<p>从上面的例子我们可以看出，我们可以在 js 逻辑代码中直接创建注入一个 React 组件到真实的  dom 中，并且可以任意操控该组件，理解这点后，我们便得到了编写 Toast 组件最核心的方法。</p>
+<h3 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h3><p>首先，我们创建一个 Toast 容器组件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">// ToastContainer.js</span><br><span class="line">class ToastContainer extends Component &#123;</span><br><span class="line">    state = &#123;</span><br><span class="line">        isShowMask: false, // 当前 mask 是否显示</span><br><span class="line">        toastList: [] // 当前 Toast item 列表</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    // 将新的 toast push 到 toastContainer 中</span><br><span class="line">    pushToast = (toastProps) =&gt; &#123;</span><br><span class="line">        const &#123; type, text, duration, isShowMask = false &#125; = toastProps;</span><br><span class="line">        const &#123; toastList &#125; = this.state;</span><br><span class="line">        toastList.push(&#123;</span><br><span class="line">            id: getUuid(),</span><br><span class="line">            type,</span><br><span class="line">            text,</span><br><span class="line">            duration,</span><br><span class="line">            isShowMask</span><br><span class="line">        &#125;);</span><br><span class="line">        this.setState(&#123;</span><br><span class="line">            toastList,</span><br><span class="line">            isShowMask</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    render() &#123;</span><br><span class="line">        const &#123; toastList, isShowMask &#125; = this.state;</span><br><span class="line">        return (</span><br><span class="line">            &lt;div className=&quot;toast-container&quot;&gt;</span><br><span class="line">                &#123;isShowMask &amp;&amp; &lt;div className=&quot;mask&quot;/&gt;&#125;</span><br><span class="line">                &lt;div className=&quot;toast-wrap&quot;&gt;</span><br><span class="line">                    &#123;toastList.reverse().map((item) =&gt; (</span><br><span class="line">                        &lt;Toast &#123;...item&#125; key=&#123;item.id&#125; /&gt;</span><br><span class="line">                    ))&#125;</span><br><span class="line">                &lt;/div&gt;</span><br><span class="line">            &lt;/div&gt;</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个容器用来存放多个 Toast Item，用来控制 Toast 的显示个数和是否展示 mask，并且将其渲染到容器当中，这里面逻辑非常简单。</p>
+<p>接着我们创建真正用来展示的 Toast Item 组件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// ToastItem.js</span><br><span class="line">class ToastItem extends Component &#123;</span><br><span class="line">    render() &#123;</span><br><span class="line">        const &#123; text &#125; = this.props;</span><br><span class="line">        return (</span><br><span class="line">            &lt;div className=&quot;toast-item&quot;&gt;</span><br><span class="line">                &#123;text&#125;</span><br><span class="line">            &lt;/div&gt;</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>两个关键组件已经创建完成，我们需要“动态注入”将其渲染到 dom 中，使用上面讲解的 <code>ReactDom.render()</code> 方法，为此，我们在创建一个 Toast 统一入口文件:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">// index.js</span><br><span class="line">import React from &apos;react&apos;;</span><br><span class="line">import ReactDom from &apos;react-dom&apos;;</span><br><span class="line"></span><br><span class="line">import ToastContainer from &apos;./ToastContainer&apos;;</span><br><span class="line"></span><br><span class="line">// 在真实 dom 中创建一个 div 节点，并且注入到 body 根结点中，该节点用来存放下面的 React 组件</span><br><span class="line">const toastContainerDiv = document.createElement(&apos;div&apos;);</span><br><span class="line">document.body.appendChild(toastContainerDiv);</span><br><span class="line"></span><br><span class="line">// 这里返回的是 ToastContainer 组件引用</span><br><span class="line">const getToastContainerRef = () =&gt; &#123;</span><br><span class="line">    // 将 &lt;ToastContainer /&gt; React 组件，渲染到 toastContainerDiv 中，并且返回了 &lt;ToastContainer /&gt; 的引用</span><br><span class="line">    return ReactDom.render(&lt;ToastContainer /&gt;, toastContainerDiv);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 这里是 &lt;ToastContainer /&gt; 的引用</span><br><span class="line">let toastContainer = getToastContainerRef();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">export default &#123;</span><br><span class="line">    info: (text, duration, isShowMask) =&gt; (toastContainer.pushToast(&#123;type: &apos;info&apos;, text, duration, isShowMask&#125;)),</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这里，我们按照上面讲解的 <code>ReactDom.render()</code> 方法， 将 <code>&lt;ToastContainer /&gt;</code> 渲染到 dom 中，并且获得了其引用，我们只需要在这里调用 <code>&lt;ToastContainer /&gt;</code> 中的 <code>pushToast</code> 方法，便能展示出 Toast 提示。</p>
+<p>到这里，我们便完成了一个最简化版的 <strong>动态注入版 Toast 组件</strong>，接下来的一节中，我们将为其添加以下两个功能：</p>
+<ol>
+<li>定时隐藏 Toast</li>
+<li>强制隐藏 Toast</li>
+</ol>
+<h2 id="完善功能"><a href="#完善功能" class="headerlink" title="完善功能"></a>完善功能</h2><h3 id="定时隐藏-Toast"><a href="#定时隐藏-Toast" class="headerlink" title="定时隐藏 Toast"></a>定时隐藏 Toast</h3><p>首先我们改造 ToastContainer 容器组件，添加一个隐藏 mask 方法，并将其传入到 <code>&lt;ToastItem /&gt;</code> 中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">class ToastContainer extends Component &#123;</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    // 将被销毁的 toast 剔除</span><br><span class="line">    popToast = (id, isShowMask) =&gt; &#123;</span><br><span class="line">        const &#123; toastList &#125; = this.state;</span><br><span class="line">        const newList = toastList.filter(item =&gt; item.id !== id);</span><br><span class="line">        this.setState(&#123;</span><br><span class="line">            toastList: newList,</span><br><span class="line">        &#125;);</span><br><span class="line">        // 该 toast item 是否为 toastList 中 duration 最长的 item</span><br><span class="line">        let isTheMaxDuration = true;</span><br><span class="line">        // 该 toast item 的 duration</span><br><span class="line">        const targetDuration = toastList.find(item =&gt; item.id === id).duration;</span><br><span class="line">        // 遍历 toastList 检查是否为最长 duration</span><br><span class="line">        toastList.forEach(item =&gt; &#123;</span><br><span class="line">            if (item.isShowMask &amp;&amp; item.duration &gt; targetDuration) &#123;</span><br><span class="line">                isTheMaxDuration = false</span><br><span class="line">            &#125;</span><br><span class="line">            return null;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        // 隐藏 mask</span><br><span class="line">        if (isShowMask &amp;&amp; isTheMaxDuration) &#123;</span><br><span class="line">            this.setState(&#123;</span><br><span class="line">                isShowMask: false</span><br><span class="line">            &#125;)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    render() &#123;</span><br><span class="line">        ...</span><br><span class="line">        &lt;ToastItem onClose=&#123;this.popToast&#125; &#123;...item&#125; key=&#123;item.id&#125; /&gt;</span><br><span class="line">        ...     </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接着，我们改造 <code>&lt;ToastItem /&gt;</code>，在起 <code>componentDidMount</code> 中设置一个定时器，根据传入的 duration 参数，设置隐藏 Toast 的定时器，并且在组件销毁前，将定时器清除。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">// ToastItem.js</span><br><span class="line">class ToastItem extends Component &#123;</span><br><span class="line">    componentDidMount() &#123;</span><br><span class="line">        const &#123; id, duration, onClose, isShowMask &#125; = this.props;</span><br><span class="line">        this.timer = setTimeout(() =&gt; &#123;</span><br><span class="line">            if (onClose) &#123;</span><br><span class="line">                onClose(id, isShowMask);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, duration)</span><br><span class="line">    &#125;</span><br><span class="line">    // 卸载组件后，清除定时器</span><br><span class="line">    componentWillUnmount() &#123;</span><br><span class="line">        clearTimeout(this.timer)</span><br><span class="line">    &#125;</span><br><span class="line">    render() &#123;</span><br><span class="line">       ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里我们便完成了隐藏 Toast 的功能，其细节在代码中有详细的解释，这里不再做赘述。</p>
+<h3 id="强制隐藏-Toast"><a href="#强制隐藏-Toast" class="headerlink" title="强制隐藏 Toast"></a>强制隐藏 Toast</h3><p>如何强制的隐藏已经出现的 Toast 呢？这里我们依旧使用到 <code>ReactDom</code> 的 api：<code>ReactDom.unmountComponentAtNode(container)</code>，这个方法的作用是从 Dom 中卸载组件，会将其事件处理器（event handlers）和 state 一并清除：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">// index.js</span><br><span class="line">...</span><br><span class="line">// 这里返回的是 ToastContainer 组件引用</span><br><span class="line">const getToastContainerRef = () =&gt; &#123;</span><br><span class="line">    // 将 &lt;ToastContainer /&gt; React 组件，渲染到 toastContainerDiv 中，并且返回了 &lt;ToastContainer /&gt; 的引用</span><br><span class="line">    return ReactDom.render(&lt;ToastContainer /&gt;, toastContainerDiv);</span><br><span class="line">&#125;</span><br><span class="line">// 这里是 &lt;ToastContainer /&gt; 的引用</span><br><span class="line">let toastContainer = getToastContainerRef();</span><br><span class="line">const destroy = () =&gt; &#123;</span><br><span class="line">    // 将 &lt;ToastContainer /&gt; 组件 unMount，卸载组件</span><br><span class="line">    ReactDom.unmountComponentAtNode(toastContainerDiv);</span><br><span class="line">    // 再次创建新的 &lt;ToastContainer /&gt; 引用，以便再次触发 Toast</span><br><span class="line">    toastContainer = getToastContainerRef();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">export default &#123;</span><br><span class="line">    ...</span><br><span class="line">    hide: destroy</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>需要注意的是，卸载 <code>&lt;ToastContainer /&gt;</code> 后，需要再次创建一个新的、空的 <code>&lt;ToastContainer /&gt;</code> 组件，以便后续再次调用 Toast。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本篇文章我们用了新的一种方法来创建一个特殊的 React 组件，实践了一些你或许没有使用过的 ReactDom 方法，除了 Toast 组件，我们还能用同样的思路编写其他的组件，如 Modal、Notification 等组件。</p>
+<p>参考：</p>
+<p><a href="https://zh-hans.reactjs.org/docs/react-dom.html" target="_blank" rel="noopener">ReactDOM</a></p>
+<p>项目源码地址： <a href="https://github.com/Vincedream/easy-toast" target="_blank" rel="noopener">Vincedream/easy-toast</a></p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://vince.xin">Vince</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://vince.xin/2019/10/13/在-React-如何实现一套优雅的-Toast-组件/">https://vince.xin/2019/10/13/在-React-如何实现一套优雅的-Toast-组件/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+        
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/2019/08/22/CSS-3D-实践：从简单正方体到房屋全景漫游图/">
+        <span class="next-text nav-default">CSS 3D 实践：从简单正方体到房屋全景漫游图</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:artistcoder@163.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/Vincedrean" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2017 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Vince</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://vince.xin/2019/10/13/在-React-如何实现一套优雅的-Toast-组件/';
+        this.page.identifier = '2019/10/13/在-React-如何实现一套优雅的-Toast-组件/';
+        this.page.title = '在 React 如何实现一套优雅的 Toast 组件';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//vincehua.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.2"></script>
+
+  <script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>
