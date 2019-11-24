@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="使用 Docker & DaoCloud 来创建你的自动化持续发布流程">
+
+
+
+
+  <meta name="keywords" content="Vince, Vince's Blog,前端,Node,React">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Vince's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.2">
+
+
+
+<link rel="canonical" href="https://vince.xin/2019/11/21/使用-Docker-DaoCloud-来创建你的自动化持续发布流程/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.2">
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 使用 Docker & DaoCloud 来创建你的自动化持续发布流程 - Vince's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Vince's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Vince's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          使用 Docker & DaoCloud 来创建你的自动化持续发布流程
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2019-11-21
+        </span>
+        
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker-入门"><span class="toc-text">Docker 入门</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是-Docker"><span class="toc-text">什么是 Docker</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#几个关键的部分"><span class="toc-text">几个关键的部分</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#镜像-Image"><span class="toc-text">镜像(Image)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Dockerfile"><span class="toc-text">Dockerfile</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#容器-Container"><span class="toc-text">容器(Container)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#宿主机-Host"><span class="toc-text">宿主机(Host)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#简单实战"><span class="toc-text">简单实战</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#安装-Docker"><span class="toc-text">安装 Docker</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#创建-Dockerfile-及-其他文件"><span class="toc-text">创建 Dockerfile 及 其他文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#构建镜像"><span class="toc-text">构建镜像</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#运行容器"><span class="toc-text">运行容器</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#持续发布"><span class="toc-text">持续发布</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#场景分析"><span class="toc-text">场景分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DaoCloud"><span class="toc-text">DaoCloud</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#创建新的项目"><span class="toc-text">创建新的项目</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#在-DaoCloud-上创建自动构建发布流程"><span class="toc-text">在 DaoCloud 上创建自动构建发布流程</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>Docker 作为近几年非常热门的技术，来看看到底有什么优势值得我们去尝试。<br><a id="more"></a></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Docker 是近几年非常热门的技术之一，相信你在工作或者学习中总能听到这项技术，现如今 Docker 容器化技术的使用已经在各大厂商已经非常普遍，作为前端，或许你编写的应用是跑到服务器的 Docker 容器当中，然而你并不知道，因为许多公司已经将其“封装”为一个黑盒，完善的 DevOps 工具让你只专注与自己领域的开发，你并不需要知道项目是在哪里构建、在哪里运行，作为一个自我驱动型的工程师，拓展自己的技术广度还是很有必要的，本篇文章将会介绍 Docker 的基本使用方式以及如何创建一个持续发布流程。</p>
+<h2 id="Docker-入门"><a href="#Docker-入门" class="headerlink" title="Docker 入门"></a>Docker 入门</h2><h3 id="什么是-Docker"><a href="#什么是-Docker" class="headerlink" title="什么是 Docker"></a>什么是 Docker</h3><p>Docker 是 Linux 容器的一种封装，提供简单易用的容器使用接口，Docker 将应用程序打包在一个文件(镜像)中，运行这个文件，就会生产一个虚拟的操作系统(容器)，程序运行在容器中，就像运行在真实的物理机中，使用 Docker 相比传统的虚拟机有很多优势：</p>
+<ul>
+<li><strong>启动快</strong>： 运行一个容器就相当于运行宿主机底层系统中的一个进程，也就相当于启动宿主机中的进程，而不是要启动一个完整的操作系统，因此速度会非常快。</li>
+<li><strong>占用资源少</strong>：虚拟机由于是完整的操作系统，需要占用大量资源，容器只需要占用“需要”的资源，不占用没有使用到的资源，并且多个容器可以共享宿主机中的资源，因此其占用的资源相比于虚拟机要少很多。</li>
+<li><strong>体积小</strong>：容器只需要打包“用到”的组件，而虚拟机是整个操作系统的打包，所以体积上容器要小很多。</li>
+</ul>
+<h3 id="几个关键的部分"><a href="#几个关键的部分" class="headerlink" title="几个关键的部分"></a>几个关键的部分</h3><p>作为入门实践，我们只需要关心几个关键的部分便能上手实现我们想要的功能：</p>
+<h4 id="镜像-Image"><a href="#镜像-Image" class="headerlink" title="镜像(Image)"></a>镜像(Image)</h4><p>镜像是一个文件，如果你重装过系统，我们需要下载该系统的镜像，那么 Docker 中的镜像就是用来装“系统”(Container)的文件包，其中包含了虚拟环境运行最原始文件系统的内容。</p>
+<h4 id="Dockerfile"><a href="#Dockerfile" class="headerlink" title="Dockerfile"></a>Dockerfile</h4><p>上面我们说的镜像是一个文件包，不同的需求我们需要定制不同的镜像，通常我们使用 Dockerfile 来构建镜像，Dockerfile 中包含一些构建镜像的命令，比如有下载某个软件包、复制某些文件、对项目进行打包、更改 nginx 的配置等等，总之我们的目的是构建一份“拿来即用”的“装机”文件包。</p>
+<h4 id="容器-Container"><a href="#容器-Container" class="headerlink" title="容器(Container)"></a>容器(Container)</h4><p>容器可视为一个完整的操作系统，容器由镜像创建而成，可以在容器当中做一切当前操作系统能做的事情，比如运行一个 Node.js 脚本、运行一个 nginx 服务器为客户端提供服务。</p>
+<h4 id="宿主机-Host"><a href="#宿主机-Host" class="headerlink" title="宿主机(Host)"></a>宿主机(Host)</h4><p>宿主机是你购买的云服务器或者你本地 pc，这是 Docker 运行的宿主，宿主机中包含许多镜像与容器，容器之间是完全隔离开来的。</p>
+<p>用一张图来表示其几个关键部分的关系：</p>
+<p><img src="http://static4.vince.xin/WeChatefd54da5ec36c36ea7b98a0f25cb2713.png" alt="image"></p>
+<h3 id="简单实战"><a href="#简单实战" class="headerlink" title="简单实战"></a>简单实战</h3><p>这个章节讲解一个最简单的 Docker 实践，我们将构建一个 Nginx 服务器，并且用来处理一个 <code>index.html</code> 静态 html 文件，访问对应的 ip 与 端口，便能访问到这个静态 html 页面。</p>
+<h4 id="安装-Docker"><a href="#安装-Docker" class="headerlink" title="安装 Docker"></a>安装 Docker</h4><p>假如在本地 PC 端安装，直接点下面链接，便能下载最新稳定版本的安装包：</p>
+<p>MacOS ： <a href="https://download.docker.com/mac/stable/Docker.dmg" target="_blank" rel="noopener">https://download.docker.com/mac/stable/Docker.dmg</a></p>
+<p>Windows: <a href="https://download.docker.com/win/stable/Docker%20for%20Windows%20Installer.exe" target="_blank" rel="noopener">https://download.docker.com/win/stable/Dock…</a></p>
+<p>如果是在 Linux 系列系统上安装，这篇教程中提供了详细的说明：<a href="https://zhuanlan.zhihu.com/p/54147784" target="_blank" rel="noopener">史上最全（全平台）docker安装方法！
+</a></p>
+<h4 id="创建-Dockerfile-及-其他文件"><a href="#创建-Dockerfile-及-其他文件" class="headerlink" title="创建 Dockerfile 及 其他文件"></a>创建 Dockerfile 及 其他文件</h4><ol>
+<li>首先我们创建一个文件夹： <code>docker-test</code></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir docker-test</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>然后其目录下创建两个文件：<code>Dockerfile</code>、<code>index.html</code></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">touch Dockerfile index.html</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>编写 <code>index.html</code></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;ie=edge&quot;&gt;</span><br><span class="line">    &lt;title&gt;Document&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    this is docker test</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p>这是作为访问静态页面的 html 文件。</p>
+<ol start="4">
+<li>编写 <code>Dockerfile</code></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">FROM nginx</span><br><span class="line"></span><br><span class="line">COPY ./index.html /usr/share/nginx/html/index.html</span><br><span class="line"></span><br><span class="line">EXPOSE 80</span><br></pre></td></tr></table></figure>
+<p>第一步： <code>FROM nginx</code> 表示该镜像是基于官方的 <code>nginx</code> 来构建的，这里就相当于下载了一个包含 nginx 服务且“拿来即用”的镜像。</p>
+<p>第二步： <code>COPY xxx xxx</code> 表示将当前项目中的 <code>index.html</code> 复制到 nginx 默认的初始页位置。</p>
+<p>第三步：<code>EXPOSE 80</code> 表示将容器 80 端口暴露出来， 允许外部连接这个端口。</p>
+<p>这里我们完成了一个镜像需要的文件包，下一步，我们将基于该文件包，构建一个可以真正运行的镜像。</p>
+<h4 id="构建镜像"><a href="#构建镜像" class="headerlink" title="构建镜像"></a>构建镜像</h4><p>有了 Dockerfile 文件以后，我们就能使用 Docker 的命令： <code>docker image build</code> 来构建镜像了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker image build -t docker-test:v1 .</span><br></pre></td></tr></table></figure>
+<p>上面命令中，<code>-t</code> 参数用来制定镜像的名称，冒号后面是镜像的标签，如果不指定，默认的标签就是 <code>latest</code>，最后我们一定要注意，这句命令中，最后还有一个<code>.</code>，这里表示的是当前路径，也就是 <code>Dockerfile</code> 所在的路径。</p>
+<p>运行该命令后，我们将会得到一下输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Step 1/3 : FROM nginx</span><br><span class="line">latest: Pulling from library/nginx</span><br><span class="line">Status: Downloaded newer image for nginx:latest</span><br><span class="line"> ---&gt; 231d40e811cd</span><br><span class="line">Step 2/3 : COPY ./index.html /usr/share/nginx/html/index.html</span><br><span class="line"> ---&gt; 68aa4c9ded77</span><br><span class="line">Step 3/3 : EXPOSE 80</span><br><span class="line"> ---&gt; Running in 9e2db6a09b00</span><br><span class="line">Successfully tagged docker-test:v1</span><br></pre></td></tr></table></figure>
+<p>我们可以看到，输出信息的每个 Step 都对应着 <code>Dockerfile</code> 中的每个指令，这也方便我们查看构建信息与 debug，构建完成后，我们在命令航中输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker image ls</span><br></pre></td></tr></table></figure>
+<p>我们会看到刚刚构建的镜像已经在列表当中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">REPOSITORY                              TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">docker-test                             v1                  567da52d5085        15 minutes ago      126MB</span><br></pre></td></tr></table></figure>
+<p>到这里已经表示我们完成了整个镜像的构建，下一步我们将会运行该镜像，启动一个容器。</p>
+<h4 id="运行容器"><a href="#运行容器" class="headerlink" title="运行容器"></a>运行容器</h4><p>现在到了整个链路中最后一步， 创建并运行容器。</p>
+<p>在命令行中输入 <code>docker container create</code> 命令来创建一个容器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker container create -p 3303:80 docker-test:v1</span><br></pre></td></tr></table></figure>
+<p>命令中 <code>-p</code> 表示 <code>port</code> ，还记得我们 <code>Dockerfile</code> 中的  <code>EXPOSE 80</code> 指令吗，上面的 80 端口，指的是容器中的 80 端口，而不是宿主机的端口，假设想要访问到容器中的 80 端口，我们需要做一个 宿主机—&gt; 容器 的端口映射，<code>-p 3303:80</code> 表示的是将宿主机的 3303 端口映射到容器的 80端口，这时候我们便能通过宿主机的 3303 端口访问到容器的 80 端口。命令中的 <code>docker-test:v1</code> 指的是用哪个镜像来创建容器，命令执行完毕后，会输出一条容器ID：</p>
+<p>接着我们运行 <code>docker container ls -a</code> 来查看所有(-a)的容器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CONTAINER ID        IMAGE                           COMMAND                  CREATED             STATUS              PORTS               NAMES</span><br><span class="line">95696808d7e4        docker-test:v1                  &quot;nginx -g &apos;daemon of…&quot;   21 seconds ago      Created                                 condescending_shirley</span><br></pre></td></tr></table></figure>
+<p>我们看到，该容器的 <code>STATUS</code> 是 <code>Created</code> 状态，还未处于运行状态，我们输入 <code>docker container start CONTAINER ID</code> 来运行容器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker container start 95696808d7e4</span><br></pre></td></tr></table></figure>
+<p>这个时候，访问：<code>http://localhost:3303/</code> ，便能访问到 <code>index.html</code> 静态文件了，这个时候我们再运行 <code>docker container ls -a</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CONTAINER ID        IMAGE                           COMMAND                  CREATED             STATUS              PORTS                  NAMES</span><br><span class="line">95696808d7e4        docker-test:v1                  &quot;nginx -g &apos;daemon of…&quot;   11 minutes ago      Up About a minute   0.0.0.0:3303-&gt;80/tcp   condescending_shirley</span><br></pre></td></tr></table></figure>
+<p>可以看到，<code>STATUS</code> 已经转变为 <code>Up</code>，我们设置的端口映射 <code>PORTS</code> 也转变为 <code>0.0.0.0:3303-&gt;80/tcp</code>。</p>
+<p>到这里，我们已经完成了 Docker 的基本实践，下面，我们将会进阶地实践基于 Docker 的自动发布流程。</p>
+<h2 id="持续发布"><a href="#持续发布" class="headerlink" title="持续发布"></a>持续发布</h2><p>上面我们已经完成了 Docker 的基本实践，这一章中我会带着读者利用第三方平台 DaoCloud 创建一个持续发布流程。</p>
+<h3 id="场景分析"><a href="#场景分析" class="headerlink" title="场景分析"></a>场景分析</h3><p>假设我们需要将一个前端项目部署在云服务器中，并且使用了 Docker 容器化技术，当应用需要更新时，我们需要进行以下步骤：</p>
+<ol>
+<li>将代码 push 到 Github / Gitlab 中。</li>
+<li>登录云服务器</li>
+<li>git clone 最新的代码</li>
+<li>执行打包(这一步也能在本地开发环境完成)</li>
+<li>构建 Docker 镜像</li>
+<li>创建并运行容器</li>
+</ol>
+<p>频繁发布项目的话，这些操作复杂且耗时不说，而且容易误操作，这个时候我们就需要一个自动化的发布流程，当我们只需要将测试无误后的代码，push 到特定的分支，服务器变能自动地运行上述的 2.3.4.5.6 步骤，我们称之为 <strong>持续发布</strong> 流程(workflow)。</p>
+<h3 id="DaoCloud"><a href="#DaoCloud" class="headerlink" title="DaoCloud"></a>DaoCloud</h3><p>作为简单的个人应用，我们不必自己的研发一套这样的持续发布系统，目前已经有比较成熟且操作简单的免费第三方 DevOps 工具供我们个人项目使用(公司一般不会轻易使用第三方的 Devops 工具，主要原因还是担忧代码泄露)，作为个人项目，我们使用 DaoCloud 作为个人 DevOps 平台。</p>
+<h4 id="创建新的项目"><a href="#创建新的项目" class="headerlink" title="创建新的项目"></a>创建新的项目</h4><p>首先我们在 Github 创建一个仓库 <code>docker-publish-demo</code>，<code>git clone</code> 到本地后，使用 vue 或者 react CLI 工具创建一个新的项目：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create-react-app docker-publish-demo</span><br></pre></td></tr></table></figure>
+<p>并且在项目中，创建一个 <code>Dockerfile</code> 文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">FROM node:8.16-slim</span><br><span class="line"></span><br><span class="line">RUN apt-get update \</span><br><span class="line">    &amp;&amp; apt-get install -y nginx</span><br><span class="line"></span><br><span class="line">WORKDIR /app</span><br><span class="line"></span><br><span class="line">COPY package.json /app/package.json</span><br><span class="line"></span><br><span class="line">RUN npm i --registry=https://registry.npm.taobao.org</span><br><span class="line"></span><br><span class="line">COPY . /app</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">RUN npm run build \</span><br><span class="line">    &amp;&amp; cp -r build/* /var/www/html \</span><br><span class="line">    &amp;&amp; rm -rf /app</span><br><span class="line"></span><br><span class="line">EXPOSE 80</span><br><span class="line"></span><br><span class="line">CMD [&quot;nginx&quot;, &quot;-g&quot;, &quot;daemon off;&quot;]</span><br></pre></td></tr></table></figure>
+<p>第一步：基于 node 镜像来进行后续的构建步骤，因为 React 项目需要 node 环境来进行打包</p>
+<p>第二步：我们下载了 nginx 以便我们创建静态文件服务</p>
+<p>第三步：<code>WORKDIR /app</code> 中，我们创建了一个工作目录</p>
+<p>第四步： <code>COPY package.json /app/package.json</code> 将项目中的 <code>package.json</code> 拷贝到 <code>/app</code> 中</p>
+<p>第五步：<code>RUN npm i</code> 安装依赖</p>
+<p>第六步：<code>COPY . /app</code> 将其所有文件(包含node_modules)拷贝到 <code>/app</code>中</p>
+<p>第七步：进行打包，并且将打包好的静态文件移到 nginx 配置文件中</p>
+<p>第八步：暴露 80 端口</p>
+<p>第九步：将 nginx 在前台运行，避免容器启动后就退出</p>
+<p>最后，我们根据上面章节的步骤在本地试一试 Dockerfile 是否能成功构建镜像且能运行容器。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker image build -t docker-publish:v1 .</span><br><span class="line"></span><br><span class="line">docker container create -p 3304:80 docker-publish:v1</span><br><span class="line"></span><br><span class="line">docker container start ContainerId</span><br></pre></td></tr></table></figure>
+<p>假设一切都没问题后，我们将代码 push 到远程仓库中，接着就开始创建我们的自动化持续发布流程。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m &apos;init project&apos;</span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
+<h4 id="在-DaoCloud-上创建自动构建发布流程"><a href="#在-DaoCloud-上创建自动构建发布流程" class="headerlink" title="在 DaoCloud 上创建自动构建发布流程"></a>在 DaoCloud 上创建自动构建发布流程</h4><p>创建 DaoCloud 账号后，我们进入 <a href="https://dashboard.daocloud.io/" target="_blank" rel="noopener">DaoCloud 控制台</a></p>
+<ol>
+<li>进入控制台，点击创建项目</li>
+</ol>
+<p><img src="http://static4.vince.xin/WeChat84547705ef1fd4fe39043689dd947f95.png" alt="image"></p>
+<ol start="2">
+<li>新用户需要绑定 Github 的账号，获取到需要绑定的 repo，绑定 Github 后，选择需要构建的 repo</li>
+</ol>
+<p><img src="http://static4.vince.xin/WeChat5be81f1d46b674c774e45fc737d012cd.png" alt="image"></p>
+<ol start="3">
+<li>进入项目，点击流程定义</li>
+</ol>
+<p><img src="http://static4.vince.xin/WeChate7302c5d585318ea21991e5cc60e445d.png" alt="image"></p>
+<ol start="4">
+<li>删除测试阶段以及发布阶段</li>
+</ol>
+<p><img src="http://static4.vince.xin/WeChat71229372749a2b851d0fd1996f766001.png" alt="image"></p>
+<ol start="5">
+<li>编辑任务</li>
+</ol>
+<p><img src="http://static4.vince.xin/WeChat64153795af2ae4b283d0ec84fcca80f3.png" alt="image"></p>
+<p><img src="http://static4.vince.xin/WeChat34d11b4f2236bbdd591ef48ab75c3391.png" alt="image"></p>
+<p>这里我们设置当代码 push 到 master 分支后，开始执行构建，这一步将会在远程仓库中设置一个 webhooks，当 repo 满足上述条件后，将会触发该 webhooks：</p>
+<p><img src="http://static4.vince.xin/WeChata2a8753298fd591f5e056cbed97ea84a.png" alt="image"></p>
+<p>由于是第一次构建，我们点击手动触发，这时候 DaoCloud 会拉取 Github 中的源码，在 DaoCould 的 runner (执行环境)中构建镜像。</p>
+<ol start="7">
+<li>创建应用</li>
+</ol>
+<p><img src="http://static4.vince.xin/WeChat8e2d5df4e99c8a8e1c2a20b1bc50d824.png" alt="image"></p>
+<p>选择左边<strong>应用</strong> Tab 栏，点击创建应用，选择之前构建的镜像。</p>
+<p><img src="http://static4.vince.xin/WeChat5208aa666d8ca89a95122a28bc02d2f3.png" alt="image"></p>
+<p>填写应用信息，选择运行环境，这里我选择自己的云服务器（因为要对外服务）。</p>
+<ol start="8">
+<li>设置容器信息后，点击立即部署。</li>
+</ol>
+<p><img src="http://static4.vince.xin/WeChat72416522d53e46b9d6f9dea2009a3620.png" alt="image"></p>
+<ol start="9">
+<li>设置自动发布</li>
+</ol>
+<p><img src="http://static4.vince.xin/WeChat543b5af9c07abb996e53994403036d1d.png" alt="image"></p>
+<ol start="10">
+<li>更改项目源码，push 到远程仓库，触发 DaoCloud 进行构建镜像。</li>
+</ol>
+<p>这里我们勾选<strong>自动发布</strong>，当有新的镜像构建完成后，创建新的容器并且替换上一版容器，这样便能完成自动构建及发布流程，最后，我们用一张图来总结上述整个流程：</p>
+<p><img src="http://static4.vince.xin/WeChat623568ff1e968e6da28b074416b30b8c.png" alt="image"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本篇博客，我们学习了 Docker 的基本使用方法，实践了如何构建镜像、创建及运行容器，基于这些知识，我们利用第三方 Devops 工具 DaoCloud 创建了个人项目的自动构建发布流程，使得我们只需要专注功能的实现，将这些粗活杂活交给自动化流程，节省了我们大量的时间，整个开发流程也更为现代化。</p>
+<p>refs:</p>
+<p><a href="http://guide.daocloud.io/dcs/ci-cd-9152690.html" target="_blank" rel="noopener">DaoCloud DevOps 文档</a></p>
+<p><a href="http://www.ruanyifeng.com/blog/2018/02/docker-tutorial.html" target="_blank" rel="noopener">Docker 入门教程
+</a></p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>原文作者: </span>
+      <a href="https://vince.xin">Vince</a>
+    </p>
+    <p class="copyright-item">
+      <span>原文链接: </span>
+      <a href="https://vince.xin/2019/11/21/使用-Docker-DaoCloud-来创建你的自动化持续发布流程/">https://vince.xin/2019/11/21/使用-Docker-DaoCloud-来创建你的自动化持续发布流程/</a>
+    </p>
+    <p class="copyright-item">
+      <span>许可协议: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/Docker/">Docker</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/2019/11/02/实现一个简易版在线集成开发环境-IDE/">
+        <span class="next-text nav-default">实现一个简易版在线集成开发环境( IDE )</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:artistcoder@163.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/Vincedrean" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2017 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Vince</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://vince.xin/2019/11/21/使用-Docker-DaoCloud-来创建你的自动化持续发布流程/';
+        this.page.identifier = '2019/11/21/使用-Docker-DaoCloud-来创建你的自动化持续发布流程/';
+        this.page.title = '使用 Docker & DaoCloud 来创建你的自动化持续发布流程';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//vincehua.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.2"></script>
+
+  <script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>
